@@ -1,10 +1,14 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 
-const pass = JSON.parse(fs.readFileSync("./pass.json").toString());
+const pass = { username: process.env.USER, pass: process.env.PASS };
 
-(async () => {
-	const browser = await puppeteer.launch({ headless: false });
+module.exports = async function scrape() {
+	const browser = await puppeteer.launch({
+		headless: true,
+		executablePath: "/usr/bin/google-chrome",
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
 	const page = (await browser.pages())[0];
 	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
 
@@ -115,7 +119,9 @@ const pass = JSON.parse(fs.readFileSync("./pass.json").toString());
 		);
 	}
 
-	fs.writeFileSync("data.json", JSON.stringify(weeks));
+	//fs.writeFileSync("data.json", JSON.stringify(weeks));
 
 	browser.close();
-})();
+
+	return weeks;
+};
