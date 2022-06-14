@@ -7,7 +7,7 @@
 <div class="timeTable">
 	<div class="table">
 		{#each weekDays as wd}
-			<Day dayName={wd} />
+			<Day day={wd} />
 		{/each}
 	</div>
 </div>

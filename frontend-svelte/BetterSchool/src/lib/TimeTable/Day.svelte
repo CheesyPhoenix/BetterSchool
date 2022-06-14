@@ -1,12 +1,19 @@
 <script>
+	import { dataset_dev } from "svelte/internal";
+
 	import Class from "./Class.svelte";
 
-	export let dayName;
+	export let day;
+
+	const dayName = day.name;
+	const classes = day.classes;
 </script>
 
 <div class="day">
 	<div class="header">{dayName}</div>
-	<Class name="Prod. og historiefortelling" />
+	{#each classes as classOb}
+		<Class name={classOb.name} />
+	{/each}
 </div>
 
 <style>
