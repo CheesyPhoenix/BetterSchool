@@ -3,7 +3,11 @@ const scrape = require("./scraper");
 let data;
 
 async function update() {
-	data = await scrape();
+	try {
+		data = await scrape();
+	} catch (error) {
+		console.log("Scraper failed!");
+	}
 	setTimeout(update, 60 * 60 * 1000);
 }
 (async () => {
@@ -11,6 +15,9 @@ async function update() {
 
 	const express = require("express");
 	const app = express();
+	const cors = require("cors");
+
+	app.use(cors());
 
 	app.get("/", (req, res) => {
 		res.send(data);
