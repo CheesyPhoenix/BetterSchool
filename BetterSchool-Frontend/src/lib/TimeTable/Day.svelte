@@ -1,6 +1,4 @@
 <script>
-	import { dataset_dev } from "svelte/internal";
-
 	import Class from "./Class.svelte";
 
 	export let day;
@@ -11,9 +9,11 @@
 
 <div class="day">
 	<div class="header">{dayName}</div>
-	{#each classes as classOb}
-		<Class name={classOb.name} />
-	{/each}
+	<div class="classes">
+		{#each classes as classOb}
+			<Class {classOb} />
+		{/each}
+	</div>
 </div>
 
 <style>
@@ -26,5 +26,10 @@
 		background-color: aquamarine;
 		width: 20%;
 		padding: 1em;
+	}
+
+	.classes {
+		position: relative;
+		height: 700px;
 	}
 </style>

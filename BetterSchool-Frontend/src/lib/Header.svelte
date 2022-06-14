@@ -3,12 +3,12 @@
 </script>
 
 <div class="header" />
-<br class="spacer" />
+<div class="spacer" />
 
 <style>
 	.header {
 		width: 100%;
-		height: 3em;
+		height: 40px;
 		background-color: cadetblue;
 		margin: 0;
 		position: absolute;
@@ -18,7 +18,7 @@
 
 	.spacer {
 		width: 100%;
-		height: 3em;
+		height: 40px;
 		margin: 0;
 	}
 </style>
