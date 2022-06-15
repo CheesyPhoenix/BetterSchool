@@ -1,17 +1,37 @@
-<script>
+<script lang="ts">
 	import Class from "./Class.svelte";
 
-	export let day;
+	export let day: {
+		name: string;
+		classes: { date: string; time: string; room: string; name: string }[];
+	};
 
 	const dayName = day.name;
+	const dayDate = day.classes[0].date;
+
 	const classes = day.classes;
+
+	const dateOb = new Date(day.classes[0].date);
+	const todayDate = new Date();
+
+	let bgColor = "#595959";
+	let today = false;
+
+	if (
+		dateOb.getDate() == todayDate.getDate() &&
+		dateOb.getMonth() == todayDate.getMonth() &&
+		dateOb.getFullYear() == todayDate.getFullYear()
+	) {
+		bgColor = "#696969";
+		today = true;
+	}
 </script>
 
-<div class="day">
-	<div class="header">{dayName}</div>
+<div class="day" style="background-color: {bgColor};">
+	<div class="header">{dayName} {dayDate}</div>
 	<div class="classes">
 		{#each classes as classOb}
-			<Class {classOb} />
+			<Class {classOb} {today} />
 		{/each}
 	</div>
 </div>
@@ -23,7 +43,6 @@
 		text-align: center;
 	}
 	.day {
-		background-color: aquamarine;
 		width: 20%;
 		padding: 1em;
 	}

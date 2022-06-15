@@ -1,10 +1,11 @@
 <script lang="ts">
 	export let classOb: {
-		dato: string;
+		date: string;
 		time: string;
 		room: string;
 		name: string;
 	};
+	export let today: boolean;
 
 	const timeStart = classOb.time.split("-")[0];
 	const timeSlutt = classOb.time.split("-")[1];
@@ -23,20 +24,55 @@
 			8) *
 			scale -
 		distTop;
+
+	// check if class is currently active
+
+	const timeStartDate = new Date(classOb.date + " " + timeStart);
+	const timeSluttDate = new Date(classOb.date + " " + timeSlutt);
+
+	const todayDate = new Date();
+
+	let classActive = false;
+
+	if (
+		today &&
+		todayDate.getTime() > timeStartDate.getTime() &&
+		todayDate.getTime() < timeSluttDate.getTime()
+	) {
+		classActive = true;
+	}
+
+	const active = classActive ? "active" : "";
 </script>
 
-<div class="class" style="top: {distTop}px; height: {height}px">
-	<p class="time">{classOb.time} - Rom: 352</p>
+<div class="class {active}" style="top: {distTop}px; height: {height}px">
+	<div class="time">
+		<p class="bold">{classOb.time}</p>
+		- Rom:
+		<p class="bold">{classOb.room}</p>
+	</div>
 	<h5 class="name">{classOb.name}</h5>
 </div>
 
 <style>
 	.class {
-		background-color: white;
-		width: 100%;
+		background-color: #d9d9d9;
+		width: calc(100% - 1em - 5px);
 		padding-left: 0.5em;
+		padding-right: 0.5em;
 		margin-top: 1em;
 		position: absolute;
+		border-radius: 10px;
+		border-bottom-left-radius: 2px;
+		border-top-left-radius: 2px;
+
+		border-left: solid 5px #39444b;
+	}
+	.active {
+		border-color: teal;
+		border-width: 5px;
+		width: calc(100% - 1em - 5px);
+		background-color: #fbfbfb;
 	}
 
 	.name {
@@ -47,6 +83,7 @@
 		white-space: nowrap;
 		overflow: hidden;
 		margin-right: 5px;
+		font-size: 14px;
 	}
 
 	.time {
@@ -54,5 +91,12 @@
 		margin-bottom: 0;
 		font-size: 12px;
 		color: #52606a;
+		display: inline;
+	}
+
+	.bold {
+		font-weight: bold;
+		display: inline;
+		font-size: 13px;
 	}
 </style>
