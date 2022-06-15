@@ -74,7 +74,7 @@ module.exports = async function scrape() {
 				const sClass = classes[x];
 
 				let classOb = {
-					dato: "",
+					date: "",
 					time: "",
 					room: "",
 					name: "",

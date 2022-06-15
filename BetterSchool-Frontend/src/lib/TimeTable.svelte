@@ -6,7 +6,7 @@
 		days: {
 			name: string;
 			classes: {
-				dato: string;
+				date: string;
 				time: string;
 				room: string;
 				name: string;
