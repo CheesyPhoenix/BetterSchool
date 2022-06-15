@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	export let classOb: {
 		date: string;
 		time: string;
@@ -41,8 +43,25 @@
 	) {
 		classActive = true;
 	}
+	$: active = classActive ? "active" : "";
 
-	const active = classActive ? "active" : "";
+	onMount(() => {
+		const interval = setInterval(() => {
+			const todayDate = new Date();
+
+			if (
+				today &&
+				todayDate.getTime() > timeStartDate.getTime() &&
+				todayDate.getTime() < timeSluttDate.getTime()
+			) {
+				classActive = true;
+			}
+		}, 60 * 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <div class="class {active}" style="top: {distTop}px; height: {height}px">
@@ -69,7 +88,7 @@
 		border-left: solid 5px #39444b;
 	}
 	.active {
-		border-color: teal;
+		border-color: #009797;
 		border-width: 5px;
 		width: calc(100% - 1em - 5px);
 		background-color: #fbfbfb;

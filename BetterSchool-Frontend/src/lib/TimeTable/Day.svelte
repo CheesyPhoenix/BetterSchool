@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	import Class from "./Class.svelte";
 
 	export let day: {
@@ -25,6 +27,35 @@
 		bgColor = "#696969";
 		today = true;
 	}
+
+	onMount(() => {
+		let blurred = false;
+		window.addEventListener("blur", () => {
+			blurred = true;
+		});
+
+		let refocusTimeout = false;
+
+		window.addEventListener("focus", () => {
+			if (refocusTimeout) return;
+
+			refocusTimeout = true;
+			setTimeout(() => {
+				refocusTimeout = false;
+			}, 60 * 1000);
+
+			if (blurred) {
+				if (
+					dateOb.getDate() == todayDate.getDate() &&
+					dateOb.getMonth() == todayDate.getMonth() &&
+					dateOb.getFullYear() == todayDate.getFullYear()
+				) {
+					bgColor = "#696969";
+					today = true;
+				}
+			}
+		});
+	});
 </script>
 
 <div class="day" style="background-color: {bgColor};">
