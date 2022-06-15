@@ -82,7 +82,7 @@ module.exports = async function scrape() {
 
 				const data = sClass.children[1].innerText;
 
-				classOb.dato = data.split(" Starter ")[1].split(" klokken")[0];
+				classOb.date = data.split(" Starter ")[1].split(" klokken")[0];
 				classOb.time =
 					data.split(" klokken ")[1].split(" og")[0] +
 					"-" +
