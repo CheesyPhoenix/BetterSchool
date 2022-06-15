@@ -44,6 +44,8 @@
 				refocusTimeout = false;
 			}, 60 * 1000);
 
+			const todayDate = new Date();
+
 			if (blurred) {
 				if (
 					dateOb.getDate() == todayDate.getDate() &&
@@ -52,6 +54,9 @@
 				) {
 					bgColor = "#696969";
 					today = true;
+				} else {
+					today = false;
+					bgColor = "#595959";
 				}
 			}
 		});
