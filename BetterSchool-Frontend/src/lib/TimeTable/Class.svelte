@@ -9,18 +9,23 @@
 	};
 	export let today: boolean;
 
-	const timeStart = classOb.time.split("-")[0];
-	const timeSlutt = classOb.time.split("-")[1];
+	let timeStart = classOb.time.split("-")[0];
+	let timeSlutt = classOb.time.split("-")[1];
+
+	$: {
+		timeStart = classOb.time.split("-")[0];
+		timeSlutt = classOb.time.split("-")[1];
+	}
 
 	const scale = 80;
 
-	const distTop =
+	$: distTop =
 		(parseInt(timeStart.split(":")[0]) +
 			parseFloat(timeStart.split(":")[1]) / 60 -
 			8) *
 		scale;
 
-	const height =
+	$: height =
 		(parseInt(timeSlutt.split(":")[0]) +
 			parseFloat(timeSlutt.split(":")[1]) / 60 -
 			8) *
@@ -29,25 +34,32 @@
 
 	// check if class is currently active
 
-	const timeStartDate = new Date(classOb.date + " " + timeStart);
-	const timeSluttDate = new Date(classOb.date + " " + timeSlutt);
+	let timeStartDate = new Date(classOb.date + " " + timeStart);
+	let timeSluttDate = new Date(classOb.date + " " + timeSlutt);
+
+	$: {
+		timeStartDate = new Date(classOb.date + " " + timeStart);
+		timeSluttDate = new Date(classOb.date + " " + timeSlutt);
+	}
 
 	const todayDate = new Date();
 
 	let classActive = false;
 
-	if (
-		today &&
-		todayDate.getTime() > timeStartDate.getTime() &&
-		todayDate.getTime() < timeSluttDate.getTime()
-	) {
-		classActive = true;
+	$: {
+		if (
+			today &&
+			todayDate.getTime() > timeStartDate.getTime() &&
+			todayDate.getTime() < timeSluttDate.getTime()
+		) {
+			classActive = true;
+		}
 	}
 	$: active = classActive ? "active" : "";
 
 	onMount(() => {
 		const interval = setInterval(() => {
-			const todayDate = new Date();
+			const todayDate = new Date("16 juni 2022 9:30");
 
 			if (
 				today &&
@@ -55,8 +67,10 @@
 				todayDate.getTime() < timeSluttDate.getTime()
 			) {
 				classActive = true;
+			} else {
+				classActive = false;
 			}
-		}, 60 * 1000);
+		}, 5 * 1000);
 
 		return () => {
 			clearInterval(interval);
@@ -88,7 +102,7 @@
 		border-left: solid 5px #39444b;
 	}
 	.active {
-		border-color: #009797;
+		border-color: #27a300;
 		border-width: 5px;
 		width: calc(100% - 1em - 5px);
 		background-color: #fbfbfb;

@@ -8,24 +8,37 @@
 		classes: { date: string; time: string; room: string; name: string }[];
 	};
 
-	const dayName = day.name;
-	const dayDate = day.classes[0].date;
+	let dayName = day.name;
+	let dayDate = day.classes[0].date;
 
-	const classes = day.classes;
+	let classes = day.classes;
+	$: classes = day.classes;
 
-	const dateOb = new Date(day.classes[0].date);
+	let dateOb =
+		classes.length == 0 ? undefined : new Date(day.classes[0].date);
+	$: {
+		dateOb =
+			classes.length == 0 ? undefined : new Date(day.classes[0].date);
+	}
+
 	const todayDate = new Date();
 
 	let bgColor = "#595959";
 	let today = false;
 
-	if (
-		dateOb.getDate() == todayDate.getDate() &&
-		dateOb.getMonth() == todayDate.getMonth() &&
-		dateOb.getFullYear() == todayDate.getFullYear()
-	) {
-		bgColor = "#696969";
-		today = true;
+	$: {
+		if (
+			dateOb &&
+			dateOb.getDate() == todayDate.getDate() &&
+			dateOb.getMonth() == todayDate.getMonth() &&
+			dateOb.getFullYear() == todayDate.getFullYear()
+		) {
+			bgColor = "#696969";
+			today = true;
+		} else {
+			bgColor = "#595959";
+			today = false;
+		}
 	}
 
 	onMount(() => {

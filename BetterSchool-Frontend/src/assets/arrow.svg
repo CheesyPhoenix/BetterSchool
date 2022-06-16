@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="40.517189mm"
+   height="47.09103mm"
+   viewBox="0 0 40.517189 47.09103"
+   version="1.1"
+   id="svg5"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-70.000002,-60.072062)">
+    <g
+       id="g2417">
+      <rect
+         style="fill:#d9d9d9;fill-opacity:1;stroke-width:0.264583"
+         id="rect113"
+         width="34.020161"
+         height="3.7258062"
+         x="103.61473"
+         y="-19.48962"
+         ry="1.4193509"
+         transform="rotate(45)" />
+      <rect
+         style="fill:#d9d9d9;fill-opacity:1;stroke-width:0.264583"
+         id="rect273"
+         width="34.020161"
+         height="3.7258062"
+         x="-14.638374"
+         y="134.01692"
+         ry="1.4193509"
+         transform="rotate(-45)" />
+      <rect
+         style="fill:#d9d9d9;fill-opacity:1;stroke-width:0.264583"
+         id="rect279"
+         width="34.020161"
+         height="3.7258062"
+         x="93.008125"
+         y="-8.8830166"
+         ry="1.4193509"
+         transform="rotate(45)" />
+      <rect
+         style="fill:#d9d9d9;fill-opacity:1;stroke-width:0.264583"
+         id="rect281"
+         width="34.020161"
+         height="3.7258062"
+         x="-25.244976"
+         y="123.41032"
+         ry="1.4193509"
+         transform="rotate(-45)" />
+    </g>
+  </g>
+</svg>
