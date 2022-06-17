@@ -10,6 +10,7 @@
 
 	let dayName = day.name;
 	let dayDate = day.classes[0].date;
+	//$: dayDate = day.classes[0].date;
 
 	let classes = day.classes;
 	$: classes = day.classes;

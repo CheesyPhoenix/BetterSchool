@@ -60,13 +60,21 @@ module.exports = async function scrape() {
 			days: [],
 		};
 
+		let prevDay = 0;
+
 		for (let i = 0; i < days.length; i++) {
 			const day = days[i];
 
 			let dayOb = {
 				name: dayNames[i],
+				date: "",
 				classes: [],
 			};
+
+			//get date
+			const dateDay = document
+				.getElementsByClassName("Timetable-TimetableHeader")
+				[i].children[0].innerText.split(" ")[1];
 
 			const classes = day.children[0].children;
 
