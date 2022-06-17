@@ -119,9 +119,11 @@
 		padding: 0 1em;
 		z-index: 1;
 		user-select: none;
+		transition-duration: 0.3s;
 	}
 
 	.button:hover {
 		cursor: pointer;
+		background-color: #f5f5f530;
 	}
 </style>

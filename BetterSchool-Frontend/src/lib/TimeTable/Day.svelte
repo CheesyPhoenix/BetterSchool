@@ -99,6 +99,7 @@
 	.day {
 		width: 20%;
 		padding: 1em;
+		min-width: 180px;
 	}
 
 	.classes {

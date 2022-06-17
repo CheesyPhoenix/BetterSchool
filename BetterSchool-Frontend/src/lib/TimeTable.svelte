@@ -50,9 +50,10 @@
 	.table {
 		margin: auto;
 		width: 90%;
+		margin-left: 67px;
+		margin-right: 67px;
 		display: flex;
-		justify-content: center;
-		overflow: hidden;
+		overflow-x: auto;
 		border-radius: 15px;
 	}
 </style>
