@@ -1,5 +1,4 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
 
 const pass = { username: process.env.USER, pass: process.env.PASS };
 
@@ -73,8 +72,24 @@ module.exports = async function scrape() {
 
 			//get date
 			const dateDay = document
-				.getElementsByClassName("Timetable-TimetableHeader")
-				[i].children[0].innerText.split(" ")[1];
+				.getElementsByClassName("Timetable-TimetableHeader")[0]
+				.children[i].innerText.split(" ")[1];
+
+			const dateRest = document
+				.getElementsByClassName(
+					"subheading2 userTimetable_currentWeek"
+				)[0]
+				.innerText.split(",")[1];
+
+			const date = new Date(dateDay + dateRest);
+
+			if (parseInt(dateDay) < prevDay) {
+				date.setMonth(date.getMonth() + 1);
+			}
+
+			dayOb.date = date.toDateString();
+
+			//get classes
 
 			const classes = day.children[0].children;
 

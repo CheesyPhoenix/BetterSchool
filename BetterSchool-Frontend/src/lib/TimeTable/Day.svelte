@@ -5,12 +5,16 @@
 
 	export let day: {
 		name: string;
+		date: string;
 		classes: { date: string; time: string; room: string; name: string }[];
 	};
 
 	let dayName = day.name;
-	let dayDate = day.classes[0].date;
-	//$: dayDate = day.classes[0].date;
+	let dayDateOb = new Date(day.date);
+	$: dayDateOb = new Date(day.date);
+
+	let dayDate = dayDateOb.toLocaleDateString();
+	$: dayDate = dayDateOb.toLocaleDateString();
 
 	let classes = day.classes;
 	$: classes = day.classes;

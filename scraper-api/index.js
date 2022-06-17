@@ -7,6 +7,7 @@ async function update() {
 		data = await scrape();
 	} catch (error) {
 		console.log("Scraper failed!");
+		console.log(error);
 	}
 	setTimeout(update, 60 * 60 * 1000);
 }
