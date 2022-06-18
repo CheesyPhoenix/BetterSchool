@@ -13,8 +13,8 @@
 	let dayDateOb = new Date(day.date);
 	$: dayDateOb = new Date(day.date);
 
-	let dayDate = dayDateOb.toLocaleDateString();
-	$: dayDate = dayDateOb.toLocaleDateString();
+	let dayDate = dayDateOb.toLocaleDateString("no");
+	$: dayDate = dayDateOb.toLocaleDateString("no");
 
 	let classes = day.classes;
 	$: classes = day.classes;

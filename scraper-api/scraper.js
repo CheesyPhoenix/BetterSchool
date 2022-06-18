@@ -84,8 +84,17 @@ module.exports = async function scrape() {
 			const date = new Date(dateDay + dateRest);
 
 			if (parseInt(dateDay) < prevDay) {
-				date.setMonth(date.getMonth() + 1);
+				for (let x = 0; x < i; x++) {
+					const day = weekOb.days[x];
+
+					const date = new Date(day.date);
+					date.setMonth(date.getMonth() - 1);
+
+					day.date = date.toDateString();
+				}
 			}
+
+			prevDay = parseInt(dateDay);
 
 			dayOb.date = date.toDateString();
 
