@@ -1,5 +1,6 @@
 <script lang="ts">
 	import TimeTable from "./lib/TimeTable.svelte";
+	import SingleDay from "./lib/SingleDay.svelte";
 	import arrow from "./assets/arrow.svg";
 	import { onMount } from "svelte";
 
@@ -65,37 +66,51 @@
 
 		currWeek = weeks[weekIndex];
 	}
+
+	// check screen size
+
+	let scrWidth: number;
+	let phoneMode = scrWidth <= 900;
+	$: phoneMode = scrWidth <= 900;
 </script>
 
-{#if currWeek}
-	<TimeTable week={currWeek} />
-{/if}
+<svelte:window bind:innerWidth={scrWidth} />
 
-<div
-	class="button"
-	style="left: 0;"
-	on:click={() => {
-		changePage(-1);
-	}}
->
-	<!-- svelte-ignore a11y-invalid-attribute -->
-	<img
-		src={arrow}
-		alt="Forrige uke"
-		class="buttonImg"
-		style="transform: rotate(180deg);"
-	/>
-</div>
-<div
-	class="button"
-	style="right: 0;"
-	on:click={() => {
-		changePage(1);
-	}}
->
-	<!-- svelte-ignore a11y-invalid-attribute -->
-	<img src={arrow} alt="Neste uke" class="buttonImg" />
-</div>
+{#if phoneMode}
+	{#if currWeek}
+		<SingleDay week={currWeek} />
+	{/if}
+{:else}
+	{#if currWeek}
+		<TimeTable week={currWeek} />
+	{/if}
+
+	<div
+		class="button"
+		style="left: 0;"
+		on:click={() => {
+			changePage(-1);
+		}}
+	>
+		<!-- svelte-ignore a11y-invalid-attribute -->
+		<img
+			src={arrow}
+			alt="Forrige uke"
+			class="buttonImg"
+			style="transform: rotate(180deg);"
+		/>
+	</div>
+	<div
+		class="button"
+		style="right: 0;"
+		on:click={() => {
+			changePage(1);
+		}}
+	>
+		<!-- svelte-ignore a11y-invalid-attribute -->
+		<img src={arrow} alt="Neste uke" class="buttonImg" />
+	</div>
+{/if}
 
 <style>
 	:root {

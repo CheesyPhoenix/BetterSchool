@@ -79,9 +79,11 @@
 			}
 		});
 	});
+
+	export let widthPer;
 </script>
 
-<div class="day" style="background-color: {bgColor};">
+<div class="day" style="background-color: {bgColor}; width: {widthPer}%">
 	<div class="header">{dayName} {dayDate}</div>
 	<div class="classes">
 		{#each classes as classOb}
@@ -97,7 +99,6 @@
 		text-align: center;
 	}
 	.day {
-		width: 20%;
 		padding: 1em;
 		min-width: 180px;
 	}

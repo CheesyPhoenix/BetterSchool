@@ -16,7 +16,19 @@
 	}
 
 	export let week: Week;
+	let days = week.days;
 	$: days = week.days;
+
+	let dayIndex: number = 0;
+
+	for (let i = 0; i < days.length; i++) {
+		const day = days[i];
+
+		if (new Date(day.date).getDay() == new Date().getDay()) {
+			dayIndex = i;
+			break;
+		}
+	}
 </script>
 
 <div class="weekNrCont">
@@ -24,18 +36,14 @@
 </div>
 <div class="centerVertical">
 	<div class="table">
-		{#each days as wd}
-			<Day day={wd} widthPer={20} />
-		{/each}
+		<Day day={days[dayIndex]} widthPer={100} />
 	</div>
 </div>
 
 <style>
 	.weekNrCont {
-		width: 90%;
+		width: 95%;
 		margin: auto;
-		margin-left: 6%;
-		margin-right: 67px;
 	}
 
 	.centerVertical {
@@ -51,9 +59,7 @@
 
 	.table {
 		margin: auto;
-		width: 90%;
-		margin-left: 67px;
-		margin-right: 67px;
+		width: 95%;
 		display: flex;
 		overflow-x: auto;
 		border-radius: 15px;
