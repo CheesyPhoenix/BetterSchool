@@ -73,7 +73,7 @@
 		use:swipe={{
 			timeframe: 300,
 			minSwipeDistance: 60,
-			touchAction: "none",
+			touchAction: "pan-y",
 		}}
 		on:swipe={swipeHandler}
 	>
