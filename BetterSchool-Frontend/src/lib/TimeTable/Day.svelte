@@ -10,6 +10,8 @@
 	};
 
 	let dayName = day.name;
+	$: dayName = day.name;
+
 	let dayDateOb = new Date(day.date);
 	$: dayDateOb = new Date(day.date);
 

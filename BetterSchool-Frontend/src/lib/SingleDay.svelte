@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Day from "./TimeTable/Day.svelte";
+	import { swipe } from "svelte-gestures";
+	import { createEventDispatcher } from "svelte";
 
 	interface Week {
 		weekNr: string;
@@ -15,6 +17,8 @@
 		}[];
 	}
 
+	export let weekIndex: number;
+
 	export let week: Week;
 	let days = week.days;
 	$: days = week.days;
@@ -29,13 +33,50 @@
 			break;
 		}
 	}
+
+	//
+
+	const dispatch = createEventDispatcher();
+
+	function swipeHandler(
+		event: CustomEvent<{
+			direction: "top" | "right" | "bottom" | "left";
+			target: EventTarget;
+		}>
+	) {
+		if (event.detail.direction == "left") {
+			dayIndex++;
+		} else if (event.detail.direction == "right") {
+			dayIndex--;
+		}
+
+		if (dayIndex >= week.days.length && weekIndex < 2) {
+			dayIndex = 0;
+			dispatch("changeWeek", 1);
+		} else if (dayIndex < 0 && weekIndex > 0) {
+			dayIndex = week.days.length - 1;
+			dispatch("changeWeek", -1);
+		} else if (weekIndex == 0 && dayIndex < 0) {
+			dayIndex = 0;
+		} else if (weekIndex == 2 && dayIndex >= week.days.length) {
+			dayIndex = week.days.length - 1;
+		}
+	}
 </script>
 
 <div class="weekNrCont">
 	<h2 class="weekNr">{"Uke " + week.weekNr}</h2>
 </div>
 <div class="centerVertical">
-	<div class="table">
+	<div
+		class="table"
+		use:swipe={{
+			timeframe: 300,
+			minSwipeDistance: 60,
+			touchAction: "none",
+		}}
+		on:swipe={swipeHandler}
+	>
 		<Day day={days[dayIndex]} widthPer={100} />
 	</div>
 </div>
@@ -43,7 +84,13 @@
 <style>
 	.weekNrCont {
 		width: 95%;
-		margin: auto;
+		z-index: 1;
+		position: absolute;
+		left: 2em;
+		top: 1em;
+	}
+	.weekNr {
+		margin: 0;
 	}
 
 	.centerVertical {

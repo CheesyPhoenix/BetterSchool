@@ -78,7 +78,13 @@
 
 {#if phoneMode}
 	{#if currWeek}
-		<SingleDay week={currWeek} />
+		<SingleDay
+			week={currWeek}
+			{weekIndex}
+			on:changeWeek={(event) => {
+				changePage(event.detail);
+			}}
+		/>
 	{/if}
 {:else}
 	{#if currWeek}
