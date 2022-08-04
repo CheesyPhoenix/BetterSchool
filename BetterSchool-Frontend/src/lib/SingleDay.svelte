@@ -83,7 +83,6 @@
 
 <style>
 	.weekNrCont {
-		width: 95%;
 		z-index: 1;
 		position: absolute;
 		left: 2em;
