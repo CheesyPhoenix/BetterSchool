@@ -57,11 +57,17 @@
 		currWeek = weeks[weekIndex];
 	});
 
+	let swipeOffset = 0;
+
 	function changePage(by: number) {
 		if (!weeks) return;
 
+		swipeOffset = 0;
+
 		if (weekIndex + by >= 0 && weekIndex + by < weeks.length) {
 			weekIndex += by;
+
+			swipeOffset = 50 * -by;
 		}
 
 		currWeek = weeks[weekIndex];
@@ -88,7 +94,7 @@
 	{/if}
 {:else}
 	{#if currWeek}
-		<TimeTable week={currWeek} />
+		<TimeTable week={currWeek} {swipeOffset} />
 	{/if}
 
 	<div

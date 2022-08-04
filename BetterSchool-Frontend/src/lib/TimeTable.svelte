@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Day from "./TimeTable/Day.svelte";
+	import { fly, fade } from "svelte/transition";
 
 	interface Week {
 		weekNr: string;
@@ -17,18 +18,22 @@
 
 	export let week: Week;
 	$: days = week.days;
+
+	export let swipeOffset: number;
 </script>
 
 <div class="weekNrCont">
 	<h2 class="weekNr">{"Uke " + week.weekNr}</h2>
 </div>
-<div class="centerVertical">
-	<div class="table">
-		{#each days as wd}
-			<Day day={wd} widthPer={20} />
-		{/each}
+{#key week}
+	<div class="centerVertical" out:fly={{ x: swipeOffset }} in:fade>
+		<div class="table">
+			{#each days as wd}
+				<Day day={wd} widthPer={20} />
+			{/each}
+		</div>
 	</div>
-</div>
+{/key}
 
 <style>
 	.weekNrCont {
