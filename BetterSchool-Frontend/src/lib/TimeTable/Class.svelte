@@ -59,7 +59,7 @@
 
 	onMount(() => {
 		const interval = setInterval(() => {
-			const todayDate = new Date("16 juni 2022 9:30");
+			const todayDate = new Date();
 
 			if (
 				today &&
