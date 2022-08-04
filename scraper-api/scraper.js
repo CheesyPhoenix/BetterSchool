@@ -1,8 +1,45 @@
 const puppeteer = require("puppeteer");
 
-const pass = { username: process.env.USER, pass: process.env.PASS };
+module.exports = { scrape, validate };
 
-module.exports = async function scrape() {
+async function validate(creds) {
+	const browser = await puppeteer.launch({
+		headless: true,
+		executablePath: "/usr/bin/google-chrome",
+		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+	});
+	const page = (await browser.pages())[0];
+	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
+
+	await page.waitForSelector("#login-with-feide-button");
+	await page.click("#login-with-feide-button");
+
+	await page.waitForSelector("#username");
+	await page.type("#username", creds.username);
+	await page.type("#password", creds.pass);
+
+	await page.evaluate(() => {
+		document
+			.getElementsByClassName("button-primary breathe-top")[0]
+			.click();
+	});
+
+	await page.waitForNetworkIdle();
+
+	let validated;
+
+	if (page.url.includes("https://ido.feide.no")) {
+		validated = false;
+	} else {
+		validated = true;
+	}
+
+	browser.close();
+
+	return validated;
+}
+
+async function scrape(pass) {
 	const browser = await puppeteer.launch({
 		headless: true,
 		executablePath: "/usr/bin/google-chrome",
@@ -156,4 +193,4 @@ module.exports = async function scrape() {
 	browser.close();
 
 	return weeks;
-};
+}
