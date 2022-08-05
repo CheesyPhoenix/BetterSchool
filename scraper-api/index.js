@@ -2,10 +2,6 @@ const { scrape, validate } = require("./scraper.js");
 const fs = require("fs");
 const crypto = require("crypto");
 
-//
-fs.writeFileSync("./pass.json", "[]");
-//
-
 const key = crypto.randomBytes(32);
 const initVector = crypto.randomBytes(16);
 
@@ -91,21 +87,20 @@ async function update() {
 		}
 	});
 
-	app.post("/addUser", (req, res) => {
+	app.post("/addUser", async (req, res) => {
 		let creds = req.body;
 
-		if (creds.username && creds.pass && creds.class) {
-			res.sendStatus(200);
-		} else {
+		if (!creds.username || !creds.pass || !creds.class) {
 			res.status(400).send("Incorrectly formatted body object");
 			return;
 		}
 
-		if (validate(creds)) {
-			console.log("Creds validated");
+		if (await validate(creds)) {
+			res.sendStatus(200);
 			addToPass(creds);
-			console.log("Creds saved");
 			update();
+		} else {
+			res.status(401).send("incorrect credentials");
 		}
 	});
 

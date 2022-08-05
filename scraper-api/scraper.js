@@ -24,11 +24,11 @@ async function validate(creds) {
 			.click();
 	});
 
-	await page.waitForNetworkIdle();
+	await page.waitForTimeout(2000);
 
 	let validated;
 
-	if (page.url.includes("https://ido.feide.no")) {
+	if (page.url().includes("https://ido.feide.no")) {
 		validated = false;
 	} else {
 		validated = true;

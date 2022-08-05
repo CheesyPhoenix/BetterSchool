@@ -42,8 +42,52 @@
 	let weeks: Week[];
 	let currWeek: Week;
 
+	function getPrevClass() {
+		return window.localStorage.getItem("class");
+	}
+
+	let klasser: string[];
+
+	let selectedIndex: number;
+
+	$: {
+		if (selectedIndex) {
+			window.localStorage.setItem("class", klasser[selectedIndex]);
+		}
+	}
+
+	$: if (klasser && selectedIndex) getClass(klasser[selectedIndex]);
+
+	async function getClass(klasse) {
+		const res = await fetch(
+			"https://api.betterschool.cheesyphoenix.tk/" + klasse
+		);
+
+		const _weeks: Week[] = await res.json();
+		weeks = _weeks;
+		currWeek = weeks[weekIndex];
+	}
+
 	onMount(async () => {
-		const res = await fetch("https://api.betterschool.cheesyphoenix.tk");
+		let res = await fetch(
+			"https://api.betterschool.cheesyphoenix.tk/classes"
+		);
+		klasser = await res.json();
+
+		if (getPrevClass() != "" && klasser.includes(getPrevClass())) {
+			res = await fetch(
+				"https://api.betterschool.cheesyphoenix.tk/" + getPrevClass()
+			);
+
+			selectedIndex = klasser.indexOf(getPrevClass());
+		} else {
+			res = await fetch(
+				"https://api.betterschool.cheesyphoenix.tk/" + klasser[0]
+			);
+
+			selectedIndex = 0;
+		}
+
 		const _weeks: Week[] = await res.json();
 
 		const weekNr = getWeekNr().toString();
@@ -93,6 +137,14 @@
 		/>
 	{/if}
 {:else}
+	<select bind:value={selectedIndex} style="left: 6em; position: absolute;">
+		{#if klasser}
+			{#each klasser as klasse, index}
+				<option value={index}>{klasse}</option>
+			{/each}
+		{/if}
+	</select>
+
 	{#if currWeek}
 		<TimeTable week={currWeek} {swipeOffset} />
 	{/if}
