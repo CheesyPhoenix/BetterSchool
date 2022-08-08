@@ -28,11 +28,13 @@ async function validate(creds) {
 
 	let validated;
 
-	if (page.url().includes("https://ido.feide.no")) {
+	if (page.url().includes("https://idp.feide.no")) {
 		validated = false;
 	} else {
 		validated = true;
 	}
+
+	console.log(page.url());
 
 	browser.close();
 

@@ -1,9 +1,17 @@
 const { scrape, validate } = require("./scraper.js");
 const fs = require("fs");
 const crypto = require("crypto");
+const { exit } = require("process");
 
-const key = crypto.randomBytes(32);
-const initVector = crypto.randomBytes(16);
+if (!process.env.iv || !process.env.key) {
+	console.log("enter iv and key as env variables");
+	exit();
+}
+
+let key = process.env.key;
+let initVector = process.env.iv;
+
+fs.writeFileSync("./pass.json", "[]");
 
 function encrypt(string) {
 	const cipher = crypto.createCipheriv("aes-256-cbc", key, initVector);

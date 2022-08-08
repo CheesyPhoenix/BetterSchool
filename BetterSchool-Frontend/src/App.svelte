@@ -1,8 +1,10 @@
 <script lang="ts">
 	import TimeTable from "./lib/TimeTable.svelte";
 	import SingleDay from "./lib/SingleDay.svelte";
-	import arrow from "./assets/arrow.svg";
+	import arrowAsset from "./assets/arrow.svg";
+	import settingsAsset from "./assets/settings.svg";
 	import { onMount } from "svelte";
+	import Menu from "./lib/Menu.svelte";
 
 	interface Week {
 		weekNr: string;
@@ -122,6 +124,10 @@
 	let scrWidth: number;
 	let phoneMode = scrWidth <= 900;
 	$: phoneMode = scrWidth <= 900;
+
+	//
+
+	let menuActive = false;
 </script>
 
 <svelte:window bind:innerWidth={scrWidth} />
@@ -137,13 +143,9 @@
 		/>
 	{/if}
 {:else}
-	<select bind:value={selectedIndex} style="left: 6em; position: absolute;">
-		{#if klasser}
-			{#each klasser as klasse, index}
-				<option value={index}>{klasse}</option>
-			{/each}
-		{/if}
-	</select>
+	{#if menuActive}
+		<Menu {klasser} bind:selectedIndex bind:menuActive />
+	{/if}
 
 	{#if currWeek}
 		<TimeTable week={currWeek} {swipeOffset} />
@@ -158,7 +160,7 @@
 	>
 		<!-- svelte-ignore a11y-invalid-attribute -->
 		<img
-			src={arrow}
+			src={arrowAsset}
 			alt="Forrige uke"
 			class="buttonImg"
 			style="transform: rotate(180deg);"
@@ -172,7 +174,22 @@
 		}}
 	>
 		<!-- svelte-ignore a11y-invalid-attribute -->
-		<img src={arrow} alt="Neste uke" class="buttonImg" />
+		<img src={arrowAsset} alt="Neste uke" class="buttonImg" />
+	</div>
+
+	<!--settings btn-->
+	<div
+		class="settingsBtn"
+		on:click={() => {
+			menuActive = true;
+		}}
+	>
+		<!-- svelte-ignore a11y-invalid-attribute -->
+		<img
+			src={settingsAsset}
+			alt="Forrige uke"
+			class="buttonImg settingsImg"
+		/>
 	</div>
 {/if}
 
@@ -182,6 +199,26 @@
 			Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 		background-color: #333;
 		color: #f5f5f5;
+	}
+
+	.settingsBtn {
+		right: 0.75em;
+		top: 0.75em;
+		position: absolute;
+		z-index: 2;
+		user-select: none;
+		transition-duration: 0.3s;
+	}
+	.settingsBtn:hover {
+		cursor: pointer;
+	}
+
+	.settingsImg {
+		filter: none;
+		transition-duration: 0.15s;
+	}
+	.settingsImg:hover {
+		filter: drop-shadow(2px 4px 6px black) brightness(1.5);
 	}
 
 	.buttonImg {
