@@ -139,6 +139,67 @@
 </div>
 
 <style>
+	input {
+		background-color: #333;
+		border: none;
+		border-radius: 5px;
+		min-height: 2em;
+		color: #f5f5f5;
+		transition-duration: 0.15s;
+		outline: none;
+		padding-left: 5px;
+	}
+	input:hover {
+		background-color: #444;
+	}
+	input:focus {
+		background-color: #555;
+		border: none;
+	}
+	input:focus-visible {
+		border: none;
+	}
+
+	h5 {
+		margin: 0.5em 0;
+	}
+
+	select {
+		background-color: #333;
+		border: none;
+		border-radius: 5px;
+		min-height: 2em;
+		color: #f5f5f5;
+		transition-duration: 0.15s;
+		outline: none;
+	}
+	select:hover {
+		background-color: #444;
+	}
+	select:focus {
+		background-color: #555;
+	}
+
+	button {
+		color: #f5f5f5;
+		background-color: #333;
+		height: 3em;
+		width: auto;
+		padding: 0.5em 1em;
+		border: none;
+		border-radius: 5px;
+		transition-duration: 0.15s;
+		cursor: pointer;
+		outline: none;
+	}
+	button:hover {
+		background-color: #555;
+	}
+
+	button:focus {
+		background-color: #555;
+	}
+
 	#menu {
 		z-index: 10;
 		position: absolute;
