@@ -3,6 +3,7 @@
 	import { fade, slide } from "svelte/transition";
 	import { Jellyfish } from "svelte-loading-spinners";
 	import { toasts, ToastContainer, FlatToast } from "svelte-toasts";
+	import { swipe } from "svelte-gestures";
 
 	export let selectedIndex: number;
 	export let klasser: string[];
@@ -61,9 +62,29 @@
 
 		loading = false;
 	}
+
+	function swipeHandler(
+		event: CustomEvent<{
+			direction: "top" | "right" | "bottom" | "left";
+			target: EventTarget;
+		}>
+	) {
+		if (event.detail.direction == "top") {
+			menuActive = false;
+		}
+	}
 </script>
 
-<div id="menu" transition:slide>
+<div
+	id="menu"
+	transition:slide
+	use:swipe={{
+		timeframe: 300,
+		minSwipeDistance: 60,
+		touchAction: "pan-x",
+	}}
+	on:swipe={swipeHandler}
+>
 	<h3 style="margin-left: 3rem;">Select class to view</h3>
 
 	<select bind:value={selectedIndex} class="selectClass">

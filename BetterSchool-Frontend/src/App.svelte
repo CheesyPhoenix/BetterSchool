@@ -5,6 +5,7 @@
 	import settingsAsset from "./assets/settings.svg";
 	import { onMount } from "svelte";
 	import Menu from "./lib/Menu.svelte";
+	import { swipe } from "svelte-gestures";
 
 	interface Week {
 		weekNr: string;
@@ -128,70 +129,91 @@
 	//
 
 	let menuActive = false;
+
+	function swipeHandler(
+		event: CustomEvent<{
+			direction: "top" | "right" | "bottom" | "left";
+			target: EventTarget;
+		}>
+	) {
+		if (event.detail.direction == "bottom") {
+			menuActive = true;
+		}
+	}
 </script>
 
 <svelte:window bind:innerWidth={scrWidth} />
 
-{#if phoneMode}
-	{#if currWeek}
-		<SingleDay
-			week={currWeek}
-			{weekIndex}
-			on:changeWeek={(event) => {
-				changePage(event.detail);
-			}}
-		/>
-	{/if}
-{:else}
-	{#if menuActive}
-		<Menu {klasser} bind:selectedIndex bind:menuActive />
-	{/if}
-
-	{#if currWeek}
-		<TimeTable week={currWeek} {swipeOffset} />
-	{/if}
-
-	<div
-		class="button"
-		style="left: 0;"
-		on:click={() => {
-			changePage(-1);
-		}}
-	>
-		<!-- svelte-ignore a11y-invalid-attribute -->
-		<img
-			src={arrowAsset}
-			alt="Forrige uke"
-			class="buttonImg"
-			style="transform: rotate(180deg);"
-		/>
-	</div>
-	<div
-		class="button"
-		style="right: 0;"
-		on:click={() => {
-			changePage(1);
-		}}
-	>
-		<!-- svelte-ignore a11y-invalid-attribute -->
-		<img src={arrowAsset} alt="Neste uke" class="buttonImg" />
-	</div>
-
-	<!--settings btn-->
-	<div
-		class="settingsBtn"
-		on:click={() => {
-			menuActive = true;
-		}}
-	>
-		<!-- svelte-ignore a11y-invalid-attribute -->
-		<img
-			src={settingsAsset}
-			alt="Forrige uke"
-			class="buttonImg settingsImg"
-		/>
-	</div>
+{#if menuActive}
+	<Menu {klasser} bind:selectedIndex bind:menuActive />
 {/if}
+
+<div
+	use:swipe={{
+		timeframe: 300,
+		minSwipeDistance: 60,
+		touchAction: "pan-x",
+	}}
+	on:swipe={swipeHandler}
+	style="width: 100%; height: 100%; margin: 0;"
+>
+	{#if phoneMode}
+		{#if currWeek}
+			<SingleDay
+				week={currWeek}
+				{weekIndex}
+				on:changeWeek={(event) => {
+					changePage(event.detail);
+				}}
+			/>
+		{/if}
+	{:else}
+		{#if currWeek}
+			<TimeTable week={currWeek} {swipeOffset} />
+		{/if}
+
+		<div
+			class="button"
+			style="left: 0;"
+			on:click={() => {
+				changePage(-1);
+			}}
+		>
+			<!-- svelte-ignore a11y-invalid-attribute -->
+			<img
+				src={arrowAsset}
+				alt="Forrige uke"
+				class="buttonImg"
+				style="transform: rotate(180deg);"
+			/>
+		</div>
+		<div
+			class="button"
+			style="right: 0;"
+			on:click={() => {
+				changePage(1);
+			}}
+		>
+			<!-- svelte-ignore a11y-invalid-attribute -->
+			<img src={arrowAsset} alt="Neste uke" class="buttonImg" />
+		</div>
+
+		<!--settings btn-->
+		<div
+			class="settingsBtn"
+			on:click={() => {
+				menuActive = true;
+			}}
+		>
+			<!-- svelte-ignore a11y-invalid-attribute -->
+			<img
+				src={settingsAsset}
+				alt="Forrige uke"
+				class="buttonImg settingsImg"
+			/>
+		</div>
+	{/if}
+</div>
 
 <style>
 	:root {
