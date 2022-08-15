@@ -4,7 +4,12 @@ module.exports = { scrape, validate };
 
 async function validate(creds) {
 	const browser = await puppeteer.launch({
-		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		args: [
+			"--no-sandbox",
+			"--disable-setuid-sandbox",
+			"--disable-gpu",
+			"--disable-dev-shm-usage",
+		],
 		headless: true,
 	});
 
@@ -48,7 +53,12 @@ async function scrape(pass) {
 	}
 
 	const browser = await puppeteer.launch({
-		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		args: [
+			"--no-sandbox",
+			"--disable-setuid-sandbox",
+			"--disable-gpu",
+			"--disable-dev-shm-usage",
+		],
 		headless: true,
 	});
 
