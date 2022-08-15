@@ -11,8 +11,6 @@ if (!process.env.iv || !process.env.key) {
 let key = process.env.key;
 let initVector = process.env.iv;
 
-fs.writeFileSync("./pass.json", "[]");
-
 function encrypt(string) {
 	const cipher = crypto.createCipheriv("aes-256-cbc", key, initVector);
 
@@ -32,7 +30,7 @@ function decrypt(string) {
 }
 
 function getPass() {
-	return JSON.parse(fs.readFileSync("./pass.json").toString());
+	return JSON.parse(fs.readFileSync("./creds/pass.json").toString());
 }
 
 function addToPass(creds) {
@@ -44,7 +42,7 @@ function addToPass(creds) {
 		type: creds.type,
 	});
 
-	fs.writeFileSync("./pass.json", JSON.stringify(pass));
+	fs.writeFileSync("./creds/pass.json", JSON.stringify(pass));
 }
 
 let data = {};

@@ -77,6 +77,8 @@
 		);
 		klasser = await res.json();
 
+		console.log(klasser);
+
 		if (getPrevClass() != "" && klasser.includes(getPrevClass())) {
 			res = await fetch(
 				"https://api.betterschool.cheesyphoenix.tk/" + getPrevClass()

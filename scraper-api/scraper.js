@@ -4,10 +4,10 @@ module.exports = { scrape, validate };
 
 async function validate(creds) {
 	const browser = await puppeteer.launch({
-		headless: true,
-		executablePath: "/usr/bin/google-chrome",
 		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		headless: true,
 	});
+
 	const page = (await browser.pages())[0];
 	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
 
@@ -24,7 +24,7 @@ async function validate(creds) {
 			.click();
 	});
 
-	await page.waitForTimeout(2000);
+	await page.waitForTimeout(5000);
 
 	let validated;
 
@@ -42,11 +42,16 @@ async function validate(creds) {
 }
 
 async function scrape(pass) {
+	if (!(await validate(pass))) {
+		console.log("creds invalid");
+		return;
+	}
+
 	const browser = await puppeteer.launch({
-		headless: true,
-		executablePath: "/usr/bin/google-chrome",
 		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		headless: true,
 	});
+
 	const page = (await browser.pages())[0];
 	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
 
@@ -64,22 +69,30 @@ async function scrape(pass) {
 	});
 
 	await page.waitForSelector(
-		"#RightContentPanel > div > div.vs-Navigation--Wrapper > div > button > div.vs-Navigation-Header-LogoWrapper > svg > path"
+		"#dashboard-widget-TimetableWidget-panel-hiddenArea > div > div > div > div > div:nth-child(2) > div.Timetable-TimetableHeader"
 	);
 
 	await page.waitForTimeout(3000);
 
 	await page.evaluate(() => {
 		try {
-			const el = document.querySelector(
-				"html > body > div:nth-of-type(5) > button:nth-of-type(2)"
+			let el = document.querySelector(
+				"html > body > div:nth-of-type(6) > button:nth-of-type(2)"
 			);
 
 			if (el) el.click();
+
+			setTimeout(() => {
+				el = document.querySelector(
+					"html > body > div:nth-of-type(5) > button:nth-of-type(2)"
+				);
+
+				if (el) el.click();
+			}, 2000);
 		} catch (error) {}
 	});
 
-	await page.waitForTimeout(1000);
+	await page.waitForTimeout(4000);
 
 	function getWeekData() {
 		const days = document.getElementsByClassName(
@@ -176,7 +189,7 @@ async function scrape(pass) {
 		return weekOb;
 	}
 
-	let foresight = 3;
+	let foresight = 5;
 
 	let weeks = [];
 
