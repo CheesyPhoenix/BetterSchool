@@ -39,16 +39,12 @@ async function validate(creds) {
 		validated = true;
 	}
 
-	console.log(page.url());
-
 	browser.close();
 
 	return validated;
 }
 
 async function scrape(pass) {
-	console.log("Scraping for: " + pass.username);
-
 	if (!(await validate(pass))) {
 		console.log("creds invalid");
 		return;
@@ -217,8 +213,6 @@ async function scrape(pass) {
 			"#dashboard-widget-TimetableWidget-panel-hiddenArea > div > div > div > div > div:nth-child(2) > div.timetable-grid"
 		);
 	}
-
-	console.log(weeks);
 
 	browser.close();
 

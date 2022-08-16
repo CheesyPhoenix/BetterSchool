@@ -39,7 +39,7 @@ function addToPass(creds) {
 	for (let i = 0; i < pass.length; i++) {
 		const cred = pass[i];
 
-		if (cred.class == creds.class) {
+		if (decrypt(cred.username) == creds.username) {
 			pass = pass.splice(i, 1);
 			i--;
 		}
@@ -56,7 +56,7 @@ function addToPass(creds) {
 	fs.writeFileSync("./creds/pass.json", JSON.stringify(pass));
 }
 
-let data = {};
+let data = [];
 
 async function update() {
 	getPass().forEach(async (cred) => {
@@ -66,7 +66,7 @@ async function update() {
 				pass: decrypt(cred.pass),
 			};
 
-			data[cred.class] = await scrape(pass);
+			data.push({ data: await scrape(pass), class: cred.class });
 		} catch (error) {
 			console.log("Scraper failed!");
 			console.log(error);
@@ -87,8 +87,8 @@ async function update() {
 	app.get("/classes", (req, res) => {
 		const classes = [];
 
-		for (const klasse in data) {
-			classes.push(klasse);
+		for (let i = 0; i < data.length; i++) {
+			classes.push(data[i].class);
 		}
 
 		res.json(classes);
@@ -97,13 +97,21 @@ async function update() {
 	app.get("/:class", (req, res) => {
 		const klasse = req.params.class;
 
-		console.log(req.params);
-
-		if (klasse in data) {
-			res.json(data[klasse]);
-		} else {
+		if (klasse !== "classes") {
 			res.sendStatus(404);
+			return;
 		}
+
+		for (let i = 0; i < data.length; i++) {
+			const element = data[i];
+
+			if (element.class == klasse) {
+				res.json(data[klasse]);
+				return;
+			}
+		}
+
+		res.sendStatus(404);
 	});
 
 	app.post("/addUser", async (req, res) => {
