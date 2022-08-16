@@ -36,11 +36,22 @@ function getPass() {
 function addToPass(creds) {
 	let pass = getPass();
 
+	for (let i = 0; i < pass.length; i++) {
+		const cred = pass[i];
+
+		if (cred.class == creds.class) {
+			pass = pass.splice(i, 1);
+			i--;
+		}
+	}
+
 	pass.push({
 		username: encrypt(creds.username),
 		pass: encrypt(creds.pass),
-		type: creds.type,
+		class: creds.class,
 	});
+
+	console.log(pass);
 
 	fs.writeFileSync("./creds/pass.json", JSON.stringify(pass));
 }
@@ -55,7 +66,7 @@ async function update() {
 				pass: decrypt(cred.pass),
 			};
 
-			data[cred.type] = await scrape(pass);
+			data[cred.class] = await scrape(pass);
 		} catch (error) {
 			console.log("Scraper failed!");
 			console.log(error);
@@ -85,6 +96,8 @@ async function update() {
 
 	app.get("/:class", (req, res) => {
 		const klasse = req.params.class;
+
+		console.log(req.params);
 
 		if (klasse in data) {
 			res.json(data[klasse]);

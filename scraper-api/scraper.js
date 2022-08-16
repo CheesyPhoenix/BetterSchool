@@ -47,6 +47,8 @@ async function validate(creds) {
 }
 
 async function scrape(pass) {
+	console.log("Scraping for: " + pass.username);
+
 	if (!(await validate(pass))) {
 		console.log("creds invalid");
 		return;
@@ -207,13 +209,16 @@ async function scrape(pass) {
 		const data = await page.evaluate(getWeekData);
 		weeks.push(data);
 
-		await page.click("#nextweek");
+		await page.evaluate(() => {
+			document.getElementById("nextweek").click();
+		});
+		await page.waitForTimeout(1000);
 		await page.waitForSelector(
 			"#dashboard-widget-TimetableWidget-panel-hiddenArea > div > div > div > div > div:nth-child(2) > div.timetable-grid"
 		);
 	}
 
-	//fs.writeFileSync("data.json", JSON.stringify(weeks));
+	console.log(weeks);
 
 	browser.close();
 
