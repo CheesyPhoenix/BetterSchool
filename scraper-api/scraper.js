@@ -60,6 +60,7 @@ async function scrape(pass) {
 		headless: true,
 	});
 
+	//login
 	const page = (await browser.pages())[0];
 	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
 
@@ -76,12 +77,12 @@ async function scrape(pass) {
 			.click();
 	});
 
-	await page.waitForSelector(
-		"#dashboard-widget-TimetableWidget-panel-hiddenArea > div > div > div > div > div:nth-child(2) > div.Timetable-TimetableHeader"
-	);
+	//wait for login to complete
+	await page.waitForNetworkIdle();
 
 	await page.waitForTimeout(3000);
 
+	//remove pop-ups
 	await page.evaluate(() => {
 		try {
 			let el = document.querySelector(
@@ -201,6 +202,7 @@ async function scrape(pass) {
 
 	let weeks = [];
 
+	//scrape data
 	for (let i = 0; i < foresight; i++) {
 		const data = await page.evaluate(getWeekData);
 		weeks.push(data);
