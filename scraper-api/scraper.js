@@ -77,10 +77,29 @@ async function scrape(pass) {
 			.click();
 	});
 
-	//wait for login to complete
-	await page.waitForNetworkIdle();
+	await page.waitForTimeout(5000);
 
-	await page.waitForTimeout(3000);
+	//wait for login to complete
+	if (
+		!(await page.evaluate(() => {
+			if (document.getElementById("top-menu-navbar-brand")) {
+				return true;
+			}
+			return false;
+		})) &&
+		page.url() != "https://amalieskram-vgs.inschool.visma.no/"
+	) {
+		console.log("waiting for page load. Currently at: " + page.url());
+		await page.waitForSelector("#top-menu-navbar-brand");
+	}
+
+	await page.waitForTimeout(2000);
+
+	await page.goto(
+		"https://amalieskram-vgs.inschool.visma.no/#/app/dashboard"
+	);
+
+	await page.waitForTimeout(2000);
 
 	//remove pop-ups
 	await page.evaluate(() => {
@@ -101,7 +120,7 @@ async function scrape(pass) {
 		} catch (error) {}
 	});
 
-	await page.waitForTimeout(4000);
+	await page.waitForTimeout(6000);
 
 	function getWeekData() {
 		const days = document.getElementsByClassName(
@@ -217,6 +236,8 @@ async function scrape(pass) {
 	}
 
 	browser.close();
+
+	console.log(weeks);
 
 	return weeks;
 }

@@ -34,14 +34,17 @@ function getPass() {
 }
 
 function addToPass(creds) {
+	console.log("adding to pass");
 	let pass = getPass();
 
 	for (let i = 0; i < pass.length; i++) {
-		const cred = pass[i];
+		console.log("testing for duplicate, i: " + i);
+		console.log("pass length: " + pass.length);
 
-		if (decrypt(cred.username) == creds.username) {
-			pass = pass.splice(i, 1);
-			i--;
+		if (decrypt(pass[i].username) == creds.username) {
+			console.log("match found, removing");
+			pass.splice(i, 1);
+			i -= 1;
 		}
 	}
 
@@ -58,8 +61,14 @@ function addToPass(creds) {
 
 let data = [];
 
-async function update() {
+async function update(prevError = false) {
+	console.log("updating data");
+
+	data = [];
+
 	getPass().forEach(async (cred) => {
+		console.log("updating for: " + cred.class);
+
 		try {
 			const pass = {
 				username: decrypt(cred.username),
@@ -67,15 +76,24 @@ async function update() {
 			};
 
 			data.push({ data: await scrape(pass), class: cred.class });
+
+			console.log("update for: " + cred.class + "  Successful");
 		} catch (error) {
-			console.log("Scraper failed!");
-			console.log(error);
+			if (!prevError) {
+				console.log("Scraper failed! Retrying in 10sec");
+				setTimeout(() => {
+					update(true);
+				}, 10000);
+			} else {
+				console.log("Scraper failed!");
+				console.log(error);
+			}
 		}
 	});
-	setTimeout(update, 60 * 60 * 1000);
 }
 (async () => {
 	await update();
+	setInterval(update, 60 * 60 * 1000);
 
 	const express = require("express");
 	const app = express();
@@ -97,7 +115,7 @@ async function update() {
 	app.get("/:class", (req, res) => {
 		const klasse = req.params.class;
 
-		if (klasse !== "classes") {
+		if (klasse == "classes") {
 			res.sendStatus(404);
 			return;
 		}
@@ -106,7 +124,7 @@ async function update() {
 			const element = data[i];
 
 			if (element.class == klasse) {
-				res.json(data[klasse]);
+				res.json(element.data);
 				return;
 			}
 		}
@@ -122,9 +140,16 @@ async function update() {
 			return;
 		}
 
+		console.log("validating creds");
+
 		if (await validate(creds)) {
+			console.log("creds validated");
+
 			res.sendStatus(200);
+
 			addToPass(creds);
+
+			console.log("creds added");
 			update();
 		} else {
 			res.status(401).send("incorrect credentials");
