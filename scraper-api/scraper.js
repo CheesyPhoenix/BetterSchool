@@ -180,7 +180,8 @@ async function scrape(pass) {
 
 			//get classes
 
-			const classes = day.children[0].children;
+			const classes =
+				day.getElementsByClassName("Timetable-Items")[0].children;
 
 			for (let x = 0; x < classes.length; x++) {
 				const sClass = classes[x];
