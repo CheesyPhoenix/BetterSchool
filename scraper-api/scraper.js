@@ -58,6 +58,7 @@ async function scrape(pass) {
 			"--disable-dev-shm-usage",
 		],
 		headless: true,
+		defaultViewport: { height: 1080, width: 1920 },
 	});
 
 	//login
@@ -99,7 +100,7 @@ async function scrape(pass) {
 		"https://amalieskram-vgs.inschool.visma.no/#/app/dashboard"
 	);
 
-	await page.waitForTimeout(2000);
+	await page.waitForTimeout(10000);
 
 	//remove pop-ups
 	await page.evaluate(() => {
@@ -226,8 +227,22 @@ async function scrape(pass) {
 	for (let i = 0; i < foresight; i++) {
 		console.log("Getting week data at: " + page.url());
 
-		const data = await page.evaluate(getWeekData);
-		weeks.push(data);
+		try {
+			let data = await page.evaluate(getWeekData);
+			if (data.days.length != 5) {
+				data = await page.evaluate(getWeekData);
+			}
+			weeks.push(data);
+		} catch (error) {
+			await page.screenshot({
+				fullPage: true,
+				path: "./errorScreenshots/latestError.png",
+			});
+
+			await browser.close();
+
+			throw error;
+		}
 
 		await page.evaluate(() => {
 			document.getElementById("nextweek").click();

@@ -61,35 +61,68 @@ function addToPass(creds) {
 
 let data = [];
 
-async function update(prevError = false) {
+async function update() {
 	console.log("updating data");
 
-	data = [];
+	let _data = [];
 
-	getPass().forEach(async (cred) => {
+	const pass = getPass();
+
+	for (let i = 0; i < pass.length; i++) {
+		const cred = pass[i];
 		console.log("updating for: " + cred.class);
 
+		const credDecrypted = {
+			username: decrypt(cred.username),
+			pass: decrypt(cred.pass),
+		};
+
+		const result = await scrapeForCred(credDecrypted, 5);
+
+		if (result[0].days.length > 0) {
+			_data.push({ data: result, class: cred.class });
+
+			console.log("update for: " + cred.class + "  Successful!");
+		} else {
+			console.log("update for: " + cred.class + " Failed!");
+		}
+	}
+
+	data = _data;
+
+	//function declaration --------------------------------------------------------------
+
+	async function scrapeForCred(cred, maxRetries, retries = 0) {
+		let _data;
 		try {
-			const pass = {
-				username: decrypt(cred.username),
-				pass: decrypt(cred.pass),
-			};
+			_data = await scrape(cred);
 
-			data.push({ data: await scrape(pass), class: cred.class });
+			console.log("Scraper successful");
 
-			console.log("update for: " + cred.class + "  Successful");
+			return _data;
 		} catch (error) {
-			if (!prevError) {
+			if (retries < maxRetries) {
 				console.log("Scraper failed! Retrying in 10sec");
-				setTimeout(() => {
-					update(true);
-				}, 10000);
+
+				await new Promise((resolve, reject) => {
+					setTimeout(async () => {
+						_data = await scrapeForCred(
+							cred,
+							maxRetries,
+							retries++
+						);
+						resolve();
+					}, 10000);
+				});
+
+				return _data;
 			} else {
-				console.log("Scraper failed!");
+				console.log("Scraper failed! Max retries reached");
 				console.log(error);
+				return [{ weekNr: "Error", days: [] }];
 			}
 		}
-	});
+	}
 }
 (async () => {
 	await update();
