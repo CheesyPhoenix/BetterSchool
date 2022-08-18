@@ -8,6 +8,7 @@ export default defineConfig({
 		svelte(),
 		VitePWA({
 			registerType: "autoUpdate",
+			devOptions: { enabled: true },
 			manifest: {
 				background_color: "#333",
 				theme_color: "#333",
@@ -38,7 +39,12 @@ export default defineConfig({
 				runtimeCaching: [
 					{
 						handler: "NetworkFirst",
-						urlPattern: "https://api.betterschool.cheesyphoenix.tk",
+						urlPattern: (opt) => {
+							return (
+								opt.url.origin ==
+								"https://api.betterschool.cheesyphoenix.tk"
+							);
+						},
 						method: "GET",
 					},
 				],

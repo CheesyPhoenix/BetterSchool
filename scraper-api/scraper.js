@@ -224,6 +224,8 @@ async function scrape(pass) {
 
 	//scrape data
 	for (let i = 0; i < foresight; i++) {
+		console.log("Getting week data at: " + page.url());
+
 		const data = await page.evaluate(getWeekData);
 		weeks.push(data);
 
