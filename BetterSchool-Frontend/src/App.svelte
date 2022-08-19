@@ -54,14 +54,18 @@
 	let selectedIndex: number;
 
 	$: {
-		if (selectedIndex) {
+		if (selectedIndex || selectedIndex == 0) {
 			window.localStorage.setItem("class", klasser[selectedIndex]);
 		}
 	}
 
-	$: if (klasser && selectedIndex) getClass(klasser[selectedIndex]);
+	$: {
+		if (klasser && (selectedIndex || selectedIndex == 0)) {
+			getClass(klasser[selectedIndex]);
+		}
+	}
 
-	async function getClass(klasse) {
+	async function getClass(klasse: string) {
 		const res = await fetch(
 			"https://api.betterschool.cheesyphoenix.tk/" + klasse
 		);
@@ -76,8 +80,6 @@
 			"https://api.betterschool.cheesyphoenix.tk/classes"
 		);
 		klasser = await res.json();
-
-		console.log(klasser);
 
 		if (getPrevClass() != "" && klasser.includes(getPrevClass())) {
 			res = await fetch(
