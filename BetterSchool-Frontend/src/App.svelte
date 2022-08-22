@@ -144,6 +144,14 @@
 			menuActive = true;
 		}
 	}
+
+	$: {
+		if (phoneMode) {
+			document.getElementById("app").style.overflowY = "auto";
+		} else {
+			document.getElementById("app").style.overflowY = "hidden";
+		}
+	}
 </script>
 
 <svelte:window bind:innerWidth={scrWidth} />
@@ -159,7 +167,7 @@
 		touchAction: "pan-x",
 	}}
 	on:swipe={swipeHandler}
-	style="width: 100%; height: 100%; margin: 0;"
+	id="main"
 >
 	{#if phoneMode}
 		{#if currWeek}
@@ -225,6 +233,12 @@
 			Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 		background-color: #333;
 		color: #f5f5f5;
+	}
+
+	#main {
+		width: 100%;
+		height: 100%;
+		margin: 0;
 	}
 
 	.settingsBtn {

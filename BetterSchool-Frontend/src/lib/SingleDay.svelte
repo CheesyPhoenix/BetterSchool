@@ -104,12 +104,13 @@
 	.centerVertical {
 		display: flex;
 		justify-content: center;
-		height: 100vh;
+		height: max-content;
 		position: absolute;
 		width: 100vw;
 		margin: 0;
 		left: 0;
 		top: 0;
+		margin-top: 4em;
 	}
 
 	.table {
@@ -118,5 +119,6 @@
 		display: flex;
 		overflow-x: auto;
 		border-radius: 15px;
+		margin-bottom: 2em;
 	}
 </style>
