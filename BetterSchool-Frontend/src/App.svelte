@@ -97,7 +97,12 @@
 
 		const _weeks: Week[] = await res.json();
 
-		const weekNr = getWeekNr().toString();
+		let weekNr = getWeekNr().toString();
+
+		//go to next week if day is Saturday or Sunday
+		if (new Date().getDay() > 5) {
+			weekNr = (parseInt(weekNr) + 1).toString();
+		}
 
 		for (let i = 0; i < _weeks.length; i++) {
 			const week = _weeks[i];
