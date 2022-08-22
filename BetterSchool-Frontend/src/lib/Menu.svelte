@@ -111,6 +111,10 @@
 		<button on:click={addNewUser}>Register</button>
 	</div>
 
+	<a id="GitHub-link" href="https://github.com/CheesyPhoenix/BetterSchool">
+		This project is open-source! Fork me on GitHub or submit an issue here!
+	</a>
+
 	{#if loading}
 		<div class="loadingPanel" transition:fade>
 			<Jellyfish />
@@ -139,6 +143,21 @@
 </div>
 
 <style>
+	a {
+		text-decoration: none;
+		color: #999;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+
+	#GitHub-link {
+		text-align: center;
+		width: 100%;
+		position: absolute;
+		bottom: 1em;
+	}
+
 	input {
 		background-color: #333;
 		border: none;
