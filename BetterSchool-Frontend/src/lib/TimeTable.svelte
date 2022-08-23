@@ -41,6 +41,8 @@
 		margin: auto;
 		margin-left: 6%;
 		margin-right: 67px;
+		position: absolute;
+		z-index: 1;
 	}
 
 	.centerVertical {
