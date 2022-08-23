@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"publish": "docker buildx build -t docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api --push ."
+		"publish": "docker buildx build -t docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api --push .",
+		"dev": "node . --dev"
 	},
 	"keywords": [],
 	"author": "",

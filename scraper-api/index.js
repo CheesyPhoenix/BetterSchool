@@ -3,6 +3,12 @@ const fs = require("fs");
 const crypto = require("crypto");
 const { exit } = require("process");
 
+if (process.argv[2] == "--dev") {
+	fs.writeFileSync("./creds/pass.json", "[]");
+	process.env.iv = crypto.randomBytes(16);
+	process.env.key = crypto.randomBytes(16);
+}
+
 if (!process.env.iv || !process.env.key) {
 	console.log("enter iv and key as env variables");
 	exit();
