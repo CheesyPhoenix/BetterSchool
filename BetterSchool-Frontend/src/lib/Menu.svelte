@@ -111,9 +111,12 @@
 		<button on:click={addNewUser}>Register</button>
 	</div>
 
-	<a id="GitHub-link" href="https://github.com/CheesyPhoenix/BetterSchool">
-		This project is open-source! Fork me on GitHub or submit an issue here!
-	</a>
+	<div class="centerHorizontal" id="GitHub-link">
+		<a href="https://github.com/CheesyPhoenix/BetterSchool">
+			This project is open-source! Fork me on GitHub or submit an issue
+			here!
+		</a>
+	</div>
 
 	{#if loading}
 		<div class="loadingPanel" transition:fade>
@@ -151,11 +154,18 @@
 		text-decoration: underline;
 	}
 
-	#GitHub-link {
+	.centerHorizontal {
+		width: 100%;
 		text-align: center;
-		width: auto;
+	}
+
+	#GitHub-link {
+		width: 100%;
 		position: absolute;
 		bottom: 1em;
+	}
+
+	#GitHub-link > a {
 		margin-left: 0.5em;
 		margin-right: 0.5em;
 	}
