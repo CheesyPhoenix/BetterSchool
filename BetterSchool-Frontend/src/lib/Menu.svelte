@@ -153,9 +153,11 @@
 
 	#GitHub-link {
 		text-align: center;
-		width: 100%;
+		width: auto;
 		position: absolute;
 		bottom: 1em;
+		margin-left: 0.5em;
+		margin-right: 0.5em;
 	}
 
 	input {
