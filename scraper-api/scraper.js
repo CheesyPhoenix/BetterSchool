@@ -39,7 +39,7 @@ async function validate(creds) {
 		validated = true;
 	}
 
-	browser.close();
+	await browser.close();
 
 	return validated;
 }
@@ -253,7 +253,7 @@ async function scrape(pass) {
 		);
 	}
 
-	browser.close();
+	await browser.close();
 
 	console.log(weeks);
 
