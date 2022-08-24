@@ -81,6 +81,8 @@
 		);
 		klasser = await res.json();
 
+		klasser.sort();
+
 		if (getPrevClass() != "" && klasser.includes(getPrevClass())) {
 			res = await fetch(
 				"https://api.betterschool.cheesyphoenix.tk/" + getPrevClass()
