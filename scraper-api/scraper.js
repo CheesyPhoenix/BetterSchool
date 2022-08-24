@@ -107,7 +107,8 @@ async function doScrape(pass, browser) {
 			}
 			return false;
 		})) &&
-		page.url() != "https://amalieskram-vgs.inschool.visma.no/"
+		page.url() !=
+			"https://amalieskram-vgs.inschool.visma.no/#/app/dashboard"
 	) {
 		console.log("waiting for page load. Currently at: " + page.url());
 		await page.waitForSelector("#top-menu-navbar-brand");

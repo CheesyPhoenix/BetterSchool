@@ -118,7 +118,7 @@ async function update() {
 						_data = await scrapeForCred(
 							cred,
 							maxRetries,
-							retries++
+							retries + 1
 						);
 						resolve();
 					}, 10000);

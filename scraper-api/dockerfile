@@ -19,6 +19,8 @@ COPY . .
 
 RUN chmod -R o+rwx node_modules/puppeteer/.local-chromium
 
+RUN node ./node_modules/puppeteer/install.js
+
 EXPOSE 8080
 
 CMD ["node", "."]
