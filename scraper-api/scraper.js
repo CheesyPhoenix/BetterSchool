@@ -11,8 +11,19 @@ async function validate(creds) {
 			"--disable-dev-shm-usage",
 		],
 		headless: true,
+		defaultViewport: { height: 1080, width: 1920 },
 	});
 
+	try {
+		return await doValidate(creds, browser);
+	} catch (e) {
+		throw e;
+	} finally {
+		await browser.close();
+	}
+}
+
+async function doValidate(creds, browser) {
 	const page = (await browser.pages())[0];
 	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
 
@@ -39,17 +50,10 @@ async function validate(creds) {
 		validated = true;
 	}
 
-	await browser.close();
-
 	return validated;
 }
 
 async function scrape(pass) {
-	if (!(await validate(pass))) {
-		console.log("creds invalid");
-		return;
-	}
-
 	const browser = await puppeteer.launch({
 		args: [
 			"--no-sandbox",
@@ -60,6 +64,21 @@ async function scrape(pass) {
 		headless: true,
 		defaultViewport: { height: 1080, width: 1920 },
 	});
+
+	try {
+		return await doScrape(pass, browser);
+	} catch (e) {
+		throw e;
+	} finally {
+		await browser.close();
+	}
+}
+
+async function doScrape(pass, browser) {
+	if (!(await validate(pass))) {
+		console.log("creds invalid");
+		return;
+	}
 
 	//login
 	const page = (await browser.pages())[0];
@@ -239,7 +258,9 @@ async function scrape(pass) {
 				path: "./errorScreenshots/latestError.png",
 			});
 
-			await browser.close();
+			console.log(
+				"encountered error while getting week data, saving screenshot"
+			);
 
 			throw error;
 		}
@@ -249,11 +270,9 @@ async function scrape(pass) {
 		});
 		await page.waitForTimeout(1000);
 		await page.waitForSelector(
-			"#dashboard-widget-TimetableWidget-panel-hiddenArea > div > div > div > div > div:nth-child(2) > div.timetable-grid"
+			"#dashboard-widget-TimetableWidget-panel > div.vs-panel-body > div > div > div > div:nth-child(2) > div.Timetable-TimetableHeader > div:nth-child(1) > p"
 		);
 	}
-
-	await browser.close();
 
 	console.log(weeks);
 

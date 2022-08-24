@@ -3,19 +3,22 @@ const fs = require("fs");
 const crypto = require("crypto");
 const { exit } = require("process");
 
-if (process.argv[2] == "--dev") {
-	fs.writeFileSync("./creds/pass.json", "[]");
-	process.env.iv = crypto.randomBytes(16);
-	process.env.key = crypto.randomBytes(16);
-}
-
-if (!process.env.iv || !process.env.key) {
+if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
 	console.log("enter iv and key as env variables");
 	exit();
 }
 
-let key = process.env.key;
-let initVector = process.env.iv;
+let key;
+let initVector;
+
+if (process.argv[2] == "--dev") {
+	fs.writeFileSync("./creds/pass.json", "[]");
+	initVector = crypto.randomBytes(16);
+	key = crypto.randomBytes(32);
+} else {
+	key = process.env.key;
+	initVector = process.env.iv;
+}
 
 function encrypt(string) {
 	const cipher = crypto.createCipheriv("aes-256-cbc", key, initVector);
@@ -192,6 +195,7 @@ async function update() {
 			update();
 		} else {
 			res.status(401).send("incorrect credentials");
+			console.log("incorrect credentials");
 		}
 	});
 

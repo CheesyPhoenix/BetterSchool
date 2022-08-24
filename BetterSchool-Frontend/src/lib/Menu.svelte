@@ -38,6 +38,11 @@
 			requestOptions
 		);
 
+		// const res = await fetch(
+		// 	"http://localhost:8080/addUser",
+		// 	requestOptions
+		// );
+
 		if (res.status == 200) {
 			toasts.add({
 				title: "New user added successfully!",
