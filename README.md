@@ -38,7 +38,7 @@ The API exposes three endpoints:
 
 Response: 
 ```TypeScript
-let response: string[];
+const response: string[];
 ```
 
 This is used to get a list of all classes in the API's database
