@@ -41,9 +41,11 @@ jobs:
       with:
         node-version: 18
     
-    - run: cd ./BetterSchool-Frontend
     - run: npm ci
+      working-directory: ./BetterSchool-Frontend
+      
     - run: npm run build --if-present
+      working-directory: ./BetterSchool-Frontend
     
     -
       name: Build and push WEB docker image
