@@ -55,3 +55,5 @@ jobs:
         push: true
         tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-web:latest
         
+    - run: curl --location --request GET 'https://watchtower.cheesyphoenix.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'
+        
