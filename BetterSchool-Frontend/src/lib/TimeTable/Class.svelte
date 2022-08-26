@@ -55,7 +55,9 @@
 			classActive = true;
 		}
 	}
+
 	$: active = classActive ? "active" : "";
+	$: cancelled = classOb.room == "UTGÅR" ? "cancelled" : "";
 
 	onMount(() => {
 		const interval = setInterval(() => {
@@ -78,7 +80,10 @@
 	});
 </script>
 
-<div class="class {active}" style="top: {distTop}px; height: {height}px">
+<div
+	class="class {active} {cancelled}"
+	style="top: {distTop}px; height: {height}px"
+>
 	<div class="time">
 		<p class="bold">{classOb.time}</p>
 		- Rom:
@@ -103,9 +108,12 @@
 	}
 	.active {
 		border-color: #27a300;
-		border-width: 5px;
-		width: calc(100% - 1em - 5px);
 		background-color: #fbfbfb;
+	}
+
+	.cancelled {
+		border-color: #a71900 !important;
+		background-color: #a5a5a5 !important;
 	}
 
 	.name {
