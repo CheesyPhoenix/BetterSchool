@@ -27,7 +27,8 @@ jobs:
       name: Build and push API docker image
       uses: docker/build-push-action@v3
       with:
-        context: ./scraper-api/dockerfile
+        context: ./scraper-api
+        file: ./dockerfile
         push: true
         tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api:latest
     
@@ -35,7 +36,8 @@ jobs:
       name: Build and push WEB docker image
       uses: docker/build-push-action@v3
       with:
-        context: ./BetterSchool-Frontend/dockerfile
+        context: ./BetterSchool-Frontend
+        file: ./dockerfile
         push: true
         tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-web:latest
         
