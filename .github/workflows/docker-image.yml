@@ -40,9 +40,12 @@ jobs:
       uses: actions/setup-node@v3.4.1
       with:
         node-version: 18
-        
+    
     - run: npm ci
+      working-directory: ./BetterSchool-Frontend
+      
     - run: npm run build --if-present
+      working-directory: ./BetterSchool-Frontend
     
     -
       name: Build and push WEB docker image
@@ -51,4 +54,6 @@ jobs:
         context: ./BetterSchool-Frontend
         push: true
         tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-web:latest
+        
+    - run: "curl --location --request GET 'https://watchtower.cheesyphoenix.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'"
         
