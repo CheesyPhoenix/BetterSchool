@@ -75,11 +75,13 @@ const response: Week[];
 
 Where the request body is of type:
 ```TypeScript
-interface body {
+interface bodyFormat {
   username: string,
   pass: string,
   class: string,
 }
+
+const body: bodyFormat;
 ```
 
 On success this will return status ```200``` <br>
