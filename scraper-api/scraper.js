@@ -160,7 +160,7 @@ async function doScrape(pass, browser) {
 			days: [],
 		};
 
-		let prevDay = 0;
+		// let prevDay = 0;
 
 		for (let i = 0; i < days.length; i++) {
 			const day = days[i];
@@ -172,32 +172,48 @@ async function doScrape(pass, browser) {
 			};
 
 			//get date
-			const dateDay = document
-				.getElementsByClassName("Timetable-TimetableHeader")[0]
-				.children[i].innerText.split(" ")[1];
+			let week = weekOb.weekNr;
+			let year = parseInt(
+				document
+					.getElementsByClassName(
+						"subheading2 userTimetable_currentWeek"
+					)[0]
+					.innerText.split(",")[1]
+					.split(" ")[2]
+			);
 
-			const dateRest = document
-				.getElementsByClassName(
-					"subheading2 userTimetable_currentWeek"
-				)[0]
-				.innerText.split(",")[1];
+			const w = new Date(year, 0).getTime() + 604800000 * (week - 1);
 
-			const date = new Date(dateDay + dateRest);
+			dayOb.date = new Date(w + (518400000 / 6) * (i + 2));
 
-			if (parseInt(dateDay) < prevDay) {
-				for (let x = 0; x < i; x++) {
-					const day = weekOb.days[x];
+			console.log(dayOb.date);
 
-					const date = new Date(day.date);
-					date.setMonth(date.getMonth() - 1);
+			// const dateDay = document
+			// 	.getElementsByClassName("Timetable-TimetableHeader")[0]
+			// 	.children[i].innerText.split(" ")[1];
 
-					day.date = date.toDateString();
-				}
-			}
+			// const dateRest = document
+			// 	.getElementsByClassName(
+			// 		"subheading2 userTimetable_currentWeek"
+			// 	)[0]
+			// 	.innerText.split(",")[1];
 
-			prevDay = parseInt(dateDay);
+			// const date = new Date(dateDay + dateRest);
 
-			dayOb.date = date.toDateString();
+			// if (parseInt(dateDay) < prevDay) {
+			// 	for (let x = 0; x < i; x++) {
+			// 		const day = weekOb.days[x];
+
+			// 		const date = new Date(day.date);
+			// 		date.setMonth(date.getMonth() - 1);
+
+			// 		day.date = date.toDateString();
+			// 	}
+			// }
+
+			// prevDay = parseInt(dateDay);
+
+			// dayOb.date = date.toDateString();
 
 			//get classes
 
