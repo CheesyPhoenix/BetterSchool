@@ -184,9 +184,7 @@ async function doScrape(pass, browser) {
 
 			const w = new Date(year, 0).getTime() + 604800000 * (week - 1);
 
-			dayOb.date = new Date(w + (518400000 / 6) * (i + 2));
-
-			console.log(dayOb.date);
+			dayOb.date = new Date(w + (518400000 / 6) * (i + 2)).toDateString();
 
 			// const dateDay = document
 			// 	.getElementsByClassName("Timetable-TimetableHeader")[0]
