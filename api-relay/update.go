@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,7 +10,7 @@ import (
 
 // GET /classes
 func getDataClasses() []string {
-	res, err := http.Get("https://api.betterschool.cheesyphoenix.tk/classes")
+	res, err := http.Get(baseURL + "classes")
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -37,7 +38,7 @@ func getDataClasses() []string {
 // GET /:class
 
 func getDataClass(class string) string {
-	res, err := http.Get("https://api.betterschool.cheesyphoenix.tk/" + class)
+	res, err := http.Get(baseURL + class)
 	if err != nil {
 		fmt.Println(err)
 		return ""
@@ -54,4 +55,15 @@ func getDataClass(class string) string {
 	defer res.Body.Close()
 
 	return classData
+}
+
+// POST /addUser
+func addUserSend(body []byte) *http.Response {
+	res, err := http.Post(baseURL+"addUser", "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	return res
 }

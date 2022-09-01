@@ -1,59 +1,50 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
+    push:
+        branches: ["main"]
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
+    docker:
+        runs-on: ubuntu-latest
 
-    steps:
-    -
-        name: Checkout
-        uses: actions/checkout@v3
-    -
-      name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-    -
-      name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-    -
-      name: Login to registry
-      uses: docker/login-action@v2
-      with:
-        registry: docker.cheesyphoenix.tk
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_TOKEN }}
-        
-    -
-      name: Build and push API docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: ./scraper-api
-        push: true
-        tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api:latest
-        
-        
-    - 
-      name: Use Node.js
-      uses: actions/setup-node@v3.4.1
-      with:
-        node-version: 18
-    
-    - run: npm ci
-      working-directory: ./BetterSchool-Frontend
-      
-    - run: npm run build --if-present
-      working-directory: ./BetterSchool-Frontend
-    
-    -
-      name: Build and push WEB docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: ./BetterSchool-Frontend
-        push: true
-        tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-web:latest
-        
-    - run: "curl --location --request GET 'https://watchtower.cheesyphoenix.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'"
-        
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v2
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+            - name: Login to registry
+              uses: docker/login-action@v2
+              with:
+                  registry: docker.cheesyphoenix.tk
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_TOKEN }}
+
+            - name: Build and push API docker image
+              uses: docker/build-push-action@v3
+              with:
+                  context: ./scraper-api
+                  push: true
+                  tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api:latest
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3.4.1
+              with:
+                  node-version: 18
+
+            - run: npm ci
+              working-directory: ./BetterSchool-Frontend
+
+            - run: npm run build --if-present
+              working-directory: ./BetterSchool-Frontend
+
+            - name: Build and push WEB docker image
+              uses: docker/build-push-action@v3
+              with:
+                  context: ./BetterSchool-Frontend
+                  push: true
+                  tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-web:latest
+
+            - run: "curl --location --request GET 'https://watchtower.cheesyphoenix.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'"
