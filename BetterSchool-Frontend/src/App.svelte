@@ -216,22 +216,21 @@
 			<!-- svelte-ignore a11y-invalid-attribute -->
 			<img src={arrowAsset} alt="Neste uke" class="buttonImg" />
 		</div>
-
-		<!--settings btn-->
-		<div
-			class="settingsBtn"
-			on:click={() => {
-				menuActive = true;
-			}}
-		>
-			<!-- svelte-ignore a11y-invalid-attribute -->
-			<img
-				src={settingsAsset}
-				alt="Forrige uke"
-				class="buttonImg settingsImg"
-			/>
-		</div>
 	{/if}
+	<!--settings btn-->
+	<div
+		class="settingsBtn"
+		on:click={() => {
+			menuActive = true;
+		}}
+	>
+		<!-- svelte-ignore a11y-invalid-attribute -->
+		<img
+			src={settingsAsset}
+			alt="Forrige uke"
+			class="buttonImg settingsImg"
+		/>
+	</div>
 </div>
 
 <style>
