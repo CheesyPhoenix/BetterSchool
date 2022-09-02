@@ -111,6 +111,7 @@
 		left: 0;
 		top: 0;
 		margin-top: 4em;
+		min-height: 90%;
 	}
 
 	.table {
@@ -120,5 +121,8 @@
 		overflow-x: auto;
 		border-radius: 15px;
 		margin-bottom: 2em;
+
+		min-height: 700px;
+		margin-top: 0;
 	}
 </style>

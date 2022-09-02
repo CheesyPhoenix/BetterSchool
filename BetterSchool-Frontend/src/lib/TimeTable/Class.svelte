@@ -17,7 +17,12 @@
 		timeSlutt = classOb.time.split("-")[1];
 	}
 
-	const scale = 80;
+	export let dayHeight;
+
+	//const scale = 80;
+	$: scale = dayHeight / 8.25;
+
+	// total height / 8.25 (from 8:00 - 16:15) = scale
 
 	$: distTop =
 		(parseInt(timeStart.split(":")[0]) +

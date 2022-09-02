@@ -64,5 +64,7 @@
 		display: flex;
 		overflow-x: auto;
 		border-radius: 15px;
+		margin-top: 5em;
+		margin-bottom: 3em;
 	}
 </style>

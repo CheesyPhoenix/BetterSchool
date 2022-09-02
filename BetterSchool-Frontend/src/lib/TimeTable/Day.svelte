@@ -83,13 +83,15 @@
 	});
 
 	export let widthPer;
+
+	let dayHeight;
 </script>
 
 <div class="day" style="background-color: {bgColor}; width: {widthPer}%">
 	<div class="header">{dayName} {dayDate}</div>
-	<div class="classes">
+	<div class="classes" bind:clientHeight={dayHeight}>
 		{#each classes as classOb}
-			<Class {classOb} {today} />
+			<Class {classOb} {today} {dayHeight} />
 		{/each}
 	</div>
 </div>
@@ -107,6 +109,6 @@
 
 	.classes {
 		position: relative;
-		height: 700px;
+		height: 100%;
 	}
 </style>
