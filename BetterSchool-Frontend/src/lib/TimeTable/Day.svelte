@@ -82,9 +82,28 @@
 		});
 	});
 
-	export let widthPer;
+	export let widthPer: number;
 
-	let dayHeight;
+	let dayHeight: number;
+
+	let currTime = new Date();
+	//update current time once a minute
+	setInterval(() => {
+		currTime = new Date();
+	}, 60 * 1000);
+
+	$: scale = dayHeight / 8.25;
+
+	let nowLineActive = false;
+
+	$: nowLinePos =
+		(currTime.getHours() + currTime.getMinutes() / 60 - 8) * scale;
+
+	$: {
+		if (today && currTime.getHours() > 8 && currTime.getHours() < 16) {
+			nowLineActive = true;
+		}
+	}
 </script>
 
 <div class="day" style="background-color: {bgColor}; width: {widthPer}%">
@@ -93,6 +112,13 @@
 		{#each classes as classOb}
 			<Class {classOb} {today} {dayHeight} />
 		{/each}
+
+		{#if nowLineActive}
+			<div class="nowLine" style="top: {nowLinePos}px;">
+				<hr class="nowLineHr" />
+				<span class="nowLineCircle" />
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -110,5 +136,33 @@
 	.classes {
 		position: relative;
 		height: 100%;
+	}
+
+	.nowLine {
+		position: absolute;
+		margin: 0;
+		width: 100%;
+		left: 0;
+	}
+	.nowLineHr {
+		margin: 0;
+		width: 102.5%;
+		left: -1.25%;
+		border-color: red;
+		border-top: none;
+		border-left: none;
+		border-right: none;
+		position: absolute;
+	}
+
+	.nowLineCircle {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background-color: red;
+		display: inline-block;
+		top: -3px;
+		left: 1px;
+		position: absolute;
 	}
 </style>
