@@ -103,7 +103,6 @@
 		width: calc(100% - 1em - 5px);
 		padding-left: 0.5em;
 		padding-right: 0.5em;
-		margin-top: 1em;
 		position: absolute;
 		border-radius: 10px;
 		border-bottom-left-radius: 2px;

@@ -125,7 +125,7 @@
 <style>
 	.header {
 		width: 100%;
-		height: 1em;
+		height: 2em;
 		text-align: center;
 	}
 	.day {
@@ -135,7 +135,7 @@
 
 	.classes {
 		position: relative;
-		height: 100%;
+		height: 98%;
 	}
 
 	.nowLine {
