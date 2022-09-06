@@ -54,13 +54,18 @@ func update() {
 
 		fmt.Println("Updating data")
 
-		classes = getDataClasses()
+		if len(getDataClasses()) > 0 {
+			classes = getDataClasses()
+		}
 
 		tempClassData := make(map[string]string)
 		for i := 0; i < len(classes); i++ {
 			tempClassData[classes[i]] = getDataClass(classes[i])
 		}
-		classData = tempClassData
+
+		if len(tempClassData) > 0 {
+			classData = tempClassData
+		}
 
 		fmt.Println("Update complete")
 	}
