@@ -100,7 +100,7 @@
 		(currTime.getHours() + currTime.getMinutes() / 60 - 8) * scale;
 
 	$: {
-		if (today && currTime.getHours() > 8 && currTime.getHours() < 16) {
+		if (today && currTime.getHours() >= 8 && currTime.getHours() < 16) {
 			nowLineActive = true;
 		}
 	}
