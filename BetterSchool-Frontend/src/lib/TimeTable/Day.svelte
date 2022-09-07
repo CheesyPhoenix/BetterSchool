@@ -135,7 +135,7 @@
 
 	.classes {
 		position: relative;
-		height: 98%;
+		height: 95%;
 	}
 
 	.nowLine {
