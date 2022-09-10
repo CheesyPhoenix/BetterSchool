@@ -2,11 +2,11 @@
 	"name": "scraper",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "./dist/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"publish": "docker buildx build -t docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api --push .",
-		"dev": "node . --dev"
+		"dev": "tsc && node . --dev"
 	},
 	"keywords": [],
 	"author": "",
@@ -14,6 +14,7 @@
 	"dependencies": {
 		"cors": "^2.8.5",
 		"express": "^4.18.1",
-		"puppeteer": "^14.3.0"
+		"puppeteer": "^14.3.0",
+		"typescript": "^4.8.3"
 	}
 }
