@@ -3,6 +3,13 @@ import fs from "fs";
 import crypto from "crypto";
 import { exit } from "process";
 
+import express from "express";
+const app = express();
+import cors from "cors";
+
+app.use(cors());
+app.use(express.json());
+
 if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
 	console.log("enter iv and key as env variables");
 	exit();
@@ -144,14 +151,7 @@ async function update() {
 	await update();
 	setInterval(update, 60 * 60 * 1000);
 
-	const express = require("express");
-	const app = express();
-	const cors = require("cors");
-
-	app.use(cors());
-	app.use(express.json());
-
-	app.get("/classes", (req: any, res: { json: (arg0: any[]) => void }) => {
+	app.get("/classes", (req, res) => {
 		const classes = [];
 
 		for (let i = 0; i < data.length; i++) {
@@ -161,72 +161,50 @@ async function update() {
 		res.json(classes);
 	});
 
-	app.get(
-		"/:class",
-		(
-			req: { params: { class: any } },
-			res: {
-				sendStatus: (arg0: number) => void;
-				json: (arg0: any) => void;
-			}
-		) => {
-			const klasse = req.params.class;
+	app.get("/:class", (req, res) => {
+		const klasse = req.params.class;
 
-			if (klasse == "classes") {
-				res.sendStatus(404);
-				return;
-			}
-
-			for (let i = 0; i < data.length; i++) {
-				const element = data[i];
-
-				if (element.class == klasse) {
-					res.json(element.data);
-					return;
-				}
-			}
-
+		if (klasse == "classes") {
 			res.sendStatus(404);
+			return;
 		}
-	);
 
-	app.post(
-		"/addUser",
-		async (
-			req: { body: any },
-			res: {
-				status: (arg0: number) => {
-					(): any;
-					new (): any;
-					send: { (arg0: string): void; new (): any };
-				};
-				sendStatus: (arg0: number) => void;
-			}
-		) => {
-			let creds = req.body;
+		for (let i = 0; i < data.length; i++) {
+			const element = data[i];
 
-			if (!creds.username || !creds.pass || !creds.class) {
-				res.status(400).send("Incorrectly formatted body object");
+			if (element.class == klasse) {
+				res.json(element.data);
 				return;
 			}
-
-			console.log("validating creds");
-
-			if (await Scraper.validate(creds)) {
-				console.log("creds validated");
-
-				res.sendStatus(200);
-
-				addToPass(creds);
-
-				console.log("creds added");
-				update();
-			} else {
-				res.status(401).send("incorrect credentials");
-				console.log("incorrect credentials");
-			}
 		}
-	);
+
+		res.sendStatus(404);
+	});
+
+	app.post("/addUser", async (req, res) => {
+		let creds = req.body;
+
+		if (!creds.username || !creds.pass || !creds.class) {
+			res.status(400).send("Incorrectly formatted body object");
+			return;
+		}
+
+		console.log("validating creds");
+
+		if (await Scraper.validate(creds)) {
+			console.log("creds validated");
+
+			res.sendStatus(200);
+
+			addToPass(creds);
+
+			console.log("creds added");
+			update();
+		} else {
+			res.status(401).send("incorrect credentials");
+			console.log("incorrect credentials");
+		}
+	});
 
 	app.listen(8080, () => {
 		console.log("running");

@@ -16,6 +16,11 @@ const scraper_1 = __importDefault(require("./scraper"));
 const fs_1 = __importDefault(require("fs"));
 const crypto_1 = __importDefault(require("crypto"));
 const process_1 = require("process");
+const express_1 = __importDefault(require("express"));
+const app = (0, express_1.default)();
+const cors_1 = __importDefault(require("cors"));
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
 if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
     console.log("enter iv and key as env variables");
     (0, process_1.exit)();
@@ -120,11 +125,6 @@ function update() {
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield update();
     setInterval(update, 60 * 60 * 1000);
-    const express = require("express");
-    const app = express();
-    const cors = require("cors");
-    app.use(cors());
-    app.use(express.json());
     app.get("/classes", (req, res) => {
         const classes = [];
         for (let i = 0; i < data.length; i++) {
