@@ -1,0 +1,97 @@
+[
+	{ "name": "Arna VGS", "url": "https://arna-vgs.inschool.visma.no/" },
+	{ "name": "Askoy VGS", "url": "https://askoy-vgs.inschool.visma.no/" },
+	{
+		"name": "Austevoll VGS",
+		"url": "https://austevoll-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Austrheim VGS",
+		"url": "https://austrheim-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Bergenkatedralskole VGS",
+		"url": "https://bergenkatedralskole-vgs.inschool.visma.no/"
+	},
+	{ "name": "Bomlo VGS", "url": "https://bomlo-vgs.inschool.visma.no/" },
+	{ "name": "Dale VGS", "url": "https://dale-vgs.inschool.visma.no/" },
+	{ "name": "Eid VGS", "url": "https://eid-vgs.inschool.visma.no/" },
+	{
+		"name": "Fagskulen Vestland",
+		"url": "https://fagskulen-vestland.inschool.visma.no/"
+	},
+	{ "name": "Firda VGS", "url": "https://firda-vgs.inschool.visma.no/" },
+	{ "name": "Fitjar VGS", "url": "https://fitjar-vgs.inschool.visma.no/" },
+	{ "name": "Flora VGS", "url": "https://flora-vgs.inschool.visma.no/" },
+	{ "name": "Fusa VGS", "url": "https://fusa-vgs.inschool.visma.no/" },
+	{
+		"name": "Fyllingsdalen VGS",
+		"url": "https://fyllingsdalen-vgs.inschool.visma.no/"
+	},
+	{ "name": "Hafstad VGS", "url": "https://hafstad-vgs.inschool.visma.no/" },
+	{
+		"name": "Hoyanger VGS",
+		"url": "https://hoyanger-vgs.inschool.visma.no/"
+	},
+	{ "name": "Knarvik VGS", "url": "https://knarvik-vgs.inschool.visma.no/" },
+	{ "name": "Kvam VGS", "url": "https://kvam-vgs.inschool.visma.no/" },
+	{
+		"name": "Kvinnherad VGS",
+		"url": "https://kvinnherad-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Laksevagbergenmaritime VGS",
+		"url": "https://laksevagbergenmaritime-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Langhaugen VGS",
+		"url": "https://langhaugen-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Mooyrane VGS",
+		"url": "https://mooyrane-vgs.inschool.visma.no/"
+	},
+	{ "name": "Maloy VGS", "url": "https://maloy-vgs.inschool.visma.no/" },
+	{
+		"name": "Nordahlgrieg VGS",
+		"url": "https://nordahlgrieg-vgs.inschool.visma.no/"
+	},
+	{ "name": "Odda VGS", "url": "https://odda-vgs.inschool.visma.no/" },
+	{
+		"name": "Olsvikasen VGS",
+		"url": "https://olsvikasen-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Osgymnas VGS",
+		"url": "https://osgymnas-vgs.inschool.visma.no/"
+	},
+	{ "name": "Os VGS", "url": "https://os-vgs.inschool.visma.no/" },
+	{ "name": "Osteroy VGS", "url": "https://osteroy-vgs.inschool.visma.no/" },
+	{
+		"name": "Rubbestadnes VGS",
+		"url": "https://rubbestadnes-vgs.inschool.visma.no/"
+	},
+	{ "name": "Sandsli VGS", "url": "https://sandsli-vgs.inschool.visma.no/" },
+	{
+		"name": "Slatthaug VGS",
+		"url": "https://slatthaug-vgs.inschool.visma.no/"
+	},
+	{
+		"name": "Sognjordhage VGS",
+		"url": "https://sognjordhage-vgs.inschool.visma.no/"
+	},
+	{ "name": "Sogndal VGS", "url": "https://sogndal-vgs.inschool.visma.no/" },
+	{ "name": "Sotra VGS", "url": "https://sotra-vgs.inschool.visma.no/" },
+	{ "name": "Stend VGS", "url": "https://stend-vgs.inschool.visma.no/" },
+	{ "name": "Stord VGS", "url": "https://stord-vgs.inschool.visma.no/" },
+	{ "name": "Stryn VGS", "url": "https://stryn-vgs.inschool.visma.no/" },
+	{ "name": "Tertnes VGS", "url": "https://tertnes-vgs.inschool.visma.no/" },
+	{
+		"name": "Vossgymnas VGS",
+		"url": "https://vossgymnas-vgs.inschool.visma.no/"
+	},
+	{ "name": "Voss VGS", "url": "https://voss-vgs.inschool.visma.no/" },
+	{ "name": "Ardal VGS", "url": "https://ardal-vgs.inschool.visma.no/" },
+	{ "name": "Arstad VGS", "url": "https://arstad-vgs.inschool.visma.no/" },
+	{ "name": "Asane VGS", "url": "https://asane-vgs.inschool.visma.no/" }
+]
