@@ -38,7 +38,7 @@ export default defineConfig({
 			workbox: {
 				runtimeCaching: [
 					{
-						handler: "NetworkFirst",
+						handler: "StaleWhileRevalidate",
 						urlPattern: (opt) => {
 							return (
 								opt.url.origin ==
