@@ -1,6 +1,9 @@
 import puppeteer from "puppeteer";
 
-async function validate(creds: any) {
+async function validate(
+	creds: { username: string; pass: string },
+	schoolURL: string
+) {
 	const browser = await puppeteer.launch({
 		args: [
 			"--no-sandbox",
@@ -13,7 +16,7 @@ async function validate(creds: any) {
 	});
 
 	try {
-		return await doValidate(creds, browser);
+		return await doValidate(creds, schoolURL, browser);
 	} catch (e) {
 		throw e;
 	} finally {
@@ -22,11 +25,12 @@ async function validate(creds: any) {
 }
 
 async function doValidate(
-	creds: { username: any; pass: any },
+	creds: { username: string; pass: string },
+	schoolURL: string,
 	browser: { pages: () => any }
 ) {
 	const page = (await browser.pages())[0];
-	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
+	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
 	await page.click("#login-with-feide-button");
@@ -47,7 +51,10 @@ async function doValidate(
 
 	let validated;
 
-	if (page.url().includes("https://idp.feide.no")) {
+	if (
+		page.url().includes("https://idp.feide.no") ||
+		page.url().includes("login_error")
+	) {
 		validated = false;
 	} else {
 		validated = true;
@@ -56,7 +63,10 @@ async function doValidate(
 	return validated;
 }
 
-async function scrape(pass: any, schoolURL: any) {
+async function scrape(
+	pass: { username: string; pass: string },
+	schoolURL: string
+) {
 	const browser = await puppeteer.launch({
 		args: [
 			"--no-sandbox",
@@ -78,11 +88,11 @@ async function scrape(pass: any, schoolURL: any) {
 }
 
 async function doScrape(
-	pass: { username: any; pass: any },
-	browser: { pages: () => any },
+	pass: { username: string; pass: string },
+	browser: puppeteer.Browser,
 	schoolURL: string
 ) {
-	if (!(await validate(pass))) {
+	if (!(await validate(pass, schoolURL))) {
 		console.log("creds invalid");
 		return;
 	}

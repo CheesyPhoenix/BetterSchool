@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = __importDefault(require("puppeteer"));
-function validate(creds) {
+function validate(creds, schoolURL) {
     return __awaiter(this, void 0, void 0, function* () {
         const browser = yield puppeteer_1.default.launch({
             args: [
@@ -26,7 +26,7 @@ function validate(creds) {
             defaultViewport: { height: 1080, width: 1920 },
         });
         try {
-            return yield doValidate(creds, browser);
+            return yield doValidate(creds, schoolURL, browser);
         }
         catch (e) {
             throw e;
@@ -36,10 +36,10 @@ function validate(creds) {
         }
     });
 }
-function doValidate(creds, browser) {
+function doValidate(creds, schoolURL, browser) {
     return __awaiter(this, void 0, void 0, function* () {
         const page = (yield browser.pages())[0];
-        yield page.goto("https://amalieskram-vgs.inschool.visma.no/");
+        yield page.goto(schoolURL);
         yield page.waitForSelector("#login-with-feide-button");
         yield page.click("#login-with-feide-button");
         yield page.waitForSelector("#username");
@@ -50,7 +50,8 @@ function doValidate(creds, browser) {
         });
         yield page.waitForTimeout(5000);
         let validated;
-        if (page.url().includes("https://idp.feide.no")) {
+        if (page.url().includes("https://idp.feide.no") ||
+            page.url().includes("login_error")) {
             validated = false;
         }
         else {
@@ -84,7 +85,7 @@ function scrape(pass, schoolURL) {
 }
 function doScrape(pass, browser, schoolURL) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!(yield validate(pass))) {
+        if (!(yield validate(pass, schoolURL))) {
             console.log("creds invalid");
             return;
         }
