@@ -2,11 +2,51 @@ import Scraper from "./scraper";
 import fs from "fs";
 import crypto from "crypto";
 import { exit } from "process";
+import { v5 as uuidv5 } from "uuid";
+
+if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
+	console.log("enter iv and key as env variables");
+	exit();
+}
+
+let key: crypto.CipherKey;
+let initVector: crypto.BinaryLike;
+
+if (process.argv[2] == "--dev") {
+	fs.writeFileSync("./creds/pass.json", "[]");
+	initVector = crypto.randomBytes(16);
+	key = crypto.randomBytes(32);
+} else {
+	key = process.env.key as string;
+	initVector = process.env.iv as string;
+}
+
+//uuid namespace
+const uuidNamespace = "32b5b01c-a581-46a3-bdb2-5456b0e9390e";
+
+interface SchoolClass {
+	weeks: {
+		weekNr: string;
+		days: {
+			name: string;
+			date: string;
+			classes: {
+				date: string;
+				time: string;
+				room: string;
+				name: string;
+			}[];
+		}[];
+	}[];
+	classID: string;
+	className: string;
+}
 
 function getPass(): {
 	username: string;
 	pass: string;
-	class: string;
+	classID: string;
+	className: string;
 	schoolURL: string;
 }[] {
 	return JSON.parse(fs.readFileSync("./creds/pass.json").toString());
@@ -35,7 +75,8 @@ function addToPass(creds: {
 	pass.push({
 		username: encrypt(creds.username),
 		pass: encrypt(creds.pass),
-		class: creds.class,
+		classID: uuidv5(creds.class, uuidNamespace),
+		className: creds.class,
 		schoolURL: creds.schoolURL,
 	});
 
@@ -46,25 +87,10 @@ function addToPass(creds: {
 
 async function update(): Promise<
 	{
-		classes: {
-			weeks: {
-				weekNr: string;
-				days: {
-					name: string;
-					date: string;
-					classes: {
-						date: string;
-						time: string;
-						room: string;
-						name: string;
-					}[];
-				}[];
-			}[];
-			class: string;
-		}[];
+		classes: SchoolClass[];
 		schoolName: string;
 		schoolURL: string;
-		schoolID: number;
+		schoolID: string;
 	}[]
 > {
 	console.log("updating data");
@@ -74,31 +100,16 @@ async function update(): Promise<
 	);
 
 	let _data: {
-		classes: {
-			weeks: {
-				weekNr: string;
-				days: {
-					name: string;
-					date: string;
-					classes: {
-						date: string;
-						time: string;
-						room: string;
-						name: string;
-					}[];
-				}[];
-			}[];
-			class: string;
-		}[];
+		classes: SchoolClass[];
 		schoolName: string;
 		schoolURL: string;
-		schoolID: number;
+		schoolID: string;
 	}[] = [];
 
 	schools.forEach((school, i) => {
 		_data.push({
 			classes: [],
-			schoolID: i,
+			schoolID: uuidv5(school.url, uuidNamespace).toString(),
 			schoolName: school.name,
 			schoolURL: school.url,
 		});
@@ -108,7 +119,7 @@ async function update(): Promise<
 
 	for (let i = 0; i < pass.length; i++) {
 		const cred = pass[i];
-		console.log("updating for: " + cred.class);
+		console.log("updating for: " + cred.className);
 
 		const credDecrypted = {
 			username: decrypt(cred.username),
@@ -122,11 +133,15 @@ async function update(): Promise<
 				.find((school) => {
 					return school.schoolURL == cred.schoolURL;
 				})
-				?.classes.push({ weeks: result, class: cred.class });
+				?.classes.push({
+					weeks: result,
+					className: cred.className,
+					classID: cred.classID,
+				});
 
-			console.log("update for: " + cred.class + "  Successful!");
+			console.log("update for: " + cred.className + "  Successful!");
 		} else {
-			console.log("update for: " + cred.class + " Failed!");
+			console.log("update for: " + cred.className + " Failed!");
 		}
 	}
 
@@ -187,23 +202,6 @@ async function update(): Promise<
 	}
 }
 
-if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
-	console.log("enter iv and key as env variables");
-	exit();
-}
-
-let key: crypto.CipherKey;
-let initVector: crypto.BinaryLike;
-
-if (process.argv[2] == "--dev") {
-	fs.writeFileSync("./creds/pass.json", "[]");
-	initVector = crypto.randomBytes(16);
-	key = crypto.randomBytes(32);
-} else {
-	key = process.env.key as string;
-	initVector = process.env.iv as string;
-}
-
 function encrypt(string: string) {
 	const cipher = crypto.createCipheriv("aes-256-cbc", key, initVector);
 
@@ -222,4 +220,4 @@ function decrypt(string: string) {
 	return decryptedData;
 }
 
-export { update, addToPass };
+export { update, addToPass, SchoolClass };

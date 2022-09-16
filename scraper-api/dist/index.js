@@ -31,7 +31,7 @@ let data = [];
     });
     app.get("/:schoolID/classes", (req, res) => {
         const classes = [];
-        const schoolID = parseInt(req.params.schoolID);
+        const schoolID = req.params.schoolID;
         const school = data.find((school) => {
             return school.schoolID == schoolID;
         });
@@ -40,29 +40,30 @@ let data = [];
             return;
         }
         for (let i = 0; i < school.classes.length; i++) {
-            classes.push(school.classes[i].class);
+            classes.push({
+                className: school.classes[i].className,
+                classID: school.classes[i].classID,
+            });
         }
         console.log(school);
         res.json(classes);
     });
-    app.get("/:schoolID/class/:class", (req, res) => {
-        const schoolID = parseInt(req.params.schoolID);
-        const school = data.find((school) => {
-            return school.schoolID == schoolID;
-        });
+    app.get("/:schoolID/class/:classID", (req, res) => {
+        const schoolID = req.params.schoolID;
+        const school = getSchoolById(schoolID);
         if (!school) {
             res.sendStatus(404);
             return;
         }
-        const klasse = req.params.class;
-        for (let i = 0; i < school.classes.length; i++) {
-            const element = school.classes[i];
-            if (element.class == klasse) {
-                res.json(element.weeks);
-                return;
-            }
+        const classID = req.params.classID;
+        const klasse = school.classes.find((klasse) => {
+            return klasse.classID == classID;
+        });
+        if (!klasse) {
+            res.sendStatus(404);
+            return;
         }
-        res.sendStatus(404);
+        res.json(klasse.weeks);
     });
     app.post("/addUser", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let creds = req.body;

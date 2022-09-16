@@ -3,38 +3,23 @@ import Scraper from "./scraper";
 import express from "express";
 const app = express();
 import cors from "cors";
-import { addToPass, update } from "./dataHandler";
+import { addToPass, SchoolClass, update } from "./dataHandler";
 
 app.use(cors());
 app.use(express.json());
 
 let data: {
-	classes: {
-		weeks: {
-			weekNr: string;
-			days: {
-				name: string;
-				date: string;
-				classes: {
-					date: string;
-					time: string;
-					room: string;
-					name: string;
-				}[];
-			}[];
-		}[];
-		class: string;
-	}[];
+	classes: SchoolClass[];
 	schoolName: string;
 	schoolURL: string;
-	schoolID: number;
+	schoolID: string;
 }[] = [];
 
 (async () => {
 	data = await update();
 	setInterval(update, 60 * 60 * 1000);
 
-	let schools: { name: string; schoolID: number }[] = data.map((school) => {
+	let schools: { name: string; schoolID: string }[] = data.map((school) => {
 		return { name: school.schoolName, schoolID: school.schoolID };
 	});
 
@@ -43,9 +28,9 @@ let data: {
 	});
 
 	app.get("/:schoolID/classes", (req, res) => {
-		const classes = [];
+		const classes: { className: string; classID: string }[] = [];
 
-		const schoolID = parseInt(req.params.schoolID);
+		const schoolID = req.params.schoolID;
 		const school = data.find((school) => {
 			return school.schoolID == schoolID;
 		});
@@ -56,7 +41,10 @@ let data: {
 		}
 
 		for (let i = 0; i < school.classes.length; i++) {
-			classes.push(school.classes[i].class);
+			classes.push({
+				className: school.classes[i].className,
+				classID: school.classes[i].classID,
+			});
 		}
 
 		console.log(school);
@@ -64,29 +52,27 @@ let data: {
 		res.json(classes);
 	});
 
-	app.get("/:schoolID/class/:class", (req, res) => {
-		const schoolID = parseInt(req.params.schoolID);
-		const school = data.find((school) => {
-			return school.schoolID == schoolID;
-		});
+	app.get("/:schoolID/class/:classID", (req, res) => {
+		const schoolID = req.params.schoolID;
+		const school = getSchoolById(schoolID);
 
 		if (!school) {
 			res.sendStatus(404);
 			return;
 		}
 
-		const klasse = req.params.class;
+		const classID = req.params.classID;
 
-		for (let i = 0; i < school.classes.length; i++) {
-			const element = school.classes[i];
+		const klasse = school.classes.find((klasse) => {
+			return klasse.classID == classID;
+		});
 
-			if (element.class == klasse) {
-				res.json(element.weeks);
-				return;
-			}
+		if (!klasse) {
+			res.sendStatus(404);
+			return;
 		}
 
-		res.sendStatus(404);
+		res.json(klasse.weeks);
 	});
 
 	app.post("/addUser", async (req, res) => {
@@ -94,7 +80,7 @@ let data: {
 			username: string;
 			pass: string;
 			class: string;
-			schoolID: number;
+			schoolID: string;
 		} = req.body;
 
 		if (
@@ -136,7 +122,7 @@ let data: {
 	});
 })();
 
-function getSchoolById(schoolID: number) {
+function getSchoolById(schoolID: string) {
 	return data.find((school) => {
 		return school.schoolID == schoolID;
 	});

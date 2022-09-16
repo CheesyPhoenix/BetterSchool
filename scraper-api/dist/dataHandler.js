@@ -17,6 +17,24 @@ const scraper_1 = __importDefault(require("./scraper"));
 const fs_1 = __importDefault(require("fs"));
 const crypto_1 = __importDefault(require("crypto"));
 const process_1 = require("process");
+const uuid_1 = require("uuid");
+if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
+    console.log("enter iv and key as env variables");
+    (0, process_1.exit)();
+}
+let key;
+let initVector;
+if (process.argv[2] == "--dev") {
+    fs_1.default.writeFileSync("./creds/pass.json", "[]");
+    initVector = crypto_1.default.randomBytes(16);
+    key = crypto_1.default.randomBytes(32);
+}
+else {
+    key = process.env.key;
+    initVector = process.env.iv;
+}
+//uuid namespace
+const uuidNamespace = "32b5b01c-a581-46a3-bdb2-5456b0e9390e";
 function getPass() {
     return JSON.parse(fs_1.default.readFileSync("./creds/pass.json").toString());
 }
@@ -35,7 +53,8 @@ function addToPass(creds) {
     pass.push({
         username: encrypt(creds.username),
         pass: encrypt(creds.pass),
-        class: creds.class,
+        classID: (0, uuid_1.v5)(creds.class, uuidNamespace),
+        className: creds.class,
         schoolURL: creds.schoolURL,
     });
     console.log(pass);
@@ -51,7 +70,7 @@ function update() {
         schools.forEach((school, i) => {
             _data.push({
                 classes: [],
-                schoolID: i,
+                schoolID: (0, uuid_1.v5)(school.url, uuidNamespace).toString(),
                 schoolName: school.name,
                 schoolURL: school.url,
             });
@@ -59,7 +78,7 @@ function update() {
         const pass = getPass();
         for (let i = 0; i < pass.length; i++) {
             const cred = pass[i];
-            console.log("updating for: " + cred.class);
+            console.log("updating for: " + cred.className);
             const credDecrypted = {
                 username: decrypt(cred.username),
                 pass: decrypt(cred.pass),
@@ -69,11 +88,15 @@ function update() {
                 (_a = _data
                     .find((school) => {
                     return school.schoolURL == cred.schoolURL;
-                })) === null || _a === void 0 ? void 0 : _a.classes.push({ weeks: result, class: cred.class });
-                console.log("update for: " + cred.class + "  Successful!");
+                })) === null || _a === void 0 ? void 0 : _a.classes.push({
+                    weeks: result,
+                    className: cred.className,
+                    classID: cred.classID,
+                });
+                console.log("update for: " + cred.className + "  Successful!");
             }
             else {
-                console.log("update for: " + cred.class + " Failed!");
+                console.log("update for: " + cred.className + " Failed!");
             }
         }
         return _data;
@@ -108,21 +131,6 @@ function update() {
     });
 }
 exports.update = update;
-if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
-    console.log("enter iv and key as env variables");
-    (0, process_1.exit)();
-}
-let key;
-let initVector;
-if (process.argv[2] == "--dev") {
-    fs_1.default.writeFileSync("./creds/pass.json", "[]");
-    initVector = crypto_1.default.randomBytes(16);
-    key = crypto_1.default.randomBytes(32);
-}
-else {
-    key = process.env.key;
-    initVector = process.env.iv;
-}
 function encrypt(string) {
     const cipher = crypto_1.default.createCipheriv("aes-256-cbc", key, initVector);
     let encryptedData = cipher.update(string, "utf-8", "hex") + cipher.final("hex");
