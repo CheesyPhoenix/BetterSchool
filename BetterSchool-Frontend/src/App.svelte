@@ -27,7 +27,9 @@
 		);
 	}
 
-	const dataManager = new DataManager("http://localhost:8080");
+	const dataManager = new DataManager(
+		"https://api.betterschool.cheesyphoenix.tk"
+	);
 	let selectedSchoolID: string;
 	let selectedClassID: string;
 
