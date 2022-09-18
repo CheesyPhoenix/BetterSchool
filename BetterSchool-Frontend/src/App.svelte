@@ -100,6 +100,10 @@
 		selectedSchoolID = window.localStorage.getItem("schoolID");
 
 		schools = await dataManager.getSchools();
+
+		if (!selectedSchoolID || !selectedClassID) {
+			menuActive = true;
+		}
 	});
 
 	let swipeOffset = 0;
