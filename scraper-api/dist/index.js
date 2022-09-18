@@ -29,7 +29,7 @@ let data = [];
     app.get("/schools", (req, res) => {
         res.json(schools);
     });
-    app.get("/:schoolID/classes", (req, res) => {
+    app.get("/school/:schoolID/classes", (req, res) => {
         const classes = [];
         const schoolID = req.params.schoolID;
         const school = data.find((school) => {
@@ -48,7 +48,7 @@ let data = [];
         console.log(school);
         res.json(classes);
     });
-    app.get("/:schoolID/class/:classID", (req, res) => {
+    app.get("/school/:schoolID/class/:classID", (req, res) => {
         const schoolID = req.params.schoolID;
         const school = getSchoolById(schoolID);
         if (!school) {

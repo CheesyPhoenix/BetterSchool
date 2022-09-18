@@ -68,6 +68,7 @@
 
 			if (blurred) {
 				if (
+					dateOb &&
 					dateOb.getDate() == todayDate.getDate() &&
 					dateOb.getMonth() == todayDate.getMonth() &&
 					dateOb.getFullYear() == todayDate.getFullYear()

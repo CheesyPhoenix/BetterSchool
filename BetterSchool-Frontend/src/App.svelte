@@ -6,20 +6,7 @@
 	import { onMount } from "svelte";
 	import Menu from "./lib/Menu.svelte";
 	import { swipe } from "svelte-gestures";
-
-	interface Week {
-		weekNr: string;
-		days: {
-			name: string;
-			date: string;
-			classes: {
-				date: string;
-				time: string;
-				room: string;
-				name: string;
-			}[];
-		}[];
-	}
+	import { DataManager, Week } from "./lib/DataManager";
 
 	function getWeekNr() {
 		var date = new Date();
@@ -40,69 +27,53 @@
 		);
 	}
 
+	const dataManager = new DataManager("http://localhost:8080");
+	let selectedSchoolID: string;
+	let selectedClassID: string;
+
 	let weekIndex = 0;
 
 	let weeks: Week[];
 	let currWeek: Week;
 
-	function getPrevClass() {
-		return window.localStorage.getItem("class");
-	}
+	let klasser: { className: string; classID: string }[];
+	let schools: { name: string; schoolID: string }[];
 
-	let klasser: string[];
+	async function updateKlasser() {
+		klasser = await dataManager.getClasses();
 
-	let selectedIndex: number;
-
-	$: {
-		if (selectedIndex || selectedIndex == 0) {
-			window.localStorage.setItem("class", klasser[selectedIndex]);
-		}
+		klasser.sort((a, b) => {
+			return a.className.localeCompare(b.className);
+		});
 	}
 
 	$: {
-		if (klasser && (selectedIndex || selectedIndex == 0)) {
-			getClass(klasser[selectedIndex]);
+		if (selectedSchoolID) {
+			console.log("Schoolid updated");
+
+			window.localStorage.setItem("schoolID", selectedSchoolID);
+
+			dataManager.schoolID = selectedSchoolID;
+
+			updateKlasser();
 		}
 	}
 
-	async function getClass(klasse: string) {
-		const res = await fetch(
-			"https://api.betterschool.cheesyphoenix.tk/" + klasse
-		);
+	$: {
+		if (selectedClassID && selectedSchoolID) {
+			window.localStorage.setItem("classID", selectedClassID);
 
-		const _weeks: Week[] = await res.json();
-		weeks = _weeks;
-		currWeek = weeks[weekIndex];
+			dataManager.classID = selectedClassID;
+		}
 	}
 
-	onMount(async () => {
-		let res = await fetch(
-			"https://api.betterschool.cheesyphoenix.tk/classes"
-		);
-		klasser = await res.json();
-
-		klasser.sort();
-
-		if (getPrevClass() != "" && klasser.includes(getPrevClass())) {
-			res = await fetch(
-				"https://api.betterschool.cheesyphoenix.tk/" + getPrevClass()
-			);
-
-			selectedIndex = klasser.indexOf(getPrevClass());
-		} else {
-			res = await fetch(
-				"https://api.betterschool.cheesyphoenix.tk/" + klasser[0]
-			);
-
-			selectedIndex = 0;
-		}
-
-		const _weeks: Week[] = await res.json();
+	async function updateWeeks() {
+		const _weeks: Week[] = await dataManager.getWeeks();
 
 		let weekNr = getWeekNr().toString();
 
 		//go to next week if day is Saturday or Sunday
-		if (new Date().getDay() > 5) {
+		if (new Date().getDay() == 6 || new Date().getDay() == 0) {
 			weekNr = (parseInt(weekNr) + 1).toString();
 		}
 
@@ -113,6 +84,20 @@
 
 		weeks = _weeks;
 		currWeek = weeks[weekIndex];
+	}
+
+	$: {
+		if (selectedClassID && selectedSchoolID) {
+			updateWeeks();
+		}
+	}
+
+	onMount(async () => {
+		// check for saved school and class ids
+		selectedClassID = window.localStorage.getItem("classID");
+		selectedSchoolID = window.localStorage.getItem("schoolID");
+
+		schools = await dataManager.getSchools();
 	});
 
 	let swipeOffset = 0;
@@ -164,7 +149,14 @@
 <svelte:window bind:innerWidth={scrWidth} />
 
 {#if menuActive}
-	<Menu {klasser} bind:selectedIndex bind:menuActive />
+	<Menu
+		{klasser}
+		{schools}
+		{dataManager}
+		bind:selectedClassID
+		bind:selectedSchoolID
+		bind:menuActive
+	/>
 {/if}
 
 <div

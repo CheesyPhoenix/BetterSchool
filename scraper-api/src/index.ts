@@ -27,7 +27,7 @@ let data: {
 		res.json(schools);
 	});
 
-	app.get("/:schoolID/classes", (req, res) => {
+	app.get("/school/:schoolID/classes", (req, res) => {
 		const classes: { className: string; classID: string }[] = [];
 
 		const schoolID = req.params.schoolID;
@@ -52,7 +52,7 @@ let data: {
 		res.json(classes);
 	});
 
-	app.get("/:schoolID/class/:classID", (req, res) => {
+	app.get("/school/:schoolID/class/:classID", (req, res) => {
 		const schoolID = req.params.schoolID;
 		const school = getSchoolById(schoolID);
 

@@ -16,7 +16,9 @@ type CacheItem struct {
 var cache map[string]CacheItem = make(map[string]CacheItem)
 
 func cachedRequest(w http.ResponseWriter, r *http.Request) {
-	if val, exists := cache[r.URL.String()]; exists && val.timeCached > time.Now().UnixMilli()+1000*60*5 {
+	if val, exists := cache[r.URL.String()]; exists && val.timeCached > time.Now().UnixMilli()-1000*60*5 {
+		fmt.Println("Found cached result")
+
 		w.Write([]byte(val.data))
 	} else {
 		res, err := http.Get(baseURL + strings.Join(strings.Split(strings.Replace(r.URL.String(), "://", "", -1), "/")[1:], "/"))

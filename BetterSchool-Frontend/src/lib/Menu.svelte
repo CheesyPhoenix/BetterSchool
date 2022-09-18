@@ -4,46 +4,35 @@
 	import { Jellyfish } from "svelte-loading-spinners";
 	import { toasts, ToastContainer, FlatToast } from "svelte-toasts";
 	import { swipe } from "svelte-gestures";
+	import type { DataManager } from "./DataManager";
 
-	export let selectedIndex: number;
-	export let klasser: string[];
+	export let selectedSchoolID: string;
+	export let schools: { name: string; schoolID: string }[];
+
+	export let selectedClassID: string;
+	export let klasser: { className: string; classID: string }[];
+
 	export let menuActive: boolean;
+
+	export let dataManager: DataManager;
 
 	let loading = false;
 
 	let username: string;
 	let password: string;
-	let klasse: string;
+	let className: string;
 
 	async function addNewUser() {
 		loading = true;
 
-		const myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-
-		const raw = JSON.stringify({
-			username: username,
-			pass: password,
-			class: klasse,
-		});
-
-		const requestOptions: RequestInit = {
-			method: "POST",
-			headers: myHeaders,
-			body: raw,
-		};
-
-		const res = await fetch(
-			"https://api.betterschool.cheesyphoenix.tk/addUser",
-			requestOptions
+		const { status } = await dataManager.addNewUser(
+			username,
+			password,
+			className,
+			selectedSchoolID
 		);
 
-		// const res = await fetch(
-		// 	"http://localhost:8080/addUser",
-		// 	requestOptions
-		// );
-
-		if (res.status == 200) {
+		if (status == 200) {
 			toasts.add({
 				title: "New user added successfully!",
 				description: "Class list will update shortly",
@@ -90,45 +79,75 @@
 	}}
 	on:swipe={swipeHandler}
 >
-	<h3 style="margin-left: 3rem;">Select class to view</h3>
+	<h3 style="margin-left: 3rem;">Select school</h3>
 
-	<select bind:value={selectedIndex} class="selectClass">
-		{#if klasser}
-			{#each klasser as klasse, index}
-				<option value={index}>{klasse}</option>
+	<select bind:value={selectedSchoolID} class="selectClass">
+		{#if schools}
+			{#each schools as school}
+				<option value={school.schoolID}>{school.name}</option>
 			{/each}
 		{/if}
 	</select>
 
-	<br />
-	<br />
-	<hr />
-	<div style="margin-left: 3rem;">
-		<h3>Register new class</h3>
-		<h5>Username:</h5>
-		<input type="text" bind:value={username} />
-		<h5>Password:</h5>
-		<input type="password" bind:value={password} />
-		<h5>Class:</h5>
-		<input type="text" bind:value={klasse} />
+	{#if selectedSchoolID}
+		<h3 style="margin-left: 3rem;">Select class to view</h3>
+
+		<select bind:value={selectedClassID} class="selectClass">
+			{#if klasser}
+				{#each klasser as klasse}
+					<option value={klasse.classID}>{klasse.className}</option>
+				{/each}
+			{/if}
+		</select>
+
 		<br />
 		<br />
-		<button on:click={addNewUser}>Register</button>
-	</div>
+		<hr />
+		<div style="margin-left: 3rem;">
+			<h3>Register new class</h3>
+			<h5>Username:</h5>
+			<input type="text" bind:value={username} />
 
-	<div class="centerHorizontal" id="GitHub-link">
-		<a href="https://github.com/CheesyPhoenix/BetterSchool">
-			This project is open-source! Fork me on GitHub or submit an issue
-			here!
-		</a>
-	</div>
+			<h5>Password:</h5>
+			<input type="password" bind:value={password} />
 
-	{#if loading}
-		<div class="loadingPanel" transition:fade>
-			<Jellyfish />
+			<h5>Class:</h5>
+			<input type="text" bind:value={className} />
+
+			<h5>School:</h5>
+			<select
+				bind:value={selectedSchoolID}
+				class="selectClass"
+				style="margin-left: 0;"
+			>
+				{#if schools}
+					{#each schools as school}
+						<option value={school.schoolID}>{school.name}</option>
+					{/each}
+				{/if}
+			</select>
+			<br />
+			<br />
+			<button on:click={addNewUser}>Register</button>
 		</div>
-	{/if}
 
+		<div class="centerHorizontal" id="GitHub-link">
+			<a href="https://github.com/CheesyPhoenix/BetterSchool">
+				This project is open-source! Fork me on GitHub or submit an
+				issue here!
+			</a>
+		</div>
+
+		{#if loading}
+			<div class="loadingPanel" transition:fade>
+				<Jellyfish />
+			</div>
+		{/if}
+
+		<ToastContainer placement="bottom-right" let:data>
+			<FlatToast {data} />
+		</ToastContainer>
+	{/if}
 	<div
 		class="settingsBtn"
 		on:click={() => {
@@ -144,10 +163,6 @@
 			style="height: 35px;"
 		/>
 	</div>
-
-	<ToastContainer placement="bottom-right" let:data>
-		<FlatToast {data} />
-	</ToastContainer>
 </div>
 
 <style>
