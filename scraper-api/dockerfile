@@ -6,7 +6,9 @@ COPY package*.json ./
 
 RUN npm i
 
-RUN npx tsc
+RUN npm i -g typescript
+
+RUN tsc
 
 RUN apt-get update \
     && apt-get install -y wget gnupg \
