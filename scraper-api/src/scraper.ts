@@ -1,8 +1,9 @@
-const puppeteer = require("puppeteer");
+import puppeteer from "puppeteer";
 
-module.exports = { scrape, validate };
-
-async function validate(creds) {
+async function validate(
+	creds: { username: string; pass: string },
+	schoolURL: string
+) {
 	const browser = await puppeteer.launch({
 		args: [
 			"--no-sandbox",
@@ -15,7 +16,7 @@ async function validate(creds) {
 	});
 
 	try {
-		return await doValidate(creds, browser);
+		return await doValidate(creds, schoolURL, browser);
 	} catch (e) {
 		throw e;
 	} finally {
@@ -23,9 +24,13 @@ async function validate(creds) {
 	}
 }
 
-async function doValidate(creds, browser) {
+async function doValidate(
+	creds: { username: string; pass: string },
+	schoolURL: string,
+	browser: { pages: () => any }
+) {
 	const page = (await browser.pages())[0];
-	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
+	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
 	await page.click("#login-with-feide-button");
@@ -35,16 +40,21 @@ async function doValidate(creds, browser) {
 	await page.type("#password", creds.pass);
 
 	await page.evaluate(() => {
-		document
-			.getElementsByClassName("button-primary breathe-top")[0]
-			.click();
+		(
+			document.getElementsByClassName(
+				"button-primary breathe-top"
+			)[0] as HTMLButtonElement
+		).click();
 	});
 
 	await page.waitForTimeout(5000);
 
 	let validated;
 
-	if (page.url().includes("https://idp.feide.no")) {
+	if (
+		page.url().includes("https://idp.feide.no") ||
+		page.url().includes("login_error")
+	) {
 		validated = false;
 	} else {
 		validated = true;
@@ -53,7 +63,10 @@ async function doValidate(creds, browser) {
 	return validated;
 }
 
-async function scrape(pass) {
+async function scrape(
+	pass: { username: string; pass: string },
+	schoolURL: string
+) {
 	const browser = await puppeteer.launch({
 		args: [
 			"--no-sandbox",
@@ -66,7 +79,7 @@ async function scrape(pass) {
 	});
 
 	try {
-		return await doScrape(pass, browser);
+		return await doScrape(pass, browser, schoolURL);
 	} catch (e) {
 		throw e;
 	} finally {
@@ -74,15 +87,19 @@ async function scrape(pass) {
 	}
 }
 
-async function doScrape(pass, browser) {
-	if (!(await validate(pass))) {
+async function doScrape(
+	pass: { username: string; pass: string },
+	browser: puppeteer.Browser,
+	schoolURL: string
+) {
+	if (!(await validate(pass, schoolURL))) {
 		console.log("creds invalid");
 		return;
 	}
 
 	//login
 	const page = (await browser.pages())[0];
-	await page.goto("https://amalieskram-vgs.inschool.visma.no/");
+	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
 	await page.click("#login-with-feide-button");
@@ -92,9 +109,11 @@ async function doScrape(pass, browser) {
 	await page.type("#password", pass.pass);
 
 	await page.evaluate(() => {
-		document
-			.getElementsByClassName("button-primary breathe-top")[0]
-			.click();
+		(
+			document.getElementsByClassName(
+				"button-primary breathe-top"
+			)[0] as HTMLButtonElement
+		).click();
 	});
 
 	await page.waitForTimeout(5000);
@@ -107,8 +126,7 @@ async function doScrape(pass, browser) {
 			}
 			return false;
 		})) &&
-		page.url() !=
-			"https://amalieskram-vgs.inschool.visma.no/#/app/dashboard"
+		page.url() != schoolURL + "#/app/dashboard"
 	) {
 		console.log("waiting for page load. Currently at: " + page.url());
 		await page.waitForSelector("#top-menu-navbar-brand");
@@ -116,9 +134,7 @@ async function doScrape(pass, browser) {
 
 	await page.waitForTimeout(2000);
 
-	await page.goto(
-		"https://amalieskram-vgs.inschool.visma.no/#/app/dashboard"
-	);
+	await page.goto(schoolURL + "#/app/dashboard");
 
 	await page.waitForTimeout(10000);
 
@@ -127,14 +143,14 @@ async function doScrape(pass, browser) {
 		try {
 			let el = document.querySelector(
 				"html > body > div:nth-of-type(6) > button:nth-of-type(2)"
-			);
+			) as HTMLButtonElement;
 
 			if (el) el.click();
 
 			setTimeout(() => {
 				el = document.querySelector(
 					"html > body > div:nth-of-type(5) > button:nth-of-type(2)"
-				);
+				) as HTMLButtonElement;
 
 				if (el) el.click();
 			}, 2000);
@@ -150,12 +166,25 @@ async function doScrape(pass, browser) {
 
 		const dayNames = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag"];
 
-		let weekOb = {
-			weekNr: document
-				.getElementsByClassName(
+		let weekOb: {
+			weekNr: string;
+			days: {
+				name: string;
+				date: string;
+				classes: {
+					date: string;
+					time: string;
+					room: string;
+					name: string;
+				}[];
+			}[];
+		} = {
+			weekNr: (
+				document.getElementsByClassName(
 					"subheading2 userTimetable_currentWeek"
-				)[0]
-				.innerText.split(",")[0]
+				)[0] as HTMLElement
+			).innerText
+				.split(",")[0]
 				.replace("UKE ", ""),
 			days: [],
 		};
@@ -165,7 +194,16 @@ async function doScrape(pass, browser) {
 		for (let i = 0; i < days.length; i++) {
 			const day = days[i];
 
-			let dayOb = {
+			let dayOb: {
+				name: string;
+				date: string;
+				classes: {
+					date: string;
+					time: string;
+					room: string;
+					name: string;
+				}[];
+			} = {
 				name: dayNames[i],
 				date: "",
 				classes: [],
@@ -174,46 +212,19 @@ async function doScrape(pass, browser) {
 			//get date
 			let week = weekOb.weekNr;
 			let year = parseInt(
-				document
-					.getElementsByClassName(
+				(
+					document.getElementsByClassName(
 						"subheading2 userTimetable_currentWeek"
-					)[0]
-					.innerText.split(",")[1]
+					)[0] as HTMLElement
+				).innerText
+					.split(",")[1]
 					.split(" ")[2]
 			);
 
-			const w = new Date(year, 0).getTime() + 604800000 * (week - 1);
+			const w =
+				new Date(year, 0).getTime() + 604800000 * (parseInt(week) - 1);
 
 			dayOb.date = new Date(w + (518400000 / 6) * (i + 2)).toDateString();
-
-			// const dateDay = document
-			// 	.getElementsByClassName("Timetable-TimetableHeader")[0]
-			// 	.children[i].innerText.split(" ")[1];
-
-			// const dateRest = document
-			// 	.getElementsByClassName(
-			// 		"subheading2 userTimetable_currentWeek"
-			// 	)[0]
-			// 	.innerText.split(",")[1];
-
-			// const date = new Date(dateDay + dateRest);
-
-			// if (parseInt(dateDay) < prevDay) {
-			// 	for (let x = 0; x < i; x++) {
-			// 		const day = weekOb.days[x];
-
-			// 		const date = new Date(day.date);
-			// 		date.setMonth(date.getMonth() - 1);
-
-			// 		day.date = date.toDateString();
-			// 	}
-			// }
-
-			// prevDay = parseInt(dateDay);
-
-			// dayOb.date = date.toDateString();
-
-			//get classes
 
 			const classes =
 				day.getElementsByClassName("Timetable-Items")[0].children;
@@ -228,7 +239,7 @@ async function doScrape(pass, browser) {
 					name: "",
 				};
 
-				const data = sClass.children[1].innerText;
+				const data = (sClass.children[1] as HTMLElement).innerText;
 
 				classOb.date = data.split(" Starter ")[1].split(" klokken")[0];
 				classOb.time =
@@ -281,7 +292,7 @@ async function doScrape(pass, browser) {
 		}
 
 		await page.evaluate(() => {
-			document.getElementById("nextweek").click();
+			(document.getElementById("nextweek") as HTMLButtonElement).click();
 		});
 		await page.waitForTimeout(1000);
 		await page.waitForSelector(
@@ -293,3 +304,5 @@ async function doScrape(pass, browser) {
 
 	return weeks;
 }
+
+export default { scrape, validate };

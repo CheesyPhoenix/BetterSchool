@@ -104,7 +104,10 @@ async function update() {
 	async function scrapeForCred(cred, maxRetries, retries = 0) {
 		let _data;
 		try {
-			_data = await scrape(cred);
+			_data = await scrape(
+				cred,
+				"https://amalieskram-vgs.inschool.visma.no/"
+			);
 
 			console.log("Scraper successful");
 
