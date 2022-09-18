@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addToPass = exports.update = void 0;
+exports.migrateAccounts = exports.addToPass = exports.update = void 0;
 const scraper_1 = __importDefault(require("./scraper"));
 const fs_1 = __importDefault(require("fs"));
 const crypto_1 = __importDefault(require("crypto"));
 const process_1 = require("process");
 const uuid_1 = require("uuid");
 if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
-    console.log("enter iv and key as env variables");
+    console.log("enter iv (string[16]) and key (string[32]) as env variables");
     (0, process_1.exit)();
 }
 let key;
@@ -55,14 +55,13 @@ function addToPass(creds) {
         pass: encrypt(creds.pass),
         classID: (0, uuid_1.v5)(creds.class, uuidNamespace),
         className: creds.class,
-        schoolURL: creds.schoolURL,
+        schoolID: (0, uuid_1.v5)(creds.schoolURL, uuidNamespace),
     });
     console.log(pass);
     fs_1.default.writeFileSync("./creds/pass.json", JSON.stringify(pass));
 }
 exports.addToPass = addToPass;
 function update() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         console.log("updating data");
         let schools = JSON.parse(fs_1.default.readFileSync("./allSchools.json").toString());
@@ -83,12 +82,14 @@ function update() {
                 username: decrypt(cred.username),
                 pass: decrypt(cred.pass),
             };
-            const result = yield scrapeForCred(credDecrypted, cred.schoolURL, 5);
+            const school = _data.find((school) => {
+                return school.schoolID == cred.schoolID;
+            });
+            if (!school)
+                continue;
+            const result = yield scrapeForCred(credDecrypted, school === null || school === void 0 ? void 0 : school.schoolURL, 5);
             if (result && result[0].days.length > 0) {
-                (_a = _data
-                    .find((school) => {
-                    return school.schoolURL == cred.schoolURL;
-                })) === null || _a === void 0 ? void 0 : _a.classes.push({
+                school.classes.push({
                     weeks: result,
                     className: cred.className,
                     classID: cred.classID,
@@ -141,3 +142,25 @@ function decrypt(string) {
     let decryptedData = decipher.update(string, "hex", "utf-8") + decipher.final("utf-8");
     return decryptedData;
 }
+// migration from single to multiple schools
+function migrateAccounts() {
+    const pass = JSON.parse(fs_1.default.readFileSync("./creds/pass.json").toString());
+    let newPass = [];
+    for (let i = 0; i < pass.length; i++) {
+        const element = pass[i];
+        if (!element.classID) {
+            newPass.push({
+                username: element.username,
+                pass: element.pass,
+                className: element.class,
+                classID: (0, uuid_1.v5)(element.class, uuidNamespace),
+                schoolID: (0, uuid_1.v5)("https://amalieskram-vgs.inschool.visma.no/", uuidNamespace),
+            });
+        }
+        else {
+            newPass.push(element);
+        }
+    }
+    fs_1.default.writeFileSync("./creds/pass.json", JSON.stringify(newPass));
+}
+exports.migrateAccounts = migrateAccounts;

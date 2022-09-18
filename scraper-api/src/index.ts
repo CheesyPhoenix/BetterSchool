@@ -3,7 +3,7 @@ import Scraper from "./scraper";
 import express from "express";
 const app = express();
 import cors from "cors";
-import { addToPass, SchoolClass, update } from "./dataHandler";
+import { addToPass, migrateAccounts, SchoolClass, update } from "./dataHandler";
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +16,9 @@ let data: {
 }[] = [];
 
 (async () => {
+	//migrate old accounts
+	migrateAccounts();
+
 	data = await update();
 	setInterval(update, 60 * 60 * 1000);
 

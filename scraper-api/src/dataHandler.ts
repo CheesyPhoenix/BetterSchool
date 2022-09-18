@@ -5,7 +5,7 @@ import { exit } from "process";
 import { v5 as uuidv5 } from "uuid";
 
 if ((!process.env.iv || !process.env.key) && process.argv[2] != "--dev") {
-	console.log("enter iv and key as env variables");
+	console.log("enter iv (string[16]) and key (string[32]) as env variables");
 	exit();
 }
 
@@ -47,7 +47,7 @@ function getPass(): {
 	pass: string;
 	classID: string;
 	className: string;
-	schoolURL: string;
+	schoolID: string;
 }[] {
 	return JSON.parse(fs.readFileSync("./creds/pass.json").toString());
 }
@@ -77,7 +77,7 @@ function addToPass(creds: {
 		pass: encrypt(creds.pass),
 		classID: uuidv5(creds.class, uuidNamespace),
 		className: creds.class,
-		schoolURL: creds.schoolURL,
+		schoolID: uuidv5(creds.schoolURL, uuidNamespace),
 	});
 
 	console.log(pass);
@@ -126,18 +126,20 @@ async function update(): Promise<
 			pass: decrypt(cred.pass),
 		};
 
-		const result = await scrapeForCred(credDecrypted, cred.schoolURL, 5);
+		const school = _data.find((school) => {
+			return school.schoolID == cred.schoolID;
+		});
+
+		if (!school) continue;
+
+		const result = await scrapeForCred(credDecrypted, school?.schoolURL, 5);
 
 		if (result && result[0].days.length > 0) {
-			_data
-				.find((school) => {
-					return school.schoolURL == cred.schoolURL;
-				})
-				?.classes.push({
-					weeks: result,
-					className: cred.className,
-					classID: cred.classID,
-				});
+			school.classes.push({
+				weeks: result,
+				className: cred.className,
+				classID: cred.classID,
+			});
 
 			console.log("update for: " + cred.className + "  Successful!");
 		} else {
@@ -220,4 +222,40 @@ function decrypt(string: string) {
 	return decryptedData;
 }
 
-export { update, addToPass, SchoolClass };
+// migration from single to multiple schools
+function migrateAccounts() {
+	const pass: any[] = JSON.parse(
+		fs.readFileSync("./creds/pass.json").toString()
+	);
+
+	let newPass: {
+		username: string;
+		pass: string;
+		classID: string;
+		className: string;
+		schoolID: string;
+	}[] = [];
+
+	for (let i = 0; i < pass.length; i++) {
+		const element = pass[i];
+
+		if (!element.classID) {
+			newPass.push({
+				username: element.username,
+				pass: element.pass,
+				className: element.class,
+				classID: uuidv5(element.class, uuidNamespace),
+				schoolID: uuidv5(
+					"https://amalieskram-vgs.inschool.visma.no/",
+					uuidNamespace
+				),
+			});
+		} else {
+			newPass.push(element);
+		}
+	}
+
+	fs.writeFileSync("./creds/pass.json", JSON.stringify(newPass));
+}
+
+export { update, addToPass, SchoolClass, migrateAccounts };

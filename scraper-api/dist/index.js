@@ -21,6 +21,8 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 let data = [];
 (() => __awaiter(void 0, void 0, void 0, function* () {
+    //migrate old accounts
+    (0, dataHandler_1.migrateAccounts)();
     data = yield (0, dataHandler_1.update)();
     setInterval(dataHandler_1.update, 60 * 60 * 1000);
     let schools = data.map((school) => {
