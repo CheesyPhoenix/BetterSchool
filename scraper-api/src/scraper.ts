@@ -214,7 +214,7 @@ async function doScrape(
 			let year = parseInt(
 				(
 					document.getElementsByClassName(
-						"subheading2 userTimetable_currentWeek"
+						"userTimetable_currentWeek"
 					)[0] as HTMLElement
 				).innerText
 					.split(",")[1]
