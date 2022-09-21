@@ -62,7 +62,7 @@
 	}
 
 	$: active = classActive ? "active" : "";
-	$: cancelled = classOb.room == "UTGÅR" ? "cancelled" : "";
+	$: cancelled = classOb.room.toLowerCase() == "utgår" ? "cancelled" : "";
 
 	onMount(() => {
 		const interval = setInterval(() => {
