@@ -250,7 +250,12 @@ async function doScrape(
 				if (data.includes("Aktivitet")) {
 					classOb.room = "Aktivitet";
 					classOb.name = data.split(".")[0].trim();
+				} else if (!data.includes(" rom ")) {
+					classOb.room = "ingen";
+					classOb.name = data.split(".")[0].trim();
 				} else {
+					console.log(data);
+
 					classOb.room = data.split(" rom ")[1].split(".")[0];
 					classOb.name = data.split(" i rom ")[0].trim();
 				}
