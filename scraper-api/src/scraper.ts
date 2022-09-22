@@ -74,7 +74,7 @@ async function scrape(
 			"--disable-gpu",
 			"--disable-dev-shm-usage",
 		],
-		headless: false,
+		headless: true,
 		defaultViewport: { height: 1080, width: 1920 },
 	});
 
@@ -294,7 +294,7 @@ async function doScrape(
 
 	//scrape data
 	for (let i = 0; i < foresight; i++) {
-		console.log("Getting week data at: " + page.url());
+		// console.log("Getting week data at: " + page.url());
 
 		try {
 			let data = await page.evaluate(getWeekData);
@@ -308,9 +308,9 @@ async function doScrape(
 				path: "./errorScreenshots/latestError.png",
 			});
 
-			console.log(
-				"encountered error while getting week data, saving screenshot"
-			);
+			// console.log(
+			// 	"encountered error while getting week data, saving screenshot"
+			// );
 
 			throw error;
 		}
@@ -324,7 +324,7 @@ async function doScrape(
 		);
 	}
 
-	console.log(weeks);
+	// console.log(weeks);
 
 	return weeks;
 }
