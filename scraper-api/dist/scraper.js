@@ -55,7 +55,7 @@ async function scrape(pass, schoolURL) {
             "--disable-gpu",
             "--disable-dev-shm-usage",
         ],
-        headless: false,
+        headless: true,
         defaultViewport: { height: 1080, width: 1920 },
     });
     try {
@@ -188,7 +188,7 @@ async function doScrape(pass, browser, schoolURL) {
     let weeks = [];
     //scrape data
     for (let i = 0; i < foresight; i++) {
-        console.log("Getting week data at: " + page.url());
+        // console.log("Getting week data at: " + page.url());
         try {
             let data = await page.evaluate(getWeekData);
             if (data.days.length != 5) {
@@ -201,7 +201,9 @@ async function doScrape(pass, browser, schoolURL) {
                 fullPage: true,
                 path: "./errorScreenshots/latestError.png",
             });
-            console.log("encountered error while getting week data, saving screenshot");
+            // console.log(
+            // 	"encountered error while getting week data, saving screenshot"
+            // );
             throw error;
         }
         await page.evaluate(() => {
@@ -210,7 +212,7 @@ async function doScrape(pass, browser, schoolURL) {
         await page.waitForTimeout(1000);
         await page.waitForSelector("#dashboard-widget-TimetableWidget-panel > div.vs-panel-body > div > div > div > div:nth-child(2) > div.Timetable-TimetableHeader > div:nth-child(1) > p");
     }
-    console.log(weeks);
+    // console.log(weeks);
     return weeks;
 }
 exports.default = { scrape, validate };

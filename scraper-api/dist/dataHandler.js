@@ -65,9 +65,9 @@ async function update() {
         });
     });
     const pass = getPass();
+    const updates = [];
     for (let i = 0; i < pass.length; i++) {
         const cred = pass[i];
-        console.log("updating for: " + cred.className);
         const credDecrypted = {
             username: decrypt(cred.username),
             pass: decrypt(cred.pass),
@@ -77,31 +77,50 @@ async function update() {
         });
         if (!school)
             continue;
-        const result = await scrapeForCred(credDecrypted, school?.schoolURL, 0);
-        if (result && result[0].days.length > 0) {
-            school.classes.push({
-                weeks: result,
-                className: cred.className,
-                classID: cred.classID,
-            });
-            console.log("update for: " + cred.className + "  Successful!");
-        }
-        else {
-            console.log("update for: " + cred.className + " Failed!");
-        }
+        updates.push(new Promise(async (resolve) => {
+            const result = await scrapeForCred(credDecrypted, school?.schoolURL, 2);
+            if (result && result[0].days.length > 0) {
+                school.classes.push({
+                    weeks: result,
+                    className: cred.className,
+                    classID: cred.classID,
+                });
+                resolve({
+                    class: cred.className,
+                    success: true,
+                    schoolName: school.schoolName,
+                });
+            }
+            else {
+                resolve({
+                    class: cred.className,
+                    success: false,
+                    schoolName: school.schoolName,
+                });
+            }
+        }));
     }
+    const results = await Promise.all(updates);
+    const asciiGreen = "\u001b[32m";
+    const asciiRed = "\u001b[31m";
+    const asciiReset = "\u001b[0m";
+    results.forEach((result) => {
+        console.log(`Update for "${result.class}": ${result.success
+            ? asciiGreen + "successfull!"
+            : asciiRed + "failed!"} ${asciiReset} (${result.schoolName})`);
+    });
     return _data;
     //function declaration --------------------------------------------------------------
     async function scrapeForCred(cred, url, maxRetries, retries = 0) {
         let _data;
         try {
             _data = await scraper_1.default.scrape(cred, url);
-            console.log("Scraper successful");
+            // console.log("Scraper successful");
             return _data;
         }
         catch (error) {
             if (retries < maxRetries) {
-                console.log("Scraper failed! Retrying in 10sec");
+                // console.log("Scraper failed! Retrying in 10sec");
                 await new Promise((resolve, reject) => {
                     setTimeout(async () => {
                         _data = await scrapeForCred(cred, url, maxRetries, retries + 1);
