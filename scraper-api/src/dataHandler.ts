@@ -35,6 +35,7 @@ interface SchoolClass {
 				time: string;
 				room: string;
 				name: string;
+				teacher: string;
 			}[];
 		}[];
 	}[];
@@ -132,7 +133,7 @@ async function update(): Promise<
 
 		if (!school) continue;
 
-		const result = await scrapeForCred(credDecrypted, school?.schoolURL, 5);
+		const result = await scrapeForCred(credDecrypted, school?.schoolURL, 0);
 
 		if (result && result[0].days.length > 0) {
 			school.classes.push({
@@ -168,6 +169,7 @@ async function update(): Promise<
 							time: string;
 							room: string;
 							name: string;
+							teacher: string;
 						}[];
 					}[];
 			  }[]

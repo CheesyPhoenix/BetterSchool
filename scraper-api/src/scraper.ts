@@ -74,7 +74,7 @@ async function scrape(
 			"--disable-gpu",
 			"--disable-dev-shm-usage",
 		],
-		headless: true,
+		headless: false,
 		defaultViewport: { height: 1080, width: 1920 },
 	});
 
@@ -159,7 +159,7 @@ async function doScrape(
 
 	await page.waitForTimeout(6000);
 
-	function getWeekData() {
+	async function getWeekData() {
 		const days = document.getElementsByClassName(
 			"Timetable-TimetableDays_day"
 		);
@@ -176,6 +176,7 @@ async function doScrape(
 					time: string;
 					room: string;
 					name: string;
+					teacher: string;
 				}[];
 			}[];
 		} = {
@@ -202,6 +203,7 @@ async function doScrape(
 					time: string;
 					room: string;
 					name: string;
+					teacher: string;
 				}[];
 			} = {
 				name: dayNames[i],
@@ -230,13 +232,14 @@ async function doScrape(
 				day.getElementsByClassName("Timetable-Items")[0].children;
 
 			for (let x = 0; x < classes.length; x++) {
-				const sClass = classes[x];
+				const sClass = classes[x] as HTMLElement;
 
 				let classOb = {
 					date: "",
 					time: "",
 					room: "",
 					name: "",
+					teacher: "",
 				};
 
 				const data = (sClass.children[1] as HTMLElement).innerText;
@@ -259,6 +262,22 @@ async function doScrape(
 					classOb.room = data.split(" rom ")[1].split(".")[0];
 					classOb.name = data.split(" i rom ")[0].trim();
 				}
+
+				//get teacher
+				//click to open context menu
+				sClass.click();
+
+				await new Promise((resolve) => {
+					setTimeout(() => {
+						resolve(undefined);
+					}, 10);
+				});
+
+				//get data from context menu
+				classOb.teacher = (
+					document.getElementsByClassName("list-group")[0]
+						.children[4] as HTMLElement
+				).innerText.trim();
 
 				dayOb.classes.push(classOb);
 			}

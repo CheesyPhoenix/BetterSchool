@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -61,75 +52,71 @@ function addToPass(creds) {
     fs_1.default.writeFileSync("./creds/pass.json", JSON.stringify(pass));
 }
 exports.addToPass = addToPass;
-function update() {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.log("updating data");
-        let schools = JSON.parse(fs_1.default.readFileSync("./allSchools.json").toString());
-        let _data = [];
-        schools.forEach((school, i) => {
-            _data.push({
-                classes: [],
-                schoolID: (0, uuid_1.v5)(school.url, uuidNamespace).toString(),
-                schoolName: school.name,
-                schoolURL: school.url,
-            });
+async function update() {
+    console.log("updating data");
+    let schools = JSON.parse(fs_1.default.readFileSync("./allSchools.json").toString());
+    let _data = [];
+    schools.forEach((school, i) => {
+        _data.push({
+            classes: [],
+            schoolID: (0, uuid_1.v5)(school.url, uuidNamespace).toString(),
+            schoolName: school.name,
+            schoolURL: school.url,
         });
-        const pass = getPass();
-        for (let i = 0; i < pass.length; i++) {
-            const cred = pass[i];
-            console.log("updating for: " + cred.className);
-            const credDecrypted = {
-                username: decrypt(cred.username),
-                pass: decrypt(cred.pass),
-            };
-            const school = _data.find((school) => {
-                return school.schoolID == cred.schoolID;
+    });
+    const pass = getPass();
+    for (let i = 0; i < pass.length; i++) {
+        const cred = pass[i];
+        console.log("updating for: " + cred.className);
+        const credDecrypted = {
+            username: decrypt(cred.username),
+            pass: decrypt(cred.pass),
+        };
+        const school = _data.find((school) => {
+            return school.schoolID == cred.schoolID;
+        });
+        if (!school)
+            continue;
+        const result = await scrapeForCred(credDecrypted, school?.schoolURL, 0);
+        if (result && result[0].days.length > 0) {
+            school.classes.push({
+                weeks: result,
+                className: cred.className,
+                classID: cred.classID,
             });
-            if (!school)
-                continue;
-            const result = yield scrapeForCred(credDecrypted, school === null || school === void 0 ? void 0 : school.schoolURL, 5);
-            if (result && result[0].days.length > 0) {
-                school.classes.push({
-                    weeks: result,
-                    className: cred.className,
-                    classID: cred.classID,
+            console.log("update for: " + cred.className + "  Successful!");
+        }
+        else {
+            console.log("update for: " + cred.className + " Failed!");
+        }
+    }
+    return _data;
+    //function declaration --------------------------------------------------------------
+    async function scrapeForCred(cred, url, maxRetries, retries = 0) {
+        let _data;
+        try {
+            _data = await scraper_1.default.scrape(cred, url);
+            console.log("Scraper successful");
+            return _data;
+        }
+        catch (error) {
+            if (retries < maxRetries) {
+                console.log("Scraper failed! Retrying in 10sec");
+                await new Promise((resolve, reject) => {
+                    setTimeout(async () => {
+                        _data = await scrapeForCred(cred, url, maxRetries, retries + 1);
+                        resolve(null);
+                    }, 10000);
                 });
-                console.log("update for: " + cred.className + "  Successful!");
+                return _data;
             }
             else {
-                console.log("update for: " + cred.className + " Failed!");
+                console.log("Scraper failed! Max retries reached");
+                console.log(error);
+                return [{ weekNr: "Error", days: [] }];
             }
         }
-        return _data;
-        //function declaration --------------------------------------------------------------
-        function scrapeForCred(cred, url, maxRetries, retries = 0) {
-            return __awaiter(this, void 0, void 0, function* () {
-                let _data;
-                try {
-                    _data = yield scraper_1.default.scrape(cred, url);
-                    console.log("Scraper successful");
-                    return _data;
-                }
-                catch (error) {
-                    if (retries < maxRetries) {
-                        console.log("Scraper failed! Retrying in 10sec");
-                        yield new Promise((resolve, reject) => {
-                            setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                                _data = yield scrapeForCred(cred, url, maxRetries, retries + 1);
-                                resolve(null);
-                            }), 10000);
-                        });
-                        return _data;
-                    }
-                    else {
-                        console.log("Scraper failed! Max retries reached");
-                        console.log(error);
-                        return [{ weekNr: "Error", days: [] }];
-                    }
-                }
-            });
-        }
-    });
+    }
 }
 exports.update = update;
 function encrypt(string) {

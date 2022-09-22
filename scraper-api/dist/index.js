@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -20,10 +11,10 @@ const dataHandler_1 = require("./dataHandler");
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 let data = [];
-(() => __awaiter(void 0, void 0, void 0, function* () {
+(async () => {
     //migrate old accounts
     (0, dataHandler_1.migrateAccounts)();
-    data = yield (0, dataHandler_1.update)();
+    data = await (0, dataHandler_1.update)();
     setInterval(dataHandler_1.update, 60 * 60 * 1000);
     let schools = data.map((school) => {
         return { name: school.schoolName, schoolID: school.schoolID };
@@ -67,7 +58,7 @@ let data = [];
         }
         res.json(klasse.weeks);
     });
-    app.post("/addUser", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    app.post("/addUser", async (req, res) => {
         let creds = req.body;
         if (!creds.username ||
             !creds.pass ||
@@ -78,7 +69,7 @@ let data = [];
         }
         console.log("validating creds");
         let school = getSchoolById(creds.schoolID);
-        if (school && (yield scraper_1.default.validate(creds, school.schoolURL))) {
+        if (school && (await scraper_1.default.validate(creds, school.schoolURL))) {
             console.log("creds validated");
             res.sendStatus(200);
             (0, dataHandler_1.addToPass)({
@@ -88,17 +79,17 @@ let data = [];
                 schoolURL: school.schoolURL,
             });
             console.log("creds added");
-            data = yield (0, dataHandler_1.update)();
+            data = await (0, dataHandler_1.update)();
         }
         else {
             res.status(401).send("incorrect credentials");
             console.log("incorrect credentials");
         }
-    }));
+    });
     app.listen(8080, () => {
         console.log("running");
     });
-}))();
+})();
 function getSchoolById(schoolID) {
     return data.find((school) => {
         return school.schoolID == schoolID;
