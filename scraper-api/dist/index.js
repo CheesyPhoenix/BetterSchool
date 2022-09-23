@@ -1,95 +1,107 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const scraper_1 = __importDefault(require("./scraper"));
-const express_1 = __importDefault(require("express"));
-const app = (0, express_1.default)();
-const cors_1 = __importDefault(require("cors"));
-const dataHandler_1 = require("./dataHandler");
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
+import Scraper from "./scraper.js";
+import swaggerUI from "swagger-ui-express";
+import fs from "fs";
+import "./swagger.js";
+import express from "express";
+const app = express();
+import cors from "cors";
+import { addToPass, migrateAccounts, update, } from "./dataHandler.js";
+const swaggerfile = fs.readFileSync("./data/swaggerfile.json");
+app.use(cors());
+app.use(express.json());
+app.use("/doc", swaggerUI.serve, swaggerUI.setup(JSON.parse(swaggerfile.toString())));
 let data = [];
-(async () => {
-    //migrate old accounts
-    (0, dataHandler_1.migrateAccounts)();
-    data = await (0, dataHandler_1.update)();
-    setInterval(dataHandler_1.update, 60 * 60 * 1000);
-    let schools = data.map((school) => {
-        return { name: school.schoolName, schoolID: school.schoolID };
+//migrate old accounts
+migrateAccounts();
+data = await update();
+setInterval(update, 60 * 60 * 1000);
+let schools = data.map((school) => {
+    return { name: school.schoolName, schoolID: school.schoolID };
+});
+app.get("/schools", (req, res) => {
+    // #swagger.description = 'Use this endpoint to get all the schools and their id's'
+    res.type("json");
+    res.json(schools);
+});
+app.get("/school/:schoolID/classes", (req, res) => {
+    // #swagger.description = 'Use this endpoint to get a list of all classes in a school'
+    /* #swagger.parameters['schoolID'] = {
+        in: "path",
+        description: "The school-ID to get the classes from",
+        required: true,
+        type: "string",
+} */
+    res.type("json");
+    const classes = [];
+    const schoolID = req.params.schoolID;
+    const school = data.find((school) => {
+        return school.schoolID == schoolID;
     });
-    app.get("/schools", (req, res) => {
-        res.json(schools);
-    });
-    app.get("/school/:schoolID/classes", (req, res) => {
-        const classes = [];
-        const schoolID = req.params.schoolID;
-        const school = data.find((school) => {
-            return school.schoolID == schoolID;
+    if (!school) {
+        res.sendStatus(404);
+        return;
+    }
+    for (let i = 0; i < school.classes.length; i++) {
+        classes.push({
+            className: school.classes[i].className,
+            classID: school.classes[i].classID,
         });
-        if (!school) {
-            res.sendStatus(404);
-            return;
-        }
-        for (let i = 0; i < school.classes.length; i++) {
-            classes.push({
-                className: school.classes[i].className,
-                classID: school.classes[i].classID,
-            });
-        }
-        console.log(school);
-        res.json(classes);
+    }
+    console.log(school);
+    res.json(classes);
+});
+app.get("/school/:schoolID/class/:classID", (req, res) => {
+    // #swagger.description = 'Use this endpoint to get the schedule of a class in a school'
+    // #swagger.parameters['schoolID'] = { description: 'The ID of the school' }
+    // #swagger.parameters['classID'] = { description: 'The ID of the class' }
+    res.type("json");
+    const schoolID = req.params.schoolID;
+    const school = getSchoolById(schoolID);
+    if (!school) {
+        res.sendStatus(404);
+        return;
+    }
+    const classID = req.params.classID;
+    const klasse = school.classes.find((klasse) => {
+        return klasse.classID == classID;
     });
-    app.get("/school/:schoolID/class/:classID", (req, res) => {
-        const schoolID = req.params.schoolID;
-        const school = getSchoolById(schoolID);
-        if (!school) {
-            res.sendStatus(404);
-            return;
-        }
-        const classID = req.params.classID;
-        const klasse = school.classes.find((klasse) => {
-            return klasse.classID == classID;
+    if (!klasse) {
+        res.sendStatus(404);
+        return;
+    }
+    res.json(klasse.weeks);
+});
+app.post("/addUser", async (req, res) => {
+    let creds = req.body;
+    if (!creds.username ||
+        !creds.pass ||
+        !creds.class ||
+        creds.schoolID === undefined) {
+        res.status(400).send("Incorrectly formatted body object");
+        return;
+    }
+    console.log("validating creds");
+    let school = getSchoolById(creds.schoolID);
+    if (school && (await Scraper.validate(creds, school.schoolURL))) {
+        console.log("creds validated");
+        res.sendStatus(200);
+        addToPass({
+            username: creds.username,
+            class: creds.class,
+            pass: creds.pass,
+            schoolURL: school.schoolURL,
         });
-        if (!klasse) {
-            res.sendStatus(404);
-            return;
-        }
-        res.json(klasse.weeks);
-    });
-    app.post("/addUser", async (req, res) => {
-        let creds = req.body;
-        if (!creds.username ||
-            !creds.pass ||
-            !creds.class ||
-            creds.schoolID === undefined) {
-            res.status(400).send("Incorrectly formatted body object");
-            return;
-        }
-        console.log("validating creds");
-        let school = getSchoolById(creds.schoolID);
-        if (school && (await scraper_1.default.validate(creds, school.schoolURL))) {
-            console.log("creds validated");
-            res.sendStatus(200);
-            (0, dataHandler_1.addToPass)({
-                username: creds.username,
-                class: creds.class,
-                pass: creds.pass,
-                schoolURL: school.schoolURL,
-            });
-            console.log("creds added");
-            data = await (0, dataHandler_1.update)();
-        }
-        else {
-            res.status(401).send("incorrect credentials");
-            console.log("incorrect credentials");
-        }
-    });
-    app.listen(8080, () => {
-        console.log("running");
-    });
-})();
+        console.log("creds added");
+        data = await update();
+    }
+    else {
+        res.status(401).send("incorrect credentials");
+        console.log("incorrect credentials");
+    }
+});
+app.listen(8080, () => {
+    console.log("running");
+});
 function getSchoolById(schoolID) {
     return data.find((school) => {
         return school.schoolID == schoolID;

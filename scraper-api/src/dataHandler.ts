@@ -1,4 +1,4 @@
-import Scraper from "./scraper";
+import Scraper from "./scraper.js";
 import fs from "fs";
 import crypto from "crypto";
 import { exit } from "process";
@@ -97,7 +97,7 @@ async function update(): Promise<
 	console.log("updating data");
 
 	let schools: { name: string; url: string }[] = JSON.parse(
-		fs.readFileSync("./allSchools.json").toString()
+		fs.readFileSync("./data/allSchools.json").toString()
 	);
 
 	let _data: {

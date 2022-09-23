@@ -1,0 +1,116 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "BetterSchool API",
+    "description": "The api for BetterSchool",
+    "version": "1.0.0"
+  },
+  "host": "api.betterschool.chph.tk",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/schools": {
+      "get": {
+        "description": "Use this endpoint to get all the schools and their id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/school/{schoolID}/classes": {
+      "get": {
+        "description": "Use this endpoint to get a list of all classes in a school",
+        "parameters": [
+          {
+            "name": "schoolID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The school-ID to get the classes from"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/school/{schoolID}/class/{classID}": {
+      "get": {
+        "description": "Use this endpoint to get the schedule of a class in a school",
+        "parameters": [
+          {
+            "name": "schoolID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the school"
+          },
+          {
+            "name": "classID",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the class"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/addUser": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "pass": {
+                  "example": "any"
+                },
+                "class": {
+                  "example": "any"
+                },
+                "schoolID": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  }
+}

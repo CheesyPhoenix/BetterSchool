@@ -27,4 +27,4 @@ function capitalizeBySpace(string: string): string {
 		.join(" ");
 }
 
-fs.writeFileSync("./allSchools.json", JSON.stringify(namedList));
+fs.writeFileSync("./data/allSchools.json", JSON.stringify(namedList));
