@@ -65,7 +65,29 @@ async function update() {
         });
     });
     const pass = getPass();
-    const updates = [];
+    async function asyncPool(asyncFns, concurrent = 5) {
+        // queue up simultaneous calls
+        let queue = [];
+        let ret = [];
+        for (let fn of asyncFns) {
+            // fire the async function, add its promise to the queue, and remove
+            // it from queue when complete
+            const p = fn().then((res) => {
+                queue.splice(queue.indexOf(p), 1);
+                return res;
+            });
+            queue.push(p);
+            ret.push(p);
+            // if max concurrent, wait for one to finish
+            if (queue.length >= concurrent) {
+                await Promise.race(queue);
+            }
+        }
+        // wait for the rest of the calls to finish
+        await Promise.all(queue);
+    }
+    const results = [];
+    const pool = [];
     for (let i = 0; i < pass.length; i++) {
         const cred = pass[i];
         const credDecrypted = {
@@ -77,30 +99,34 @@ async function update() {
         });
         if (!school)
             continue;
-        updates.push(new Promise(async (resolve) => {
-            const result = await scrapeForCred(credDecrypted, school?.schoolURL, 2);
-            if (result && result[0].days.length > 0) {
-                school.classes.push({
-                    weeks: result,
-                    className: cred.className,
-                    classID: cred.classID,
-                });
-                resolve({
-                    class: cred.className,
-                    success: true,
-                    schoolName: school.schoolName,
-                });
-            }
-            else {
-                resolve({
-                    class: cred.className,
-                    success: false,
-                    schoolName: school.schoolName,
-                });
-            }
-        }));
+        pool.push(() => {
+            return new Promise(async (resolve) => {
+                const result = await scrapeForCred(credDecrypted, school?.schoolURL, 2);
+                if (result && result[0].days.length > 0) {
+                    school.classes.push({
+                        weeks: result,
+                        className: cred.className,
+                        classID: cred.classID,
+                    });
+                    results.push({
+                        class: cred.className,
+                        success: true,
+                        schoolName: school.schoolName,
+                    });
+                    resolve(undefined);
+                }
+                else {
+                    results.push({
+                        class: cred.className,
+                        success: false,
+                        schoolName: school.schoolName,
+                    });
+                    resolve(undefined);
+                }
+            });
+        });
     }
-    const results = await Promise.all(updates);
+    await asyncPool(pool, 5);
     const asciiGreen = "\u001b[32m";
     const asciiRed = "\u001b[31m";
     const asciiReset = "\u001b[0m";

@@ -173,7 +173,7 @@ async function doScrape(pass, browser, schoolURL) {
                 await new Promise((resolve) => {
                     setTimeout(() => {
                         resolve(undefined);
-                    }, 10);
+                    }, 20);
                 });
                 //get data from context menu
                 const elements = document.getElementsByClassName("list-group")[0].children;

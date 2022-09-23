@@ -118,11 +118,35 @@ async function update(): Promise<
 
 	const pass = getPass();
 
-	const updates: Promise<{
+	async function asyncPool(asyncFns: (() => Promise<any>)[], concurrent = 5) {
+		// queue up simultaneous calls
+		let queue: any[] = [];
+		let ret = [];
+		for (let fn of asyncFns) {
+			// fire the async function, add its promise to the queue, and remove
+			// it from queue when complete
+			const p = fn().then((res) => {
+				queue.splice(queue.indexOf(p), 1);
+				return res;
+			});
+			queue.push(p);
+			ret.push(p);
+			// if max concurrent, wait for one to finish
+			if (queue.length >= concurrent) {
+				await Promise.race(queue);
+			}
+		}
+		// wait for the rest of the calls to finish
+		await Promise.all(queue);
+	}
+
+	const results: {
 		class: string;
 		success: boolean;
 		schoolName: string;
-	}>[] = [];
+	}[] = [];
+
+	const pool: (() => Promise<any>)[] = [];
 
 	for (let i = 0; i < pass.length; i++) {
 		const cred = pass[i];
@@ -138,8 +162,8 @@ async function update(): Promise<
 
 		if (!school) continue;
 
-		updates.push(
-			new Promise(async (resolve) => {
+		pool.push(() => {
+			return new Promise(async (resolve) => {
 				const result = await scrapeForCred(
 					credDecrypted,
 					school?.schoolURL,
@@ -153,23 +177,25 @@ async function update(): Promise<
 						classID: cred.classID,
 					});
 
-					resolve({
+					results.push({
 						class: cred.className,
 						success: true,
 						schoolName: school.schoolName,
 					});
+					resolve(undefined);
 				} else {
-					resolve({
+					results.push({
 						class: cred.className,
 						success: false,
 						schoolName: school.schoolName,
 					});
+					resolve(undefined);
 				}
-			})
-		);
+			});
+		});
 	}
 
-	const results = await Promise.all(updates);
+	await asyncPool(pool, 5);
 
 	const asciiGreen = "\u001b[32m";
 	const asciiRed = "\u001b[31m";

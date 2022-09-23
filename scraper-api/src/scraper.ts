@@ -270,7 +270,7 @@ async function doScrape(
 				await new Promise((resolve) => {
 					setTimeout(() => {
 						resolve(undefined);
-					}, 10);
+					}, 20);
 				});
 
 				//get data from context menu
