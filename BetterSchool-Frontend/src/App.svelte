@@ -30,6 +30,8 @@
 	const dataManager = new DataManager(
 		"https://api.betterschool.cheesyphoenix.tk"
 	);
+	// const dataManager = new DataManager("http://localhost:8080");
+
 	let selectedSchoolID: string;
 	let selectedClassID: string;
 

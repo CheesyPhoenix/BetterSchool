@@ -176,8 +176,15 @@ async function doScrape(pass, browser, schoolURL) {
                     }, 10);
                 });
                 //get data from context menu
-                classOb.teacher = document.getElementsByClassName("list-group")[0]
-                    .children[4].innerText.trim();
+                const elements = document.getElementsByClassName("list-group")[0].children;
+                for (let i = 0; i < elements.length; i++) {
+                    const element = elements[i];
+                    if (element.children[0].classList.value ==
+                        "svg-inline--fa fa-user fa-w-14") {
+                        classOb.teacher = element.innerText.trim();
+                        break;
+                    }
+                }
                 dayOb.classes.push(classOb);
             }
             weekOb.days.push(dayOb);
