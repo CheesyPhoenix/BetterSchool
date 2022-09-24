@@ -274,20 +274,23 @@ async function doScrape(
 				});
 
 				//get data from context menu
-				const elements =
-					document.getElementsByClassName("list-group")[0].children;
+				const menu = document.getElementsByClassName("list-group")[0];
 
-				for (let i = 0; i < elements.length; i++) {
-					const element = elements[i];
+				if (menu) {
+					const elements = menu.children;
 
-					if (
-						element.children[0].classList.value ==
-						"svg-inline--fa fa-user fa-w-14"
-					) {
-						classOb.teacher = (
-							element as HTMLElement
-						).innerText.trim();
-						break;
+					for (let i = 0; i < elements.length; i++) {
+						const element = elements[i];
+
+						if (
+							element.children[0].classList.value ==
+							"svg-inline--fa fa-user fa-w-14"
+						) {
+							classOb.teacher = (
+								element as HTMLElement
+							).innerText.trim();
+							break;
+						}
 					}
 				}
 
