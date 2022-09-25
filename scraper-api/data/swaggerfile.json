@@ -13,11 +13,30 @@
   "paths": {
     "/schools": {
       "get": {
-        "description": "Use this endpoint to get all the schools and their id",
+        "description": "Use this endpoint to get all the schools and their ID's",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns a list of schools and their respective ID's",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Amalieskram VGS"
+                  },
+                  "schoolID": {
+                    "type": "string",
+                    "example": "78f7ae51-b9e7-5c61-95e7-283b7cd7f8f2"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -36,7 +55,26 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns a list of the classes registered to said school",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "className": {
+                    "type": "string",
+                    "example": "3PBYA"
+                  },
+                  "classID": {
+                    "type": "string",
+                    "example": "f0907e85-8d20-51a2-a307-956b55ad77ad"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -46,7 +84,7 @@
     },
     "/school/{schoolID}/class/{classID}": {
       "get": {
-        "description": "Use this endpoint to get the schedule of a class in a school",
+        "description": "",
         "parameters": [
           {
             "name": "schoolID",
@@ -65,7 +103,66 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns a list of the classes registered to said school",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "weekNr": {
+                    "type": "string",
+                    "example": "42"
+                  },
+                  "days": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Fredag"
+                        },
+                        "date": {
+                          "type": "string",
+                          "example": "Fri Oct 21 2022"
+                        },
+                        "classes": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "example": "21. oktober 2022"
+                              },
+                              "time": {
+                                "type": "string",
+                                "example": "13:15-14:15"
+                              },
+                              "room": {
+                                "type": "string",
+                                "example": "553"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Naturfag"
+                              },
+                              "teacher": {
+                                "type": "string",
+                                "example": "Ole-Kristian Eide"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -78,22 +175,27 @@
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "description": "Credentials of the new user",
             "schema": {
               "type": "object",
               "properties": {
                 "username": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "e-bobkåre"
                 },
                 "pass": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "BoblikerKål123"
                 },
                 "class": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "2ITKA"
                 },
                 "schoolID": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "78f7ae51-b9e7-5c61-95e7-283b7cd7f8f2"
                 }
               }
             }
@@ -104,10 +206,10 @@
             "description": "OK"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Retuns 400 if the body object did not include the correct params"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Returns 401 if the api failed to verify the credentials"
           }
         }
       }
