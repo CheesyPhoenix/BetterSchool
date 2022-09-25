@@ -18,11 +18,16 @@ const swaggerfile = fs.readFileSync("./data/swaggerfile.json");
 
 app.use(cors());
 app.use(express.json());
-app.use(
-	"/doc",
+
+//documentation
+const doc = express();
+doc.use(
+	"/",
 	swaggerUI.serve,
 	swaggerUI.setup(JSON.parse(swaggerfile.toString()))
 );
+doc.listen(8081);
+//
 
 let data: {
 	classes: SchoolClass[];

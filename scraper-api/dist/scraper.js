@@ -88,7 +88,6 @@ async function doScrape(pass, browser, schoolURL) {
         return false;
     })) &&
         page.url() != schoolURL + "#/app/dashboard") {
-        console.log("waiting for page load. Currently at: " + page.url());
         await page.waitForSelector("#top-menu-navbar-brand");
     }
     await page.waitForTimeout(2000);
@@ -171,13 +170,16 @@ async function doScrape(pass, browser, schoolURL) {
                     }, 20);
                 });
                 //get data from context menu
-                const elements = document.getElementsByClassName("list-group")[0].children;
-                for (let i = 0; i < elements.length; i++) {
-                    const element = elements[i];
-                    if (element.children[0].classList.value ==
-                        "svg-inline--fa fa-user fa-w-14") {
-                        classOb.teacher = element.innerText.trim();
-                        break;
+                const menu = document.getElementsByClassName("list-group")[0];
+                if (menu) {
+                    const elements = menu.children;
+                    for (let i = 0; i < elements.length; i++) {
+                        const element = elements[i];
+                        if (element.children[0].classList.value ==
+                            "svg-inline--fa fa-user fa-w-14") {
+                            classOb.teacher = element.innerText.trim();
+                            break;
+                        }
                     }
                 }
                 dayOb.classes.push(classOb);

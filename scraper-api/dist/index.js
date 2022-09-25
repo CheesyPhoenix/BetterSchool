@@ -9,7 +9,11 @@ import { addToPass, migrateAccounts, update, } from "./dataHandler.js";
 const swaggerfile = fs.readFileSync("./data/swaggerfile.json");
 app.use(cors());
 app.use(express.json());
-app.use("/doc", swaggerUI.serve, swaggerUI.setup(JSON.parse(swaggerfile.toString())));
+//documentation
+const doc = express();
+doc.use("/", swaggerUI.serve, swaggerUI.setup(JSON.parse(swaggerfile.toString())));
+doc.listen(8081);
+//
 let data = [];
 //migrate old accounts
 migrateAccounts();
