@@ -20,77 +20,7 @@ Thats easy. Just head to https://betterschool.cheesyphoenix.tk and simply downlo
 
 ## API documentation
 
-The BetterSchool API is completely open and is hosted at `https://api.betterschool.cheesyphoenix.tk/`.
+The BetterSchool API is completely open and is hosted at `https://api.betterschool.chph.tk/` (both `...chph.tk` and `...cheesyphoenix.tk` works).
+see [the documentation page](https://doc.api.betterschool.chph.tk) for usage
 
 Both the API and the website can be self-hosted, documentation for this will eventiually be created.
-
-### Usage
-
-<br>
-
-## IMPORTANT! THIS IS OUTDATED, THIS WILL NOT WORK!
-
-<br>
-
-All API communication takes place using JSON
-
-The API exposes three endpoints:
-
-<br>
-
-`/classes [GET]`
-
-Response:
-
-```TypeScript
-const response: string[];
-```
-
-This is used to get a list of all classes in the API's database
-
-<br>
-
-`/:class [GET]`
-
-Where "class" is a valid class gotten from /classes
-e.g. `[GET] /2ITKA`
-
-Response:
-
-```TypeScript
-interface Week {
-  weekNr: string;
-  days: {
-    name: string;
-    date: string;
-    classes: {
-      date: string;
-      time: string;
-      room: string;
-      name: string;
-    }[];
-  }[];
-}
-
-const response: Week[];
-```
-
-<br>
-
-`/addUser [POST]`
-
-Where the request body is of type:
-
-```TypeScript
-interface bodyFormat {
-  username: string,
-  pass: string,
-  class: string,
-}
-
-const body: bodyFormat;
-```
-
-On success this will return status `200` <br>
-On an incorrectly formatted body object it will return status `400` <br>
-On verification failure it will return status `401` <br>
