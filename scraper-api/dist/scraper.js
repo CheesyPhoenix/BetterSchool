@@ -1,11 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const puppeteer_1 = __importDefault(require("puppeteer"));
+import puppeteer from "puppeteer";
 async function validate(creds, schoolURL) {
-    const browser = await puppeteer_1.default.launch({
+    const browser = await puppeteer.launch({
         args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",
@@ -48,7 +43,7 @@ async function doValidate(creds, schoolURL, browser) {
     return validated;
 }
 async function scrape(pass, schoolURL) {
-    const browser = await puppeteer_1.default.launch({
+    const browser = await puppeteer.launch({
         args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",
@@ -222,4 +217,4 @@ async function doScrape(pass, browser, schoolURL) {
     // console.log(weeks);
     return weeks;
 }
-exports.default = { scrape, validate };
+export default { scrape, validate };

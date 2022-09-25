@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const list = fs_1.default.readFileSync("./allSchools.txt").toString().split("\r\n");
+import fs from "fs";
+const list = fs.readFileSync("./allSchools.txt").toString().split("\r\n");
 let namedList = [];
 list.forEach((e) => {
     namedList.push({
@@ -25,4 +20,4 @@ function capitalizeBySpace(string) {
     })
         .join(" ");
 }
-fs_1.default.writeFileSync("./allSchools.json", JSON.stringify(namedList));
+fs.writeFileSync("./data/allSchools.json", JSON.stringify(namedList));
