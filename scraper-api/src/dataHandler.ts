@@ -128,10 +128,10 @@ async function update(): Promise<
 			// fire the async function, add its promise to the queue, and remove
 			// it from queue when complete
 
-			console.log(`Running update ${i}/${asyncFns.length}`);
+			console.log(`Running update ${i + 1}/${asyncFns.length}`);
 
 			const p = fn().then((res) => {
-				console.log(`Update ${i} complete`);
+				console.log(`Update ${i + 1} complete`);
 
 				queue.splice(queue.indexOf(p), 1);
 				return res;
