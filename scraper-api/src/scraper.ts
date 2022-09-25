@@ -128,7 +128,6 @@ async function doScrape(
 		})) &&
 		page.url() != schoolURL + "#/app/dashboard"
 	) {
-		console.log("waiting for page load. Currently at: " + page.url());
 		await page.waitForSelector("#top-menu-navbar-brand");
 	}
 

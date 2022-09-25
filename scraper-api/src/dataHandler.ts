@@ -122,10 +122,17 @@ async function update(): Promise<
 		// queue up simultaneous calls
 		let queue: any[] = [];
 		let ret = [];
-		for (let fn of asyncFns) {
+
+		for (let i = 0; i < asyncFns.length; i++) {
+			const fn = asyncFns[i];
 			// fire the async function, add its promise to the queue, and remove
 			// it from queue when complete
+
+			console.log(`Running update ${i}/${asyncFns.length}`);
+
 			const p = fn().then((res) => {
+				console.log(`Update ${i} complete`);
+
 				queue.splice(queue.indexOf(p), 1);
 				return res;
 			});
@@ -136,6 +143,7 @@ async function update(): Promise<
 				await Promise.race(queue);
 			}
 		}
+
 		// wait for the rest of the calls to finish
 		await Promise.all(queue);
 	}
