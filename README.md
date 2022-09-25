@@ -21,6 +21,6 @@ Thats easy. Just head to https://betterschool.cheesyphoenix.tk and simply downlo
 ## API documentation
 
 The BetterSchool API is completely open and is hosted at `https://api.betterschool.chph.tk/` (both `...chph.tk` and `...cheesyphoenix.tk` works).
-see [the documentation page](https://doc.api.betterschool.chph.tk) for usage
+See [the documentation page](https://doc.api.betterschool.chph.tk) for usage.
 
 Both the API and the website can be self-hosted, documentation for this will eventiually be created.
