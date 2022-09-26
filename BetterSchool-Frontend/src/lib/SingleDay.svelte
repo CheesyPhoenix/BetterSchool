@@ -3,6 +3,7 @@
 	import { swipe } from "svelte-gestures";
 	import { createEventDispatcher } from "svelte";
 	import { fly, fade } from "svelte/transition";
+	import { getWeekNr } from "./shared";
 
 	interface Week {
 		weekNr: string;
@@ -34,6 +35,10 @@
 			break;
 		}
 	}
+
+	const now = new Date();
+
+	const nowFormatted = `${now.getDate()}.${now.getMonth()}.${now.getFullYear()}, uke ${getWeekNr()}`;
 
 	//
 
@@ -73,6 +78,7 @@
 
 <div class="weekNrCont">
 	<h2 class="weekNr">{"Uke " + week.weekNr}</h2>
+	<h5 class="nowDate">Dato: {nowFormatted}</h5>
 </div>
 {#key dayIndex}
 	<div class="centerVertical" out:fly={{ x: swipeOffset }} in:fade>
@@ -95,10 +101,13 @@
 		z-index: 1;
 		position: absolute;
 		left: 2em;
-		top: 1em;
+		top: 0.5em;
 	}
 	.weekNr {
 		margin: 0;
+	}
+	.nowDate {
+		margin-top: 0px;
 	}
 
 	.centerVertical {

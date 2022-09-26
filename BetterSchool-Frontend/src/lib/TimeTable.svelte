@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Day from "./TimeTable/Day.svelte";
 	import { fly, fade } from "svelte/transition";
+	import { getWeekNr } from "./shared";
 
 	interface Week {
 		weekNr: string;
@@ -20,10 +21,15 @@
 	$: days = week.days;
 
 	export let swipeOffset: number;
+
+	const now = new Date();
+
+	const nowFormatted = `${now.getDate()}.${now.getMonth()}.${now.getFullYear()}, uke ${getWeekNr()}`;
 </script>
 
 <div class="weekNrCont">
 	<h2 class="weekNr">{"Uke " + week.weekNr}</h2>
+	<h5 class="nowDate">Dato: {nowFormatted}</h5>
 </div>
 {#key week}
 	<div class="centerVertical" out:fly={{ x: swipeOffset }} in:fade>
@@ -66,5 +72,13 @@
 		border-radius: 15px;
 		margin-top: 5em;
 		margin-bottom: 3em;
+	}
+
+	.weekNr {
+		margin-bottom: 0;
+		margin-top: 0.5em;
+	}
+	.nowDate {
+		margin-top: 5px;
 	}
 </style>
