@@ -92,7 +92,13 @@
 	{#if selectedSchoolID}
 		<h3 style="margin-left: 3rem;">Select class to view</h3>
 
-		<select bind:value={selectedClassID} class="selectClass">
+		<select
+			bind:value={selectedClassID}
+			on:change={() => {
+				menuActive = false;
+			}}
+			class="selectClass"
+		>
 			{#if klasser}
 				{#each klasser as klasse}
 					<option value={klasse.classID}>{klasse.className}</option>
