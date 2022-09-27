@@ -24,7 +24,9 @@
 
 	const now = new Date();
 
-	const nowFormatted = `${now.getDate()}.${now.getMonth()}.${now.getFullYear()}, uke ${getWeekNr()}`;
+	const nowFormatted = `${now.getDate()}.${
+		now.getMonth() + 1
+	}.${now.getFullYear()}, uke ${getWeekNr()}`;
 </script>
 
 <div class="weekNrCont">
