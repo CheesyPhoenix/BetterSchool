@@ -40,7 +40,9 @@ let data: {
 migrateAccounts();
 
 data = await update();
-setInterval(update, 60 * 60 * 1000);
+setInterval(async () => {
+	data = await update();
+}, 60 * 60 * 1000);
 
 let schools: { name: string; schoolID: string }[] = data.map((school) => {
 	return { name: school.schoolName, schoolID: school.schoolID };
