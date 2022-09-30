@@ -27,10 +27,12 @@
 	const nowFormatted = `${now.getDate()}.${
 		now.getMonth() + 1
 	}.${now.getFullYear()}, uke ${getWeekNr()}`;
+
+	export let className: string;
 </script>
 
 <div class="weekNrCont">
-	<h2 class="weekNr">{"Uke " + week.weekNr}</h2>
+	<h2 class="weekNr">{"Uke " + week.weekNr} - {className}</h2>
 	<h5 class="nowDate">Dato: {nowFormatted}</h5>
 </div>
 {#key week}
