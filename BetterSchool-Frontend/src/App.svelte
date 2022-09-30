@@ -25,6 +25,13 @@
 	let klasser: { className: string; classID: string }[];
 	let schools: { name: string; schoolID: string }[];
 
+	let selectedClassName: string = "";
+    $: {
+	    if (selectedClassID) {
+            klasser.forEach(klasse => {if (klasse.classID == selectedClassID) selectedClassName = klasse.className}
+		}
+	}
+
 	async function updateKlasser() {
 		klasser = await dataManager.getClasses();
 
@@ -162,6 +169,7 @@
 		{#if currWeek}
 			<SingleDay
 				week={currWeek}
+				className={selectedClassName}
 				{weekIndex}
 				on:changeWeek={(event) => {
 					changePage(event.detail);
@@ -170,7 +178,7 @@
 		{/if}
 	{:else}
 		{#if currWeek}
-			<TimeTable week={currWeek} {swipeOffset} />
+			<TimeTable week={currWeek} {swipeOffset} className={selectedClassName} />
 		{/if}
 
 		<div
