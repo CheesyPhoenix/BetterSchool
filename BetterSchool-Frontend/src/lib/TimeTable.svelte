@@ -28,7 +28,7 @@
 		now.getMonth() + 1
 	}.${now.getFullYear()}, uke ${getWeekNr()}`;
 
-	export let className:string;
+	export let className: string;
 </script>
 
 <div class="weekNrCont">

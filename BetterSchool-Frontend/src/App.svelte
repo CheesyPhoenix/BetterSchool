@@ -26,9 +26,12 @@
 	let schools: { name: string; schoolID: string }[];
 
 	let selectedClassName: string = "";
-    $: {
-	    if (selectedClassID) {
-            klasser.forEach(klasse => {if (klasse.classID == selectedClassID) selectedClassName = klasse.className}
+	$: {
+		if (selectedClassID && klasser) {
+			klasser.forEach((klasse) => {
+				if (klasse.classID == selectedClassID)
+					selectedClassName = klasse.className;
+			});
 		}
 	}
 
@@ -178,7 +181,11 @@
 		{/if}
 	{:else}
 		{#if currWeek}
-			<TimeTable week={currWeek} {swipeOffset} className={selectedClassName} />
+			<TimeTable
+				week={currWeek}
+				{swipeOffset}
+				className={selectedClassName}
+			/>
 		{/if}
 
 		<div

@@ -38,7 +38,9 @@
 
 	const now = new Date();
 
-	const nowFormatted = `${now.getDate()}.${now.getMonth()+1}.${now.getFullYear()}, uke ${getWeekNr()}`;
+	const nowFormatted = `${now.getDate()}.${
+		now.getMonth() + 1
+	}.${now.getFullYear()}, uke ${getWeekNr()}`;
 
 	//
 
@@ -75,7 +77,7 @@
 		}
 	}
 
-	export let className:string = "";
+	export let className: string = "";
 </script>
 
 <div class="weekNrCont">
