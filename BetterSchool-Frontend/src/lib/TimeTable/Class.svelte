@@ -38,16 +38,15 @@
 		distTop;
 
 	// check if class is currently active
+	const todayDate = new Date();
 
-	let timeStartDate = new Date(classOb.date + " " + timeStart);
-	let timeSluttDate = new Date(classOb.date + " " + timeSlutt);
+	let timeStartDate = new Date(todayDate.toDateString() + " " + timeStart);
+	let timeSluttDate = new Date(todayDate.toDateString() + " " + timeSlutt);
 
 	$: {
-		timeStartDate = new Date(classOb.date + " " + timeStart);
-		timeSluttDate = new Date(classOb.date + " " + timeSlutt);
+		timeStartDate = new Date(todayDate.toDateString() + " " + timeStart);
+		timeSluttDate = new Date(todayDate.toDateString() + " " + timeSlutt);
 	}
-
-	const todayDate = new Date();
 
 	let classActive = false;
 

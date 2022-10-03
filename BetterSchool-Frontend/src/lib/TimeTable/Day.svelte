@@ -21,12 +21,12 @@
 	let classes = day.classes;
 	$: classes = day.classes;
 
-	let dateOb =
-		classes.length == 0 ? undefined : new Date(day.classes[0].date);
-	$: {
-		dateOb =
-			classes.length == 0 ? undefined : new Date(day.classes[0].date);
-	}
+	// let dateOb =
+	// 	classes.length == 0 ? undefined : new Date(day.classes[0].date);
+	// $: {
+	// 	dateOb =
+	// 		classes.length == 0 ? undefined : new Date(day.classes[0].date);
+	// }
 
 	const todayDate = new Date();
 
@@ -35,10 +35,10 @@
 
 	$: {
 		if (
-			dateOb &&
-			dateOb.getDate() == todayDate.getDate() &&
-			dateOb.getMonth() == todayDate.getMonth() &&
-			dateOb.getFullYear() == todayDate.getFullYear()
+			dayDateOb &&
+			dayDateOb.getDate() == todayDate.getDate() &&
+			dayDateOb.getMonth() == todayDate.getMonth() &&
+			dayDateOb.getFullYear() == todayDate.getFullYear()
 		) {
 			bgColor = "#696969";
 			today = true;
@@ -68,10 +68,10 @@
 
 			if (blurred) {
 				if (
-					dateOb &&
-					dateOb.getDate() == todayDate.getDate() &&
-					dateOb.getMonth() == todayDate.getMonth() &&
-					dateOb.getFullYear() == todayDate.getFullYear()
+					dayDateOb &&
+					dayDateOb.getDate() == todayDate.getDate() &&
+					dayDateOb.getMonth() == todayDate.getMonth() &&
+					dayDateOb.getFullYear() == todayDate.getFullYear()
 				) {
 					bgColor = "#696969";
 					today = true;
