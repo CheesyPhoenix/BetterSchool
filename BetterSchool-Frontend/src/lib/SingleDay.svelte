@@ -15,6 +15,7 @@
 				time: string;
 				room: string;
 				name: string;
+				teacher: string;
 			}[];
 		}[];
 	}

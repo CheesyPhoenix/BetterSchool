@@ -6,6 +6,7 @@
 		time: string;
 		room: string;
 		name: string;
+		teacher: string;
 	};
 	export let today: boolean;
 
@@ -94,6 +95,7 @@
 		<p class="bold">{classOb.room}</p>
 	</div>
 	<h5 class="name">{classOb.name}</h5>
+	<p class="bold">{classOb.teacher}</p>
 </div>
 
 <style>
