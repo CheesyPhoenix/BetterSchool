@@ -108,6 +108,7 @@
 		border-radius: 10px;
 		border-bottom-left-radius: 2px;
 		border-top-left-radius: 2px;
+		overflow-x: auto;
 
 		border-left: solid 5px #39444b;
 	}
