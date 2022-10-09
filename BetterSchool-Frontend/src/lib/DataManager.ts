@@ -1,16 +1,4 @@
-interface Week {
-	weekNr: string;
-	days: {
-		name: string;
-		date: string;
-		classes: {
-			date: string;
-			time: string;
-			room: string;
-			name: string;
-		}[];
-	}[];
-}
+import type { Week } from "./shared";
 
 class DataManager {
 	private apiURL: string;
@@ -76,4 +64,3 @@ class DataManager {
 	}
 }
 export { DataManager };
-export type { Week };

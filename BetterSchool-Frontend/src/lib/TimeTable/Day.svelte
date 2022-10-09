@@ -6,7 +6,7 @@
 	export let day: {
 		name: string;
 		date: string;
-		classes: { date: string; time: string; room: string; name: string }[];
+		classes: { date: string; time: string; room: string; name: string, teacher: string }[];
 	};
 
 	let dayName = day.name;

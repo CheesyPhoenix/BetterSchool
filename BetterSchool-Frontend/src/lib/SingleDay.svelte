@@ -3,21 +3,7 @@
 	import { swipe } from "svelte-gestures";
 	import { createEventDispatcher } from "svelte";
 	import { fly, fade } from "svelte/transition";
-	import { getWeekNr } from "./shared";
-
-	interface Week {
-		weekNr: string;
-		days: {
-			name: string;
-			date: string;
-			classes: {
-				date: string;
-				time: string;
-				room: string;
-				name: string;
-			}[];
-		}[];
-	}
+	import { getWeekNr, Week } from "./shared";
 
 	export let weekIndex: number;
 
