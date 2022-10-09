@@ -6,8 +6,8 @@
 	import { onMount } from "svelte";
 	import Menu from "./lib/Menu.svelte";
 	import { swipe } from "svelte-gestures";
-	import { DataManager, Week } from "./lib/DataManager";
-	import { getWeekNr } from "./lib/shared";
+	import { DataManager } from "./lib/DataManager";
+	import { getWeekNr, Week } from "./lib/shared";
 
 	const dataManager = new DataManager(
 		"https://api.betterschool.cheesyphoenix.tk"
@@ -134,14 +134,6 @@
 	) {
 		if (event.detail.direction == "bottom") {
 			menuActive = true;
-		}
-	}
-
-	$: {
-		if (phoneMode) {
-			document.getElementById("app").style.overflowY = "auto";
-		} else {
-			document.getElementById("app").style.overflowY = "hidden";
 		}
 	}
 </script>

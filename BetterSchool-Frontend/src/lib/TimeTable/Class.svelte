@@ -95,7 +95,7 @@
 		<p class="bold">{classOb.room}</p>
 	</div>
 	<h5 class="name">{classOb.name}</h5>
-	<p class="bold">{classOb.teacher}</p>
+	<p class="teacher">{classOb.teacher}</p>
 </div>
 
 <style>
@@ -108,7 +108,6 @@
 		border-radius: 10px;
 		border-bottom-left-radius: 2px;
 		border-top-left-radius: 2px;
-		overflow-x: auto;
 
 		border-left: solid 5px #39444b;
 	}
@@ -145,5 +144,12 @@
 		font-weight: bold;
 		display: inline;
 		font-size: 13px;
+	}
+
+	.teacher {
+		color: #666;
+		display: inline;
+		font-size: 13px;
+		font-weight: 600;
 	}
 </style>
