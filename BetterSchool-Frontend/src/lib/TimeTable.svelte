@@ -1,21 +1,7 @@
 <script lang="ts">
 	import Day from "./TimeTable/Day.svelte";
 	import { fly, fade } from "svelte/transition";
-	import { getWeekNr } from "./shared";
-
-	interface Week {
-		weekNr: string;
-		days: {
-			name: string;
-			date: string;
-			classes: {
-				date: string;
-				time: string;
-				room: string;
-				name: string;
-			}[];
-		}[];
-	}
+	import { getWeekNr, Week } from "./shared";
 
 	export let week: Week;
 	$: days = week.days;
@@ -64,6 +50,7 @@
 		margin: 0;
 		left: 0;
 		top: 0;
+		min-height: 900px;
 	}
 
 	.table {
