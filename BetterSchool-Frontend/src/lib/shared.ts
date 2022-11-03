@@ -68,8 +68,6 @@ function exportICS(weeks: Week[]) {
 		});
 	});
 
-	console.log(events);
-
 	const createdEvents = ics.createEvents(events);
 
 	if (createdEvents.error) {
