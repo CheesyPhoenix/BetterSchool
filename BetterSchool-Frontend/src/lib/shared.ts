@@ -1,3 +1,20 @@
+import * as ics from "ics";
+
+interface Week {
+	weekNr: string;
+	days: {
+		name: string;
+		date: string;
+		classes: {
+			date: string;
+			time: string;
+			room: string;
+			name: string;
+			teacher: string;
+		}[];
+	}[];
+}
+
 function getWeekNr() {
 	var date = new Date();
 	date.setHours(0, 0, 0, 0);
@@ -17,20 +34,64 @@ function getWeekNr() {
 	);
 }
 
-interface Week {
-	weekNr: string;
-	days: {
-		name: string;
-		date: string;
-		classes: {
-			date: string;
-			time: string;
-			room: string;
-			name: string;
-			teacher: string;
-		}[];
-	}[];
+function exportICS(weeks: Week[]) {
+	let events: ics.EventAttributes[] = [];
+
+	weeks.forEach((week) => {
+		week.days.forEach((day) => {
+			const dayDate = new Date(day.date);
+
+			day.classes.forEach((sClass) => {
+				events.push({
+					start: [
+						dayDate.getFullYear(),
+						dayDate.getMonth() + 1,
+						dayDate.getDate(),
+						parseInt(sClass.time.split("-")[0].split(":")[0]),
+						parseInt(sClass.time.split("-")[0].split(":")[1]),
+					],
+					end: [
+						dayDate.getFullYear(),
+						dayDate.getMonth() + 1,
+						dayDate.getDate(),
+						parseInt(sClass.time.split("-")[1].split(":")[0]),
+						parseInt(sClass.time.split("-")[1].split(":")[1]),
+					],
+					startInputType: "local",
+					endInputType: "local",
+					startOutputType: "local",
+					endOutputType: "local",
+					title: sClass.name,
+					description: `Room: ${sClass.room}, Teacher: ${sClass.teacher}`,
+				});
+			});
+		});
+	});
+
+	console.log(events);
+
+	const createdEvents = ics.createEvents(events);
+
+	if (createdEvents.error) {
+		console.error(createdEvents.error);
+	}
+
+	const calendar = createdEvents.value;
+
+	var element = document.createElement("a");
+	element.setAttribute(
+		"href",
+		"data:text/plain;charset=utf-8," + encodeURIComponent(calendar)
+	);
+	element.setAttribute("download", "schedule.ics");
+
+	element.style.display = "none";
+	document.body.appendChild(element);
+
+	element.click();
+
+	document.body.removeChild(element);
 }
 
-export { getWeekNr };
+export { getWeekNr, exportICS };
 export type { Week };

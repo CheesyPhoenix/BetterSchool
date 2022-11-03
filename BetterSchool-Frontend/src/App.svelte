@@ -145,6 +145,7 @@
 		{klasser}
 		{schools}
 		{dataManager}
+		{weeks}
 		bind:selectedClassID
 		bind:selectedSchoolID
 		bind:menuActive
