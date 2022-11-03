@@ -100,6 +100,7 @@ jobs:
     deployment:
         runs-on: ubuntu-latest
         needs: [backend, frontend]
+        if: ${{always() && (steps.backend.outcome == "success" || steps.frontend.outcome == "success")}}
         
         steps:
             - run: "curl --location --request GET 'https://watchtower.cheesyphoenix.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'"
