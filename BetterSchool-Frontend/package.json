@@ -23,6 +23,7 @@
 		"vite-plugin-pwa": "^0.12.3"
 	},
 	"dependencies": {
+		"ics": "^2.41.0",
 		"svelte-gestures": "^1.4.1",
 		"svelte-toasts": "^1.1.2"
 	}

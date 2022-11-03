@@ -5,6 +5,7 @@
 	import { toasts, ToastContainer, FlatToast } from "svelte-toasts";
 	import { swipe } from "svelte-gestures";
 	import type { DataManager } from "./DataManager";
+	import { exportICS, Week } from "./shared";
 
 	export let selectedSchoolID: string;
 	export let schools: { name: string; schoolID: string }[];
@@ -15,6 +16,9 @@
 	export let menuActive: boolean;
 
 	export let dataManager: DataManager;
+
+	//For .ics export
+	export let weeks: Week[];
 
 	let loading = false;
 
@@ -154,6 +158,20 @@
 			<FlatToast {data} />
 		</ToastContainer>
 	{/if}
+
+	{#if weeks}
+		<br />
+		<hr />
+		<br />
+
+		<button
+			style="margin-left: 3rem;"
+			on:click={() => {
+				exportICS(weeks);
+			}}>Download calendar file</button
+		>
+	{/if}
+
 	<div
 		class="settingsBtn"
 		on:click={() => {
