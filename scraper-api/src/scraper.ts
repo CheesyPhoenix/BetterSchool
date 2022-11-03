@@ -33,6 +33,12 @@ async function doValidate(
 	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
+
+	//decline the bloody cookies
+	await page.waitForTimeout(1000);
+	await page.click(".onetrust-close-btn-ui");
+	await page.waitForTimeout(1000);
+
 	await page.click("#login-with-feide-button");
 
 	await page.waitForSelector("#username");
@@ -102,6 +108,12 @@ async function doScrape(
 	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
+
+	//decline the bloody cookies
+	await page.waitForTimeout(1000);
+	await page.click(".onetrust-close-btn-ui");
+	await page.waitForTimeout(1000);
+
 	await page.click("#login-with-feide-button");
 
 	await page.waitForSelector("#username");
