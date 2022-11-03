@@ -9,10 +9,15 @@
 	import { DataManager } from "./lib/DataManager";
 	import { getWeekNr, Week } from "./lib/shared";
 
-	const dataManager = new DataManager(
-		"https://api.betterschool.cheesyphoenix.tk"
-	);
-	// const dataManager = new DataManager("http://localhost:8080");
+	let dataManager: DataManager;
+
+	if (import.meta.env.DEV) {
+		dataManager = new DataManager("http://localhost:8080");
+	} else {
+		dataManager = new DataManager(
+			"https://api.betterschool.cheesyphoenix.tk"
+		);
+	}
 
 	let selectedSchoolID: string;
 	let selectedClassID: string;
