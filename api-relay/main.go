@@ -91,6 +91,9 @@ func reqManager(w http.ResponseWriter, r *http.Request) {
 		// } else {
 		// 	w.WriteHeader(404)
 		// }
+
+		w.Header().Set("Content-Type", "application/json")
+
 		cachedRequest(w, r)
 	} else if r.Method == "POST" {
 		if r.URL.Path == "/addUser" {
