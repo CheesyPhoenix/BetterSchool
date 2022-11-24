@@ -151,23 +151,41 @@ async function doScrape(pass, browser, schoolURL) {
                     teacher: "",
                 };
                 const data = sClass.children[1].innerText;
-                classOb.date = data.split(" Starter ")[1].split(" klokken")[0];
-                classOb.time =
-                    data.split(" klokken ")[1].split(" og")[0] +
-                        "-" +
-                        data.split(" slutter ")[1].trim();
-                if (data.includes("Aktivitet")) {
-                    classOb.room = "Aktivitet";
-                    classOb.name = data.split(".")[0].trim();
+                if (data.includes("og slutter Klikk for å se detaljer")) {
+                    //for screen reader bug
+                    classOb.date = data.split(".")[1].split(".")[0].trim();
+                    classOb.time =
+                        data.split("Starter")[1].split("klokken")[0].trim() +
+                            "-" +
+                            data.split(" klokken ")[1].split(" og")[0].trim();
                 }
-                else if (!data.includes(" rom ")) {
+                else {
+                    classOb.date = data
+                        .split(" Starter ")[1]
+                        .split(" klokken")[0];
+                    classOb.time =
+                        data.split(" klokken ")[1].split(" og")[0] +
+                            "-" +
+                            data.split(" slutter ")[1].trim();
+                }
+                // if (data.includes("Aktivitet")) {
+                // 	classOb.room = "Aktivitet";
+                // 	classOb.name = data.split(".")[0].trim();
+                /* } else*/ if (!data.includes(" rom ")) {
                     classOb.room = "ingen";
                     classOb.name = data.split(".")[0].trim();
                 }
                 else {
                     console.log(data);
-                    classOb.room = data.split(" rom ")[1].split(".")[0];
-                    classOb.name = data.split(" i rom ")[0].trim();
+                    if (data.includes("og slutter Klikk for å se detaljer")) {
+                        //for screen reader bug
+                        classOb.room = data.split("\n")[1].split(" ")[0].trim();
+                        classOb.name = data.split("\n")[0].trim();
+                    }
+                    else {
+                        classOb.room = data.split(" rom ")[1].split(".")[0];
+                        classOb.name = data.split(" i rom ")[0].trim();
+                    }
                 }
                 //get teacher
                 //click to open context menu
