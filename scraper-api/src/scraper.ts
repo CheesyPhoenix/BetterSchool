@@ -253,9 +253,11 @@ async function doScrape(
 					teacher: "",
 				};
 
-				const data = (sClass.children[1] as HTMLElement).innerText;
+				const data = (
+					sClass.getElementsByClassName("sr-only")[0] as HTMLElement
+				).innerText;
 
-				if (data.includes("og slutter Klikk for å se detaljer")) {
+				if (data.trim().endsWith("og slutter")) {
 					//for screen reader bug
 
 					classOb.date = data.split(".")[1].split(".")[0].trim();
@@ -282,10 +284,15 @@ async function doScrape(
 				} else {
 					console.log(data);
 
-					if (data.includes("og slutter Klikk for å se detaljer")) {
+					if (data.trim().endsWith("og slutter")) {
 						//for screen reader bug
-						classOb.room = data.split("\n")[1].split(" ")[0].trim();
-						classOb.name = data.split("\n")[0].trim();
+						const idk = data.split(" i rom ")[0].split(" ");
+
+						classOb.room = idk[idk.length - 1];
+						classOb.name = idk
+							.slice(0, idk.length - 1)
+							.join(" ")
+							.trim();
 					} else {
 						classOb.room = data.split(" rom ")[1].split(".")[0];
 						classOb.name = data.split(" i rom ")[0].trim();
@@ -294,7 +301,11 @@ async function doScrape(
 
 				//get teacher
 				//click to open context menu
-				sClass.click();
+				(
+					sClass.getElementsByClassName(
+						"Timetable-TimetableItem Timetable-TimetableItem-m"
+					)[0] as HTMLElement
+				).click();
 
 				await new Promise((resolve) => {
 					setTimeout(() => {
@@ -312,12 +323,14 @@ async function doScrape(
 						const element = elements[i];
 
 						if (
-							element.children[0].classList.value ==
-							"svg-inline--fa fa-user fa-w-14"
+							element.children[0].children[0] &&
+							element.children[0].children[0].classList.value ==
+								"svg-inline--fa fa-user fa-w-14"
 						) {
 							classOb.teacher = (
 								element as HTMLElement
 							).innerText.trim();
+
 							break;
 						}
 					}
