@@ -150,8 +150,8 @@ async function doScrape(pass, browser, schoolURL) {
                     name: "",
                     teacher: "",
                 };
-                const data = sClass.children[1].innerText;
-                if (data.includes("og slutter Klikk for å se detaljer")) {
+                const data = sClass.getElementsByClassName("sr-only")[0].innerText;
+                if (data.trim().endsWith("og slutter")) {
                     //for screen reader bug
                     classOb.date = data.split(".")[1].split(".")[0].trim();
                     classOb.time =
@@ -177,10 +177,14 @@ async function doScrape(pass, browser, schoolURL) {
                 }
                 else {
                     console.log(data);
-                    if (data.includes("og slutter Klikk for å se detaljer")) {
+                    if (data.trim().endsWith("og slutter")) {
                         //for screen reader bug
-                        classOb.room = data.split("\n")[1].split(" ")[0].trim();
-                        classOb.name = data.split("\n")[0].trim();
+                        const idk = data.split(" i rom ")[0].split(" ");
+                        classOb.room = idk[idk.length - 1];
+                        classOb.name = idk
+                            .slice(0, idk.length - 1)
+                            .join(" ")
+                            .trim();
                     }
                     else {
                         classOb.room = data.split(" rom ")[1].split(".")[0];
@@ -189,7 +193,7 @@ async function doScrape(pass, browser, schoolURL) {
                 }
                 //get teacher
                 //click to open context menu
-                sClass.click();
+                sClass.getElementsByClassName("Timetable-TimetableItem Timetable-TimetableItem-m")[0].click();
                 await new Promise((resolve) => {
                     setTimeout(() => {
                         resolve(undefined);
@@ -201,8 +205,9 @@ async function doScrape(pass, browser, schoolURL) {
                     const elements = menu.children;
                     for (let i = 0; i < elements.length; i++) {
                         const element = elements[i];
-                        if (element.children[0].classList.value ==
-                            "svg-inline--fa fa-user fa-w-14") {
+                        if (element.children[0].children[0] &&
+                            element.children[0].children[0].classList.value ==
+                                "svg-inline--fa fa-user fa-w-14") {
                             classOb.teacher = element.innerText.trim();
                             break;
                         }
