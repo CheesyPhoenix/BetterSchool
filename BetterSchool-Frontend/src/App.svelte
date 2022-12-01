@@ -11,7 +11,7 @@
 
 	let dataManager: DataManager;
 
-	if (import.meta.env.DEV) {
+	if (import.meta.env.VITE_API_LOCAL == "true") {
 		dataManager = new DataManager("http://localhost:8080");
 	} else {
 		dataManager = new DataManager(
@@ -141,6 +141,22 @@
 			menuActive = true;
 		}
 	}
+
+	// keyboard shortcuts
+
+	document.body.addEventListener("keyup", (event) => {
+		if (phoneMode) return;
+
+		if (event.key == "ArrowRight" && !menuActive) {
+			changePage(1);
+		} else if (event.key == "ArrowLeft" && !menuActive) {
+			changePage(-1);
+		} else if (event.key == "ArrowDown") {
+			menuActive = true;
+		} else if (event.key == "ArrowUp") {
+			menuActive = false;
+		}
+	});
 </script>
 
 <svelte:window bind:innerWidth={scrWidth} />
