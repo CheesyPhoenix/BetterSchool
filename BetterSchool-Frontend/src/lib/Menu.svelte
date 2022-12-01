@@ -141,6 +141,19 @@
 			<button on:click={addNewUser}>Register</button>
 		</div>
 
+		{#if weeks}
+			<br />
+			<hr />
+			<br />
+
+			<button
+				style="margin-left: 3rem;"
+				on:click={() => {
+					exportICS(weeks);
+				}}>Download calendar file</button
+			>
+		{/if}
+
 		<div class="centerHorizontal" id="GitHub-link">
 			<a href="https://github.com/CheesyPhoenix/BetterSchool">
 				This project is open-source! Fork me on GitHub or submit an
@@ -157,19 +170,6 @@
 		<ToastContainer placement="bottom-right" let:data>
 			<FlatToast {data} />
 		</ToastContainer>
-	{/if}
-
-	{#if weeks}
-		<br />
-		<hr />
-		<br />
-
-		<button
-			style="margin-left: 3rem;"
-			on:click={() => {
-				exportICS(weeks);
-			}}>Download calendar file</button
-		>
 	{/if}
 
 	<div
