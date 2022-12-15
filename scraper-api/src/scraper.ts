@@ -267,7 +267,8 @@ async function doScrape(
 						data.split(" klokken ")[1].split(" og")[0].trim();
 				} else {
 					classOb.date = data
-						.split(" Starter ")[1]
+						.toLowerCase()
+						.split(" starter ")[1]
 						.split(" klokken")[0];
 					classOb.time =
 						data.split(" klokken ")[1].split(" og")[0] +
@@ -275,18 +276,15 @@ async function doScrape(
 						data.split(" slutter ")[1].trim();
 				}
 
-				// if (data.includes("Aktivitet")) {
-				// 	classOb.room = "Aktivitet";
-				// 	classOb.name = data.split(".")[0].trim();
-				/* } else*/ if (!data.includes(" rom ")) {
+				if (!data.includes(" rom ")) {
 					classOb.room = "ingen";
-					classOb.name = data.split(".")[0].trim();
+					classOb.name = data.split(",")[0].trim();
 				} else {
 					console.log(data);
 
 					if (data.trim().endsWith("og slutter")) {
 						//for screen reader bug
-						const idk = data.split(" i rom ")[0].split(" ");
+						const idk = data.split(" på rom ")[0].split(" ");
 
 						classOb.room = idk[idk.length - 1];
 						classOb.name = idk
@@ -295,7 +293,7 @@ async function doScrape(
 							.trim();
 					} else {
 						classOb.room = data.split(" rom ")[1].split(".")[0];
-						classOb.name = data.split(" i rom ")[0].trim();
+						classOb.name = data.split(" på rom ")[0].trim();
 					}
 				}
 
