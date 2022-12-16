@@ -34,7 +34,7 @@ All of the docker images are hosted on a custom docker registry at `docker.chph.
 ### Docker
 
 <details>
-<summary style="font-weight: bold">API</summary>
+<summary><h3>API</h3></summary>
 
 Run with:
 
@@ -62,7 +62,7 @@ docker run -p 8080:8080 -v betterschool-api-data:/src/creds -e iv={INSERT RANDOM
 <br>
 
 <details>
-<summary style="font-weight: bold">Web</summary>
+<summary><h3>Web</h3></summary>
 
 Run with:
 
