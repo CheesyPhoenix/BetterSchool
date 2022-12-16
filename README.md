@@ -59,8 +59,6 @@ docker run -p 8080:8080 -v betterschool-api-data:/src/creds -e iv={INSERT RANDOM
 
 </details>
 
-<br>
-
 <details>
 <summary><h3>Web</h3></summary>
 
