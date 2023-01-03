@@ -237,7 +237,7 @@ async function doScrape(
 			const w =
 				new Date(year, 0).getTime() + 604800000 * (parseInt(week) - 1);
 
-			dayOb.date = new Date(w + (518400000 / 6) * (i + 2)).toDateString();
+			dayOb.date = new Date(w + (518400000 / 6) * (i + 1)).toDateString();
 
 			const classes =
 				day.getElementsByClassName("Timetable-Items")[0].children;
