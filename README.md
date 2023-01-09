@@ -1,4 +1,4 @@
-# [BetterSchool](https://betterschool.cheesyphoenix.tk)
+# [BetterSchool](https://betterschool.chph.tk)
 
 ![betterschool-icon-192](https://user-images.githubusercontent.com/30808373/185181607-1bd61fa3-92dd-4413-b342-7d26861f39b9.png)
 
@@ -12,7 +12,7 @@ With our revoultionary technology you will never have to log in again. We have d
 
 ## **Where can I get this magical app?**
 
-Thats easy. Just head to https://betterschool.cheesyphoenix.tk and simply download the website as an app.
+Thats easy. Just head to https://betterschool.chph.tk and simply download the website as an app.
 
 <br>
 
@@ -20,7 +20,7 @@ Thats easy. Just head to https://betterschool.cheesyphoenix.tk and simply downlo
 
 ## API documentation
 
-The BetterSchool API is completely open and is hosted at `https://api.betterschool.chph.tk/` (both `...chph.tk` and `...cheesyphoenix.tk` works).
+The BetterSchool API is completely open and is hosted at `https://api.betterschool.chph.tk/`.
 See [the documentation page](https://doc.api.betterschool.chph.tk) for usage.
 
 <br>
