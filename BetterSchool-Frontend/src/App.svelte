@@ -16,9 +16,7 @@
 	} else if (import.meta.env.VITE_API_LOC) {
 		dataManager = new DataManager(import.meta.env.VITE_API_LOC);
 	} else {
-		dataManager = new DataManager(
-			"https://api.betterschool.cheesyphoenix.tk"
-		);
+		dataManager = new DataManager("https://api.betterschool.chph.tk");
 	}
 
 	let selectedSchoolID: string;
