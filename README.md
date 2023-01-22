@@ -1,6 +1,6 @@
 # [BetterSchool](https://betterschool.chph.tk)
 
-![betterschool-icon-192](https://user-images.githubusercontent.com/30808373/185181607-1bd61fa3-92dd-4413-b342-7d26861f39b9.png)
+![betterschool-icon-192](https://user-images.githubusercontent.com/30808373/213921037-4bf9b005-75ad-4368-ab3f-51ecc2014577.png)
 
 ## **Hello everyone!**
 
