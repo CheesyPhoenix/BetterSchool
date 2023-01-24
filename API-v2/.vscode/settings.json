@@ -19,5 +19,13 @@
 		"titleBar.inactiveBackground": "#5be89999",
 		"titleBar.inactiveForeground": "#15202b99"
 	},
-	"peacock.color": "#5be899"
+	"peacock.color": "#5be899",
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"driver": "SQLite",
+			"name": "database",
+			"database": "${workspaceFolder:API-v2}/data/database.db"
+		}
+	]
 }
