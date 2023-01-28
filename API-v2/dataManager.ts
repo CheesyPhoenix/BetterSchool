@@ -1,18 +1,14 @@
 import { IDManager } from "./idManager.ts";
-import { School, SchoolClass, User } from "./types.d.ts";
+import { School, SchoolClass, User, Week } from "./types.d.ts";
 import { v5 } from "https://deno.land/std@0.175.0/uuid/mod.ts";
 import {
 	decode as hexDecode,
 	encode as hexEncode,
 } from "https://deno.land/std@0.175.0/encoding/hex.ts";
+import scraper from "./scraper.ts";
 
 class DataManager {
-	private data: {
-		classes: SchoolClass[];
-		schoolName: string;
-		schoolURL: string;
-		schoolID: string;
-	}[] = [];
+	private data: SchoolClass[] = [];
 
 	private idManager: IDManager;
 	private _schools: School[] = [];
@@ -37,7 +33,7 @@ class DataManager {
 			);
 
 			this.users = JSON.parse(Deno.readTextFileSync("./data/users.json"));
-		} catch (error) {
+		} catch (_error) {
 			this._schools = [];
 			this.users = [];
 			this.migrateData();
@@ -71,7 +67,7 @@ class DataManager {
 		) as { name: string; url: string }[];
 
 		for (const school of importedSchools) {
-			this.schools.push({
+			this._schools.push({
 				id: await this.idManager.newUUID(),
 				...school,
 			});
@@ -88,12 +84,12 @@ class DataManager {
 			Deno.readTextFileSync("./creds/pass.json")
 		) as User[];
 
-		let oldNamespace = "32b5b01c-a581-46a3-bdb2-5456b0e9390e";
+		const oldNamespace = "32b5b01c-a581-46a3-bdb2-5456b0e9390e";
 
 		for (const user of importedUsers) {
 			let newSchoolID: string | undefined = undefined;
 
-			for (const school of this.schools) {
+			for (const school of this._schools) {
 				const oldUUID = await v5.generate(
 					oldNamespace,
 					new TextEncoder().encode(school.url)
@@ -123,11 +119,40 @@ class DataManager {
 	private async update() {
 		console.log("Updating...");
 
-		console.log(await this.decrypt(this.users[0].username));
-		console.log(
-			(await this.encrypt(await this.decrypt(this.users[0].username))) ==
-				this.users[0].username
-		);
+		const _data: SchoolClass[] = [];
+
+		const pool: (() => Promise<void>)[] = [];
+
+		this.users.forEach((user) => {
+			pool.push(async () => {
+				const school = this._schools.find(
+					(x) => x.id === user.schoolID
+				);
+
+				if (!school) throw "user doesn't link to school";
+
+				const scraped = await scraper.scrape(
+					{
+						pass: await this.decrypt(user.pass),
+						username: await this.decrypt(user.username),
+					},
+					school.url
+				);
+
+				if (scraped) {
+					_data.push({
+						weeks: scraped,
+						classID: user.classID,
+						className: user.className,
+						schoolID: user.schoolID,
+					});
+				}
+			});
+		});
+
+		await asyncPool(pool);
+
+		this.data = _data;
 	}
 
 	private async encrypt(string: string) {
@@ -176,6 +201,79 @@ class DataManager {
 	public get schools() {
 		return this._schools;
 	}
+
+	public getClasses(schoolID: string): {
+		className: string;
+		classID: string;
+	}[] {
+		return this.data
+			.filter((x) => x.schoolID == schoolID)
+			.map((x) => {
+				return { className: x.className, classID: x.classID };
+			});
+	}
+
+	public getWeeks(classID: string): Week[] | undefined {
+		return this.data.find((x) => x.classID === classID)?.weeks;
+	}
+
+	public async addUser(
+		username: string,
+		password: string,
+		className: string,
+		schoolID: string
+	) {
+		const school = this.schools.find((x) => x.id === schoolID);
+		if (!school) {
+			throw "School not found";
+		}
+
+		if (await scraper.validate({ username, pass: password }, school.url)) {
+			const newUser: User = {
+				className,
+				schoolID,
+				classID: await this.idManager.newUUID(),
+				username: await this.encrypt(username),
+				pass: await this.encrypt(password),
+			};
+
+			this.users.push(newUser);
+
+			this.update();
+		} else {
+			throw "Creds invalid";
+		}
+	}
+}
+
+async function asyncPool(asyncFns: (() => Promise<any>)[], concurrent = 5) {
+	// queue up simultaneous calls
+	const queue: any[] = [];
+	const ret = [];
+
+	for (let i = 0; i < asyncFns.length; i++) {
+		const fn = asyncFns[i];
+		// fire the async function, add its promise to the queue, and remove
+		// it from queue when complete
+
+		console.log(`Running update ${i + 1}/${asyncFns.length}`);
+
+		const p = fn().then((res) => {
+			console.log(`Update ${i + 1} complete`);
+
+			queue.splice(queue.indexOf(p), 1);
+			return res;
+		});
+		queue.push(p);
+		ret.push(p);
+		// if max concurrent, wait for one to finish
+		if (queue.length >= concurrent) {
+			await Promise.race(queue);
+		}
+	}
+
+	// wait for the rest of the calls to finish
+	await Promise.all(queue);
 }
 
 export { DataManager };
