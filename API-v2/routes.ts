@@ -4,8 +4,8 @@ import { DataManager } from "./dataManager.ts";
 function createRoutes(dataManager: DataManager) {
 	const router = new Router();
 
-	router.get("/schools", async (ctx) => {
-		ctx.response.body = JSON.stringify(await dataManager.getSchools());
+	router.get("/schools", (ctx) => {
+		ctx.response.body = JSON.stringify(dataManager.schools);
 		ctx.response.headers.set("Content-Type", "application/json");
 	});
 
