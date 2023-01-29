@@ -1,6 +1,6 @@
 {
 	"tasks": {
-		"dev": "deno run --allow-net --allow-read --allow-write --allow-env --allow-run --watch main.ts"
+		"dev": "deno run --allow-net --allow-read --allow-write --allow-env --allow-run --watch ./src/main.ts"
 	},
 	"compilerOptions": {
 		"lib": ["deno.window", "dom"]

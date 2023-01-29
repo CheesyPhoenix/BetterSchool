@@ -57,11 +57,13 @@ class DataManager {
 		await this.importSchools();
 
 		await this.importUsers();
+
+		this.update();
 	}
 
 	private async importSchools() {
 		const importedSchools = JSON.parse(
-			Deno.readTextFileSync("./allSchools.json")
+			Deno.readTextFileSync("./src/allSchools.json")
 		) as { name: string; url: string }[];
 
 		for (const school of importedSchools) {
@@ -129,13 +131,18 @@ class DataManager {
 
 				if (!school) throw "user doesn't link to school";
 
-				const scraped = await scraper.scrape(
-					{
-						pass: await this.decrypt(user.pass),
-						username: await this.decrypt(user.username),
-					},
-					school.url
-				);
+				const scraped = await scraper
+					.scrape(
+						{
+							pass: await this.decrypt(user.pass),
+							username: await this.decrypt(user.username),
+						},
+						school.url
+					)
+					.catch(() => {
+						console.log("Failed to scrape for: " + user.className);
+						return undefined;
+					});
 
 				if (scraped) {
 					_data.push({

@@ -17,12 +17,13 @@ RUN apt-get update \
 
 COPY . .
 
-RUN deno cache main.ts
-RUN deno cache dataManager.ts
-RUN deno cache idManager.ts
-RUN deno cache scraper.ts
+RUN deno cache src/dataManager.ts
+RUN deno cache src/idManager.ts
+RUN deno cache src/scraper.ts
+RUN deno cache src/routes.ts
+RUN deno cache src/main.ts
 
 
 EXPOSE 8080:8080
 
-CMD [ "run", "-A", "main.ts" ]
+CMD [ "run", "-A", "./src/main.ts" ]

@@ -1,6 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { DataManager } from "./dataManager.ts";
-import swaggerUIDist from "npm:swagger-ui-dist";
 
 function createRoutes(dataManager: DataManager) {
 	const router = new Router();
