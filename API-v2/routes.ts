@@ -1,5 +1,6 @@
 import { Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { DataManager } from "./dataManager.ts";
+import swaggerUIDist from "npm:swagger-ui-dist";
 
 function createRoutes(dataManager: DataManager) {
 	const router = new Router();
@@ -33,7 +34,7 @@ function createRoutes(dataManager: DataManager) {
 			schoolID: string;
 		} = await ctx.request.body().value;
 
-		console.log(creds);
+		console.log("Adding new user: " + creds.class);
 
 		if (!creds.username || !creds.pass || !creds.class || !creds.schoolID) {
 			ctx.response.status = 200;
@@ -59,6 +60,9 @@ function createRoutes(dataManager: DataManager) {
 			} else if (error == "Creds invalid") {
 				ctx.response.status = 401;
 				ctx.response.body = "Credentials invalid";
+			} else if (error == "User exists") {
+				ctx.response.status = 409;
+				ctx.response.body = "Classname already in use";
 			} else {
 				ctx.response.status = 500;
 			}

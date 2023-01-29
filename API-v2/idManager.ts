@@ -24,6 +24,16 @@ export class IDManager {
 				throw "invalid config";
 			}
 		} catch (_error) {
+			let dirExists = false;
+			for (const filename of Deno.readDirSync("./")) {
+				if (filename.isDirectory && filename.name == "data") {
+					dirExists = true;
+					break;
+				}
+			}
+
+			if (!dirExists) Deno.mkdirSync("./data");
+
 			config = { nextID: 0, nameSpace: crypto.randomUUID() };
 			Deno.writeTextFileSync(filePath, JSON.stringify(config));
 		}

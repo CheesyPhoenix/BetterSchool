@@ -39,8 +39,6 @@ class DataManager {
 			this.migrateData();
 		}
 
-		console.log(Deno.args);
-
 		if (Deno.args[0] == "--dev") {
 			this.initVector = "asweghiKaliytbij";
 			this.key = "asweghiKaliytbijasweghiKaliytbij";
@@ -63,7 +61,7 @@ class DataManager {
 
 	private async importSchools() {
 		const importedSchools = JSON.parse(
-			Deno.readTextFileSync("./data/allSchools.json")
+			Deno.readTextFileSync("./allSchools.json")
 		) as { name: string; url: string }[];
 
 		for (const school of importedSchools) {
@@ -228,6 +226,9 @@ class DataManager {
 			throw "School not found";
 		}
 
+		if (this.users.some((x) => x.className == className))
+			throw "User exists";
+
 		if (await scraper.validate({ username, pass: password }, school.url)) {
 			const newUser: User = {
 				className,
@@ -237,7 +238,19 @@ class DataManager {
 				pass: await this.encrypt(password),
 			};
 
+			if (this.users.some((x) => x.className == newUser.className))
+				throw "User exists";
+
+			this.users = this.users.filter(
+				(x) => x.username != newUser.username
+			);
+
 			this.users.push(newUser);
+
+			Deno.writeTextFileSync(
+				"./data/users.json",
+				JSON.stringify(this.users)
+			);
 
 			this.update();
 		} else {
