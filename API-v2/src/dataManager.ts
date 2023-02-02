@@ -13,7 +13,7 @@ class DataManager {
 	private idManager: IDManager;
 	private _schools: School[] = [];
 
-	private users: User[];
+	private users: User[] = [];
 
 	private key: string;
 	private initVector: string;
