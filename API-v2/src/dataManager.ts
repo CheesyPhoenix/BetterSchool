@@ -148,8 +148,6 @@ class DataManager {
 		Deno.writeTextFileSync("./data/users.json", JSON.stringify(this.users));
 		//--
 
-		console.log(this.users.map((x) => x.toSchoolYear));
-
 		this.users.forEach((user) => {
 			pool.push(async () => {
 				const school = this._schools.find(
