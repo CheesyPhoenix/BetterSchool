@@ -21,7 +21,7 @@ Thats easy. Just head to https://betterschool.chph.tk and simply download the we
 ## API documentation
 
 The BetterSchool API is completely open and is hosted at `https://api.betterschool.chph.tk/`.
-See [the documentation page](https://doc.api.betterschool.chph.tk) for usage.
+See [the documentation page](https://api.betterschool.chph.tk/doc) for usage.
 
 <br>
 
