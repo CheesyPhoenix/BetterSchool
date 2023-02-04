@@ -48,7 +48,9 @@ class DataManager {
 		}
 
 		this.update();
-		setInterval(this.update, 60 * 60 * 1000);
+		setInterval(() => {
+			this.update();
+		}, 60 * 1000);
 	}
 
 	private async migrateData() {
@@ -116,12 +118,37 @@ class DataManager {
 		Deno.writeTextFileSync("./data/users.json", JSON.stringify(this.users));
 	}
 
+	/**
+	 * Gets the **to** school year. Eg. for 2022/2023, it returns 2023
+	 */
+	private getSchoolYear(): number {
+		const now = new Date();
+		now.setMonth(now.getMonth() + 6);
+		return now.getFullYear();
+	}
+
 	private async update() {
 		console.log("Updating...");
 
 		const _data: SchoolClass[] = [];
 
 		const pool: (() => Promise<void>)[] = [];
+
+		// Check for outdated users
+		this.users = this.users.filter((user) => {
+			if (user.toSchoolYear && user.toSchoolYear < this.getSchoolYear()) {
+				return false;
+			}
+
+			if (!user.toSchoolYear) user.toSchoolYear = this.getSchoolYear();
+
+			return true;
+		});
+
+		Deno.writeTextFileSync("./data/users.json", JSON.stringify(this.users));
+		//--
+
+		console.log(this.users.map((x) => x.toSchoolYear));
 
 		this.users.forEach((user) => {
 			pool.push(async () => {
@@ -243,6 +270,7 @@ class DataManager {
 				classID: await this.idManager.newUUID(),
 				username: await this.encrypt(username),
 				pass: await this.encrypt(password),
+				toSchoolYear: this.getSchoolYear(),
 			};
 
 			if (this.users.some((x) => x.className == newUser.className))

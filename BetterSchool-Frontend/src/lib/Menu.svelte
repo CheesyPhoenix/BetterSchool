@@ -29,7 +29,7 @@
 	async function addNewUser() {
 		loading = true;
 
-		const { status } = await dataManager.addNewUser(
+		const { status, body } = await dataManager.addNewUser(
 			username,
 			password,
 			className,
@@ -49,7 +49,7 @@
 		} else {
 			toasts.add({
 				title: "Failed to add user",
-				description: "Check your credentials!",
+				description: body.length > 0 ? body : "Check your credentials!",
 				duration: 3000,
 				placement: "bottom-right",
 				type: "error",
@@ -115,6 +115,16 @@
 		<hr />
 		<div style="margin-left: 3rem;">
 			<h3>Register new class</h3>
+
+			<p>
+				Register using your Feide credentials. NOTE: These credentials
+				will be saved on a server for the remainder of the current
+				school year, and then used to log in to visma InSchool on your
+				behalf to collect your schedule data. This data will thereafter
+				be made PUBLICLY availible. If you are not comfortable with
+				this, do not register!
+			</p>
+
 			<h5>Username:</h5>
 			<input type="text" bind:value={username} />
 
@@ -190,6 +200,11 @@
 </div>
 
 <style>
+	p {
+		width: 36rem;
+		color: #999;
+	}
+
 	a {
 		text-decoration: none;
 		color: #999;

@@ -26,6 +26,7 @@ export interface User {
 	classID: string;
 	className: string;
 	schoolID: string;
+	toSchoolYear?: number;
 }
 
 export interface School {

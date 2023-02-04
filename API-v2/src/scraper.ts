@@ -75,24 +75,35 @@ async function scrape(
 	pass: { username: string; pass: string },
 	schoolURL: string
 ) {
-	const browser = await puppeteer.launch({
-		args: [
-			"--no-sandbox",
-			"--disable-setuid-sandbox",
-			"--disable-gpu",
-			"--disable-dev-shm-usage",
-		],
-		headless: true,
-		defaultViewport: { height: 1080, width: 1920 },
-	});
+	let iteration = 0;
 
-	try {
-		return await doScrape(pass, browser, schoolURL);
-	} catch (e) {
-		throw e;
-	} finally {
-		await browser.close();
+	let data;
+
+	while (iteration < 3) {
+		iteration++;
+
+		const browser = await puppeteer.launch({
+			args: [
+				"--no-sandbox",
+				"--disable-setuid-sandbox",
+				"--disable-gpu",
+				"--disable-dev-shm-usage",
+			],
+			headless: true,
+			defaultViewport: { height: 1080, width: 1920 },
+		});
+
+		try {
+			data = await doScrape(pass, browser, schoolURL);
+			break;
+		} catch (e) {
+			if (iteration >= 3) throw e;
+		} finally {
+			await browser.close();
+		}
 	}
+
+	return data;
 }
 
 async function doScrape(
