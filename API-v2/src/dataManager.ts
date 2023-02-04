@@ -50,7 +50,7 @@ class DataManager {
 		this.update();
 		setInterval(() => {
 			this.update();
-		}, 60 * 1000);
+		}, 60 * 60 * 1000);
 	}
 
 	private async migrateData() {
