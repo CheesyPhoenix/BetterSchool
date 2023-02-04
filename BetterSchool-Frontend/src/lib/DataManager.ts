@@ -41,7 +41,7 @@ class DataManager {
 		password: string,
 		className: string,
 		schoolID: string
-	): Promise<{ status: number }> {
+	) {
 		const myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 
@@ -60,7 +60,7 @@ class DataManager {
 
 		const res = await fetch(this.apiURL + "/addUser", requestOptions);
 
-		return { status: res.status };
+		return { status: res.status, body: await res.text() };
 	}
 }
 export { DataManager };
