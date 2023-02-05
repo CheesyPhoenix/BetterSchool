@@ -1,0 +1,9 @@
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
+
+body {
+	background-color: #333;
+	color: #f5f5f5;
+	@apply overflow-hidden;
+}

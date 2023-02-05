@@ -1,18 +1,27 @@
 {
 	"folders": [
 		{
-			"path": "API-v2"
-		},
-		{
+			"name": "api-relay",
 			"path": "api-relay"
 		},
 		{
-			"path": "BetterSchool-Frontend"
+			"name": "API-v2",
+			"path": "API-v2"
 		},
 		{
+			"name": "scraper-api",
 			"path": "scraper-api"
 		},
 		{
+			"name": "BetterSchool-Frontend",
+			"path": "BetterSchool-Frontend"
+		},
+		{
+			"name": "Frontend-v2",
+			"path": "Frontend-v2"
+		},
+		{
+			"name": "BetterSchool",
 			"path": "."
 		}
 	],
