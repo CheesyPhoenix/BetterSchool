@@ -17,7 +17,7 @@
 	export let className: string;
 </script>
 
-<div class="weekNrCont">
+<div class="absolute right-[7%] top-0">
 	<h2 class="weekNr">{"Uke " + week.weekNr} - {className}</h2>
 	<h5 class="nowDate">Dato: {nowFormatted}</h5>
 </div>
@@ -36,15 +36,6 @@
 {/key}
 
 <style>
-	.weekNrCont {
-		width: 90%;
-		margin: auto;
-		margin-left: 6%;
-		margin-right: 67px;
-		position: absolute;
-		z-index: 1;
-	}
-
 	.centerVertical {
 		display: flex;
 		justify-content: center;

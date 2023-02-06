@@ -2,21 +2,38 @@
 	import TimeTable from "$lib/components/timetable/TimeTable.svelte";
 	import type { PageData } from "./$types";
 	import arrow from "$lib/assets/arrow.svg";
+	import { onMount } from "svelte";
+	import { headerText } from "$lib/stores/header";
 
 	export let data: PageData;
+
+	$headerText = [
+		{ text: data.schoolName, url: "/" },
+		{ text: data.className, url: "./" },
+	];
 
 	let weekIndex = 0;
 
 	let swipeDir = 0;
+	let swipeOffset = 0;
+
+	let clientSide = false;
+	onMount(() => {
+		clientSide = true;
+	});
+
+	$: {
+		if (clientSide) swipeOffset = window.innerWidth * swipeDir;
+	}
 </script>
 
 <TimeTable
-	className="Temp"
-	swipeOffset={window.innerWidth * swipeDir}
+	className={data.className}
+	{swipeOffset}
 	week={data.weeks[weekIndex]}
 />
 
-<div class="h-screen left-0 flex flex-col justify-center absolute">
+<div class="h-screen left-0 flex flex-col justify-center absolute top-0">
 	<button
 		on:click={() => {
 			if (weekIndex > 0) {
@@ -29,7 +46,7 @@
 	>
 </div>
 
-<div class="h-screen right-0 flex flex-col justify-center absolute">
+<div class="h-screen right-0 flex flex-col justify-center absolute top-0">
 	<button
 		on:click={() => {
 			if (data.weeks.length - 1 > weekIndex) {

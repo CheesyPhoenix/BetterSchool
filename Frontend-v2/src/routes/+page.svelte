@@ -1,17 +1,15 @@
 <script lang="ts">
+	import Search from "$lib/components/Search.svelte";
 	import type { PageData } from "./$types";
+	import { headerText } from "$lib/stores/header";
+
+	$headerText = [{ text: "Schools" }];
 
 	export let data: PageData;
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>
-	Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
-</p>
-
-<h3>Schools</h3>
-
-{#each data.schools as school}
-	<a href={"/" + school.schoolID}>{school.name}</a>
-	<br />
-{/each}
+<Search
+	searchables={data.schools.map((x) => {
+		return { name: x.name, url: `/${x.schoolID}` };
+	})}
+/>

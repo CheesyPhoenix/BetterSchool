@@ -1,6 +1,6 @@
-import type { PageLoad } from "./$types";
+import type { LayoutLoad } from "./$types";
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: LayoutLoad = async ({ fetch }) => {
 	const res = await fetch("https://api.betterschool.chph.tk/schools");
 	let schools: App.School[] = await res.json();
 	schools = schools.sort((a, b) => a.name.localeCompare(b.name));
