@@ -8,8 +8,9 @@
 	export let data: PageData;
 
 	$headerText = [
-		{ text: data.schoolName, url: "/" },
-		{ text: data.className, url: "./" },
+		{ text: "Schools", url: "/" },
+		{ text: data.schoolName, url: "./" },
+		{ text: data.className },
 	];
 
 	let weekIndex = 0;

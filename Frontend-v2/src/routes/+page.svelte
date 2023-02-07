@@ -1,15 +1,10 @@
-<script lang="ts">
-	import Search from "$lib/components/Search.svelte";
-	import type { PageData } from "./$types";
-	import { headerText } from "$lib/stores/header";
+<h1 class="text-3xl font-bold m-auto w-max mt-12">BetterSchool</h1>
+<h3 class="w-max m-auto">The better alternative to Visma Inschool</h3>
 
-	$headerText = [{ text: "Schools" }];
+<br />
 
-	export let data: PageData;
-</script>
-
-<Search
-	searchables={data.schools.map((x) => {
-		return { name: x.name, url: `/${x.schoolID}` };
-	})}
-/>
+<a
+	href="/schools"
+	class="absolute top-4 right-4 bg-zinc-500 p-2 rounded-xl hover:bg-zinc-400 hover:rounded-lg active:bg-zinc-600 active:top-4 duration-150"
+	>Get started!</a
+>
