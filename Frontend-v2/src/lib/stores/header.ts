@@ -1,3 +1,5 @@
 import { writable } from "svelte/store";
 
-export const headerText = writable<{ text: string; url?: string }[]>();
+export const headerText = writable<{ text: string; url?: string }[]>([
+	{ text: "Schools" },
+]);

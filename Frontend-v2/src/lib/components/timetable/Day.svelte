@@ -95,7 +95,7 @@
 		currTime = new Date();
 	}, 60 * 1000);
 
-	$: scale = dayHeight / 8.25;
+	$: scale = 100 / 8.25;
 
 	let nowLineActive = false;
 
@@ -117,7 +117,7 @@
 		{/each}
 
 		{#if nowLineActive}
-			<div class="nowLine" style="top: {nowLinePos}px;">
+			<div class="nowLine" style="top: {nowLinePos}%;">
 				<hr class="nowLineHr" />
 				<span class="nowLineCircle" />
 			</div>
@@ -151,10 +151,10 @@
 		margin: 0;
 		width: 102.5%;
 		left: -1.25%;
-		border-color: red;
 		border-top: none;
 		border-left: none;
 		border-right: none;
+		border-bottom: solid 1px red;
 		position: absolute;
 	}
 
