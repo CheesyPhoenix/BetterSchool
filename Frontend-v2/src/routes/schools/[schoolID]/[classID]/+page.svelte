@@ -8,7 +8,7 @@
 	export let data: PageData;
 
 	$headerText = [
-		{ text: "Schools", url: "/" },
+		{ text: "Schools", url: "/schools" },
 		{ text: data.schoolName, url: "./" },
 		{ text: data.className },
 	];

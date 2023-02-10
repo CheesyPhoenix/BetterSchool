@@ -7,7 +7,10 @@
 
 	export let data: PageData;
 
-	$headerText = [{ text: "Schools", url: "/" }, { text: data.schoolName }];
+	$headerText = [
+		{ text: "Schools", url: "/schools" },
+		{ text: data.schoolName },
+	];
 </script>
 
 <Search

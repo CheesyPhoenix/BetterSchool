@@ -10,6 +10,6 @@
 
 <Search
 	searchables={data.schools.map((x) => {
-		return { name: x.name, url: `/${x.schoolID}` };
+		return { name: x.name, url: `/schools/${x.schoolID}` };
 	})}
 />

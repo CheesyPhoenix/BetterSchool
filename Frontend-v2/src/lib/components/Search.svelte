@@ -6,7 +6,7 @@
 	let filteredSearchables = searchables;
 
 	$: {
-		if (searchTerm)
+		if (searchTerm || searchTerm == "")
 			filteredSearchables = searchables.filter((x) =>
 				x.name.toLowerCase().includes(searchTerm.toLowerCase())
 			);
