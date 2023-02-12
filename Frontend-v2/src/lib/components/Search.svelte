@@ -14,15 +14,12 @@
 </script>
 
 <div class="m-auto w-64">
-	<input
-		type="text"
-		placeholder="Search..."
-		bind:value={searchTerm}
-		class="text-stone-800 w-full block mb-2"
-	/>
+	<input type="text" placeholder="Search..." bind:value={searchTerm} />
+
+	<slot />
 
 	<div
-		class="overflow-y-auto max-h-[80vh] pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-thumb-rounded-full"
+		class="overflow-y-auto max-h-[80vh] pr-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-thumb-rounded-full mb-2"
 	>
 		{#each filteredSearchables as searchable}
 			<a

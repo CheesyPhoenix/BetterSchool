@@ -1,12 +1,19 @@
 <script>
 	import { fly } from "svelte/transition";
+	import BSLogo from "$lib/assets/betterschool-icon-512.png";
 </script>
+
+<svelte:head>
+	<title>BetterSchool</title>
+</svelte:head>
 
 <main in:fly={{ y: 100 }} out:fly={{ y: -100 }} class="absolute w-screen">
 	<h1 class="text-3xl font-bold m-auto w-max mt-12">BetterSchool</h1>
 	<h3 class="w-max m-auto">The better alternative to Visma Inschool</h3>
 
 	<br />
+
+	<img src={BSLogo} alt="BetterSchool Logo" class="w-40 m-auto mb-4" />
 
 	<a
 		href="/schools"

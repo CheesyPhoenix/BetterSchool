@@ -4,6 +4,7 @@
 	import arrow from "$lib/assets/arrow.svg";
 	import { onMount } from "svelte";
 	import { headerText } from "$lib/stores/header";
+	import { beforeNavigate } from "$app/navigation";
 
 	export let data: PageData;
 
@@ -26,6 +27,10 @@
 	$: {
 		if (clientSide) swipeOffset = window.innerWidth * swipeDir;
 	}
+
+	beforeNavigate(() => {
+		swipeDir = 0;
+	});
 </script>
 
 <TimeTable

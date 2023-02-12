@@ -15,5 +15,5 @@ export const load: LayoutLoad = async ({ params, fetch, parent }) => {
 		(x) => x.schoolID == params.schoolID
 	)[0].name;
 
-	return { classes, schoolName };
+	return { classes, schoolName, schoolID: params.schoolID };
 };

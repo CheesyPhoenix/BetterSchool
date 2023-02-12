@@ -133,7 +133,7 @@
 	}
 	.day {
 		padding: 1em;
-		min-width: 190px;
+		min-width: 205px;
 	}
 
 	.classes {

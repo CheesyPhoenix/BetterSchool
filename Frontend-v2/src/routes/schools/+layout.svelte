@@ -3,6 +3,10 @@
 	import { fly } from "svelte/transition";
 </script>
 
+<svelte:head>
+	<title>{$headerText.map((x) => x.text).join(" / ")}</title>
+</svelte:head>
+
 <div in:fly={{ y: 100 }} out:fly={{ y: -100 }} class="absolute w-screen">
 	<header
 		class="w-screen h-16 p-2 z-10 flex flex-col justify-center font-bold absolute"
