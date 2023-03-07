@@ -9,7 +9,11 @@
 	export let data: PageData;
 </script>
 
-<main in:fly={{ y: 100 }} out:fly={{ y: -100 }} class="absolute w-screen">
+<main
+	in:fly={{ y: 100 }}
+	out:fly={{ y: -100 }}
+	class="absolute w-screen top-16"
+>
 	<Search
 		searchables={data.schools.map((x) => {
 			return { name: x.name, url: `/schools/${x.schoolID}` };

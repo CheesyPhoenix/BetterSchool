@@ -73,7 +73,11 @@
 	</div>
 {/if}
 
-<main in:fly={{ y: 100 }} out:fly={{ y: -100 }} class="absolute w-screen">
+<main
+	in:fly={{ y: 100 }}
+	out:fly={{ y: -100 }}
+	class="absolute w-screen top-16"
+>
 	<div class="max-w-[35rem] m-auto p-2">
 		<h1 class="font-bold text-lg text-center">
 			Add class to {data.schoolName}

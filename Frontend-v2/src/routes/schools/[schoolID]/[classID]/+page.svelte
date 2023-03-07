@@ -11,6 +11,7 @@
 	} from "$lib/components/timetable/shared";
 	import { fade, fly, scale, slide } from "svelte/transition";
 	import SingleDay from "$lib/components/timetable/SingleDay.svelte";
+	import { isMobile } from "$lib/stores/isMobile";
 
 	export let data: PageData;
 
@@ -29,34 +30,21 @@
 	let clientSide = false;
 	onMount(() => {
 		clientSide = true;
-		navigating = true;
 	});
 
 	$: {
 		if (clientSide) swipeOffset = window.innerWidth * swipeDir;
 	}
 
-	let navigating = false;
-
-	// beforeNavigate(() => {
-	// 	swipeDir = 0;
-	// 	navigating = true;
-	// });
-
-	// afterNavigate(() => {
-	// 	navigating = false;
-	// });
-
-	// for single day
 	let windowWidth = 0;
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
 
-{#if windowWidth > mobileThreshold}
+{#if !$isMobile}
 	<div
-		in:fly|local={{ x: -100 * (navigating ? 0 : 1) }}
-		out:fly|local={{ x: 100 * (navigating ? 0 : 1) }}
+		in:fly|local={{ x: -100 }}
+		out:fly|local={{ x: 100 }}
 		class="absolute w-screen h-screen"
 	>
 		<TimeTable
@@ -105,8 +93,8 @@
 	</div>
 {:else}
 	<div
-		in:fly|local={{ x: -100 * (navigating ? 0 : 1) }}
-		out:fly|local={{ x: 100 * (navigating ? 0 : 1) }}
+		in:fly|local={{ x: -100 }}
+		out:fly|local={{ x: 100 }}
 		class="absolute w-screen h-screen"
 	>
 		<SingleDay

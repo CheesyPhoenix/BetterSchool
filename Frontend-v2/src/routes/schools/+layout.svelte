@@ -5,8 +5,7 @@
 	import settingsSVG from "$lib/assets/settings.svg";
 	import closeSVG from "$lib/assets/close.svg";
 	import { afterNavigate } from "$app/navigation";
-
-	let screenWidth = 0;
+	import { isMobile } from "$lib/stores/isMobile";
 
 	let menuOpen = false;
 
@@ -21,15 +20,15 @@
 	<title>{$headerText.map((x) => x.text).join(" / ")}</title>
 </svelte:head>
 
-<svelte:window bind:innerWidth={screenWidth} />
-
 <div
 	in:fly={{ y: 100 }}
 	out:fly={{ y: -100 }}
 	class="absolute max-w-screen w-max"
 >
-	{#if screenWidth > mobileThreshold}
+	{#if !$isMobile}
 		<header
+			in:fade
+			out:fade
 			class="w-full h-16 p-2 z-10 flex flex-col justify-center font-bold"
 		>
 			<div>
@@ -55,7 +54,7 @@
 			</div>
 		</header>
 	{:else}
-		<div class="absolute z-20">
+		<div class="absolute z-20 top-0">
 			<button
 				class="relative w-screen block"
 				on:click={() => (menuOpen = !menuOpen)}
@@ -65,7 +64,7 @@
 						in:scale
 						out:scale
 						src={closeSVG}
-						alt="settings"
+						alt="close settings"
 						class="right-5 top-4 h-8 absolute hover:drop-shadow-[2px_4px_6px_black] hover:cursor-pointer hover:brightness-150 duration-200"
 					/>
 				{:else}
@@ -73,7 +72,7 @@
 						in:scale
 						out:scale
 						src={settingsSVG}
-						alt="settings"
+						alt="open settings"
 						class="right-4 top-3 h-10 absolute hover:drop-shadow-[2px_4px_6px_black] hover:cursor-pointer hover:brightness-150 duration-200"
 					/>
 				{/if}
