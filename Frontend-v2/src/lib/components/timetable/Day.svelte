@@ -14,6 +14,7 @@
 			teacher: string;
 		}[];
 	};
+	export let singleDay: boolean;
 
 	$: dayName = day.name;
 
@@ -113,7 +114,7 @@
 	<div class="header">{dayName} {dayDate}</div>
 	<div class="classes">
 		{#each classes as classOb}
-			<Class {classOb} {today} />
+			<Class {classOb} {today} {singleDay} />
 		{/each}
 
 		{#if nowLineActive}
@@ -133,7 +134,7 @@
 	}
 	.day {
 		padding: 1em;
-		min-width: 205px;
+		min-width: 200px;
 	}
 
 	.classes {

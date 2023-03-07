@@ -29,7 +29,7 @@
 	>
 		<div class="table">
 			{#each days as wd}
-				<Day day={wd} widthPer={20} />
+				<Day day={wd} widthPer={20} singleDay={false} />
 			{/each}
 		</div>
 	</div>
@@ -54,7 +54,7 @@
 		margin-left: 67px;
 		margin-right: 67px;
 		display: flex;
-		overflow-x: auto;
+		overflow: auto;
 		border-radius: 15px;
 		margin-top: 5em;
 		margin-bottom: 3em;

@@ -9,6 +9,7 @@
 		teacher: string;
 	};
 	export let today: boolean;
+	export let singleDay: boolean;
 
 	$: timeStart = classOb.time.split("-")[0];
 	$: timeSlutt = classOb.time.split("-")[1];
@@ -76,13 +77,15 @@
 	class="class {active} {cancelled}"
 	style="top: {distTop}%; height: {height}%"
 >
-	<div class="time">
+	<div class="time {singleDay ? 'text-sm' : 'text-xs'}">
 		<p class="bold">{classOb.time}</p>
 		- Rom:
 		<p class="bold">{classOb.room}</p>
 	</div>
-	<h5 class="name">{classOb.name}</h5>
-	<p class="teacher">{classOb.teacher}</p>
+	<h5 class="name {singleDay ? 'text-md' : 'text-sm'}">{classOb.name}</h5>
+	<p class="teacher {singleDay ? 'text-sm' : 'text-xs'} block">
+		{classOb.teacher}
+	</p>
 </div>
 
 <style lang="postcss">
@@ -116,14 +119,12 @@
 		white-space: nowrap;
 		overflow: hidden;
 		margin-right: 5px;
-		font-size: 14px;
 		@apply font-bold;
 	}
 
 	.time {
 		margin-top: 0;
 		margin-bottom: 0;
-		font-size: 12px;
 		color: #52606a;
 		display: inline;
 	}
@@ -131,13 +132,10 @@
 	.bold {
 		font-weight: bold;
 		display: inline;
-		font-size: 13px;
 	}
 
 	.teacher {
 		color: #666;
-		display: inline;
-		font-size: 13px;
 		font-weight: 600;
 	}
 </style>

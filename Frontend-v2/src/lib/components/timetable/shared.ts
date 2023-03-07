@@ -78,3 +78,5 @@ function exportICS(weeks: App.Week[]) {
 }
 
 export { getWeekNr, exportICS };
+
+export const mobileThreshold = 900;
