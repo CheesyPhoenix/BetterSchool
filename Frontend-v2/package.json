@@ -8,7 +8,8 @@
 		"preview": "vite preview",
 		"test": "playwright test",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"publish": "docker build -t docker.chph.tk/cheesyphoenix/betterschool-web-v2 --push ."
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
