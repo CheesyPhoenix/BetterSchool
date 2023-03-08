@@ -25,7 +25,7 @@
 	out:fly={{ y: -100 }}
 	class="absolute max-w-screen w-max"
 >
-	{#if !$isMobile}
+	{#if $isMobile == false}
 		<header
 			in:fade
 			out:fade
@@ -53,10 +53,10 @@
 				{/if}
 			</div>
 		</header>
-	{:else}
+	{:else if $isMobile == true}
 		<div class="absolute z-20 top-0">
 			<button
-				class="relative w-screen block"
+				class="relative w-screen block select-none"
 				on:click={() => (menuOpen = !menuOpen)}
 			>
 				{#if menuOpen}

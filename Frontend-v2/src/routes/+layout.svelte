@@ -4,10 +4,12 @@
 	import { isMobile } from "$lib/stores/isMobile";
 	import { mobileThreshold } from "$lib/components/timetable/shared";
 
-	let screenWidth = 0;
+	let screenWidth: number | undefined = undefined;
 
 	$: {
-		$isMobile = screenWidth < mobileThreshold;
+		if (screenWidth) {
+			$isMobile = screenWidth < mobileThreshold;
+		}
 	}
 </script>
 

@@ -38,7 +38,7 @@
 	>
 		{#each filteredSearchables as searchable}
 			<a
-				class="{$isMobile
+				class="{$isMobile == true
 					? 'p-4'
 					: 'p-2'} bg-[#444] block mb-2 rounded-lg duration-200 w-full hover:bg-[#666]"
 				href={searchable.url

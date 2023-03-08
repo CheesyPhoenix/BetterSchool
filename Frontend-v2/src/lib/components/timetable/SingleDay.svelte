@@ -1,26 +1,36 @@
 <script lang="ts">
 	import Day from "./Day.svelte";
-	//import { swipe } from "svelte-gestures";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onMount } from "svelte";
 	import { fly, fade } from "svelte/transition";
 	import { getWeekNr } from "./shared";
+	import { Swipe, SwipeItem } from "svelte-swipe";
+	import { bubble } from "svelte/internal";
 
-	export let weekIndex: number;
+	export let initWeekIndex: number;
+	export let weeks: App.Week[];
 
-	export let week: App.Week;
-	let days = week.days;
-	$: days = week.days;
+	let dayIndex: number | undefined = undefined;
 
-	let dayIndex: number = 0;
+	$: weekIndex =
+		dayIndex !== undefined
+			? (dayIndex - (dayIndex % 5)) / 5
+			: initWeekIndex;
+	$: week = weeks[weekIndex];
 
-	for (let i = 0; i < days.length; i++) {
-		const day = days[i];
+	onMount(() => {
+		for (let i = 0; i < week.days.length; i++) {
+			const day = week.days[i];
 
-		if (new Date(day.date).getDay() == new Date().getDay()) {
-			dayIndex = i;
-			break;
+			if (
+				new Date(day.date).getDate() == new Date().getDate() &&
+				new Date(day.date).getMonth() == new Date().getMonth() &&
+				new Date(day.date).getFullYear() == new Date().getFullYear()
+			) {
+				dayIndex = i;
+				break;
+			}
 		}
-	}
+	});
 
 	const now = new Date();
 
@@ -34,49 +44,90 @@
 
 	let swipeOffset = 0;
 
-	function swipeHandler(
-		event: CustomEvent<{
-			direction: "top" | "right" | "bottom" | "left";
-			target: EventTarget;
-		}>
-	) {
-		if (event.detail.direction == "left") {
-			dayIndex++;
-			swipeOffset = -50;
-		} else if (event.detail.direction == "right") {
-			dayIndex--;
-			swipeOffset = 50;
-		}
+	export let className: string = "";
 
-		if (dayIndex >= week.days.length && weekIndex < 2) {
-			dayIndex = 0;
-			dispatch("changeWeek", 1);
-		} else if (dayIndex < 0 && weekIndex > 0) {
-			dayIndex = week.days.length - 1;
-			dispatch("changeWeek", -1);
-		} else if (weekIndex == 0 && dayIndex < 0) {
-			dayIndex = 0;
-			swipeOffset = 0;
-		} else if (weekIndex == 2 && dayIndex >= week.days.length) {
-			dayIndex = week.days.length - 1;
-			swipeOffset = 0;
+	let swipeGoTo: (step: any) => void;
+	let weekGoTo: (step: any) => void;
+
+	$: {
+		if (dayIndex != undefined && swipeGoTo) {
+			swipeGoTo(dayIndex);
 		}
 	}
 
-	export let className: string = "";
+	$: {
+		if (weekIndex != undefined && weekGoTo) {
+			weekGoTo(weekIndex);
+		}
+	}
 </script>
 
-<div class="absolute left-6 top-0">
-	<h2 class="weekNr">{"Uke " + week.weekNr} - {className}</h2>
-	<h5 class="nowDate">Dato: {nowFormatted}</h5>
-</div>
-{#key dayIndex}
-	<div class="centerVertical" out:fly={{ x: swipeOffset }} in:fade>
-		<div class="table">
-			<Day day={days[dayIndex]} widthPer={100} singleDay={true} />
-		</div>
+<div class="relative w-screen h-screen select-none">
+	<div class="absolute left-6 top-0">
+		<h2 class="weekNr">{"Uke " + week.weekNr} - {className}</h2>
+		<h5 class="nowDate">Dato: {nowFormatted}</h5>
 	</div>
-{/key}
+
+	{#if dayIndex != undefined}
+		<Swipe
+			bind:active_item={dayIndex}
+			defaultIndex={dayIndex}
+			bind:goTo={swipeGoTo}
+		>
+			{#each weeks as week}
+				{#each week.days as day}
+					<SwipeItem>
+						<div
+							class="centerVertical"
+							out:fly={{ x: swipeOffset }}
+							in:fade
+						>
+							<div class="table">
+								<Day {day} widthPer={100} singleDay={true} />
+							</div>
+						</div>
+					</SwipeItem>
+				{/each}
+			{/each}
+		</Swipe>
+	{/if}
+
+	<div class="fixed bottom-10 left-0 z-[2] w-screen h-16">
+		<Swipe
+			defaultIndex={weekIndex}
+			bind:goTo={weekGoTo}
+			on:change={(e) => {
+				dayIndex = e.detail.active_item * 5 + ((dayIndex ?? 0) % 5);
+			}}
+		>
+			{#each weeks as week}
+				<SwipeItem>
+					<div
+						class="w-max flex justify-center gap-6 m-auto bg-black bg-opacity-20 backdrop-blur-sm rounded-lg p-2"
+					>
+						{#each week.days as day, i}
+							{#if dayIndex !== undefined && dayIndex % 5 === i}
+								<button
+									on:click={() =>
+										(dayIndex = weekIndex * 5 + i)}
+									class="bg-[#333] rounded-full h-12 w-12 drop-shadow-lg duration-200"
+									>{day.name.slice(0, 1)}</button
+								>
+							{:else}
+								<button
+									on:click={() =>
+										(dayIndex = weekIndex * 5 + i)}
+									class="bg-[#222] rounded-full h-12 w-12 drop-shadow-lg hover:bg-[#444] duration-200 pointer-events-auto"
+									>{day.name.slice(0, 1)}</button
+								>
+							{/if}
+						{/each}
+					</div>
+				</SwipeItem>
+			{/each}
+		</Swipe>
+	</div>
+</div>
 
 <style>
 	.weekNr {
@@ -92,7 +143,6 @@
 	.centerVertical {
 		display: flex;
 		justify-content: center;
-		height: max-content;
 		position: absolute;
 		width: 100vw;
 		margin: 0;
@@ -106,11 +156,9 @@
 		margin: auto;
 		width: 95%;
 		display: flex;
-		overflow-x: auto;
+		overflow: auto;
 		border-radius: 15px;
 		margin-bottom: 2em;
-
-		min-height: 700px;
 		margin-top: 0;
 	}
 </style>

@@ -41,7 +41,7 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 
-{#if !$isMobile}
+{#if $isMobile == false}
 	<div
 		in:fly|local={{ x: -100 }}
 		out:fly|local={{ x: 100 }}
@@ -91,7 +91,7 @@
 			>
 		</div>
 	</div>
-{:else}
+{:else if $isMobile == true}
 	<div
 		in:fly|local={{ x: -100 }}
 		out:fly|local={{ x: 100 }}
@@ -99,8 +99,8 @@
 	>
 		<SingleDay
 			className={data.className}
-			week={data.weeks[weekIndex]}
-			{weekIndex}
+			weeks={data.weeks}
+			initWeekIndex={weekIndex}
 		/>
 	</div>
 {/if}
