@@ -12,7 +12,7 @@
 <main
 	in:fly={{ y: 100 }}
 	out:fly={{ y: -100 }}
-	class="absolute w-screen top-16"
+	class="absolute w-screen top-0 screenHeight pt-16"
 >
 	<Search
 		searchables={data.schools.map((x) => {

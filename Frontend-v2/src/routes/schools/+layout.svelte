@@ -85,10 +85,10 @@
 				on:click={() => (menuOpen = false)}
 				in:fade
 				out:fade
-				class="fixed z-10 top-0 left-0 w-screen screenHeight bg-black bg-opacity-80 backdrop-blur-sm"
+				class="fixed z-10 top-0 left-0 w-screen h-screen bg-black bg-opacity-80 backdrop-blur-sm"
 			>
 				<div
-					class="max-w-md m-auto flex justify-start pt-36 flex-col screenHeight gap-2 p-4"
+					class="max-w-md m-auto flex justify-start pt-36 flex-col h-full gap-2 p-4"
 				>
 					<a
 						href="/"

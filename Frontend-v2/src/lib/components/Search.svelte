@@ -34,7 +34,7 @@
 	</div>
 
 	<div
-		class="overflow-y-auto max-h-[80vh] scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-thumb-rounded-full mb-2 pr-4"
+		class="overflow-y-auto screenHeight80 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-thumb-rounded-full mb-2 pr-4"
 	>
 		{#each filteredSearchables as searchable}
 			<a

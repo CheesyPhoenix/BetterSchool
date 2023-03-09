@@ -78,7 +78,7 @@
 	out:fly={{ y: -100 }}
 	class="absolute w-screen top-16"
 >
-	<div class="max-w-[35rem] m-auto p-2">
+	<div class="max-w-[35rem] m-auto p-4">
 		<h1 class="font-bold text-lg text-center">
 			Add class to {data.schoolName}
 		</h1>

@@ -21,3 +21,8 @@ input {
 	height: 100vh; /* Fallback for browsers that do not support Custom Properties */
 	height: calc(var(--vh, 1vh) * 100);
 }
+
+.screenHeight80 {
+	height: 80vh; /* Fallback for browsers that do not support Custom Properties */
+	height: calc(var(--vh, 1vh) * 80);
+}
