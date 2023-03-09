@@ -77,15 +77,21 @@
 	class="class {active} {cancelled}"
 	style="top: {distTop}%; height: {height}%"
 >
-	<div class="time {singleDay ? 'text-sm' : 'text-xs'}">
-		<p class="bold">{classOb.time}</p>
-		- Rom:
-		<p class="bold">{classOb.room}</p>
+	<div>
+		<div class="time {singleDay ? 'text-sm' : 'text-xs'}">
+			<p class="bold">{classOb.time}</p>
+			- Rom:
+			<p class="bold">{classOb.room}</p>
+		</div>
+		<h5 class="name {singleDay ? 'text-md' : 'text-sm'}">{classOb.name}</h5>
+		<p
+			class="teacher {singleDay
+				? 'text-sm'
+				: 'text-xs'} block absolute bottom-1 right-2 left-2 text-right"
+		>
+			{classOb.teacher}
+		</p>
 	</div>
-	<h5 class="name {singleDay ? 'text-md' : 'text-sm'}">{classOb.name}</h5>
-	<p class="teacher {singleDay ? 'text-sm' : 'text-xs'} block">
-		{classOb.teacher}
-	</p>
 </div>
 
 <style lang="postcss">

@@ -45,7 +45,7 @@
 		margin: 0;
 		left: 0;
 		top: 0;
-		min-height: 900px;
+		min-height: 710px;
 	}
 
 	.table {

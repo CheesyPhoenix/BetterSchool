@@ -5,13 +5,19 @@
 body {
 	background-color: #333;
 	color: #f5f5f5;
-	@apply overflow-hidden;
+
+	@apply overflow-y-auto;
 }
 
 input {
-	@apply bg-stone-800 w-full block mb-2 p-2 rounded-xl focus-visible:outline-none hover:bg-stone-700 focus-visible:rounded-sm duration-200
+	@apply bg-stone-800 w-full block mb-2 p-2 rounded-xl focus-visible:outline-none hover:bg-stone-700 focus-visible:rounded-sm duration-200;
 }
 
 .btn {
-	@apply bg-stone-800 w-full block mb-2 p-2 text-center rounded-xl hover:bg-stone-700 active:rounded-sm active:bg-stone-600 duration-200
+	@apply bg-stone-800 w-full block mb-2 p-2 text-center rounded-xl hover:bg-stone-700 active:rounded-sm active:bg-stone-600 duration-200;
+}
+
+.screenHeight {
+	height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+	height: calc(var(--vh, 1vh) * 100);
 }

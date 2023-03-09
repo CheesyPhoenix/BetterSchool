@@ -59,7 +59,7 @@
 	<div
 		in:fade
 		out:fade
-		class="absolute flex justify-center h-screen w-screen top-0 flex-col z-10 bg-black bg-opacity-70 backdrop-blur-sm duration-200"
+		class="absolute flex justify-center screenHeight w-screen top-0 flex-col z-10 bg-black bg-opacity-70 backdrop-blur-sm duration-200"
 	>
 		<div class="absolute flex justify-center w-screen">
 			<img

@@ -1,6 +1,5 @@
 <script>
 	import { fly } from "svelte/transition";
-	import BSLogo from "$lib/assets/betterschool-icon-512.png";
 </script>
 
 <svelte:head>
@@ -8,7 +7,7 @@
 </svelte:head>
 
 <main in:fly={{ y: 100 }} out:fly={{ y: -100 }} class="absolute w-screen">
-	<div class="m-2 overflow-y-auto max-h-screen">
+	<div class="m-4 overflow-y-auto max-screenHeight">
 		<h1 class="text-3xl font-bold m-auto max-w-[max-content] mt-12">
 			BetterSchool
 		</h1>

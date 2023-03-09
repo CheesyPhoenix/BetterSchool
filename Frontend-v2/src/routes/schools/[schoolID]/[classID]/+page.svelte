@@ -45,7 +45,7 @@
 	<div
 		in:fly|local={{ x: -100 }}
 		out:fly|local={{ x: 100 }}
-		class="absolute w-screen h-screen"
+		class="absolute w-screen screenHeight"
 	>
 		<TimeTable
 			className={data.className}
@@ -54,7 +54,7 @@
 		/>
 
 		<div
-			class="h-screen left-0 flex flex-col justify-center absolute top-0"
+			class="screenHeight left-0 flex flex-col justify-center absolute top-0"
 		>
 			<button
 				on:click={() => {
@@ -73,7 +73,7 @@
 		</div>
 
 		<div
-			class="h-screen right-0 flex flex-col justify-center absolute top-0"
+			class="screenHeight right-0 flex flex-col justify-center absolute top-0"
 		>
 			<button
 				on:click={() => {
@@ -95,7 +95,7 @@
 	<div
 		in:fly|local={{ x: -100 }}
 		out:fly|local={{ x: 100 }}
-		class="absolute w-screen h-screen"
+		class="absolute w-screen screenHeight"
 	>
 		<SingleDay
 			className={data.className}

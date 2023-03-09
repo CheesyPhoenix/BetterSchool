@@ -4,7 +4,6 @@
 	import { fly, fade } from "svelte/transition";
 	import { getWeekNr } from "./shared";
 	import { Swipe, SwipeItem } from "svelte-swipe";
-	import { bubble } from "svelte/internal";
 
 	export let initWeekIndex: number;
 	export let weeks: App.Week[];
@@ -40,8 +39,6 @@
 
 	//
 
-	const dispatch = createEventDispatcher();
-
 	let swipeOffset = 0;
 
 	export let className: string = "";
@@ -62,7 +59,7 @@
 	}
 </script>
 
-<div class="relative w-screen h-screen select-none">
+<div class="relative w-screen screenHeight select-none">
 	<div class="absolute left-6 top-0">
 		<h2 class="weekNr">{"Uke " + week.weekNr} - {className}</h2>
 		<h5 class="nowDate">Dato: {nowFormatted}</h5>
@@ -92,7 +89,7 @@
 		</Swipe>
 	{/if}
 
-	<div class="fixed bottom-10 left-0 z-[2] w-screen h-16">
+	<div class="fixed bottom-4 left-0 z-[2] w-screen h-16">
 		<Swipe
 			defaultIndex={weekIndex}
 			bind:goTo={weekGoTo}
@@ -149,7 +146,7 @@
 		left: 0;
 		top: 0;
 		margin-top: 4em;
-		min-height: calc(100% - 4em);
+		min-height: calc(100% - 8em);
 	}
 
 	.table {
