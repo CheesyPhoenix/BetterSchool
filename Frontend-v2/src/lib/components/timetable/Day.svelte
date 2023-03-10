@@ -15,6 +15,7 @@
 		}[];
 	};
 	export let singleDay: boolean;
+	export let show = true;
 
 	$: dayName = day.name;
 
@@ -111,19 +112,21 @@
 </script>
 
 <div class="day" style="background-color: {bgColor}; width: {widthPer}%">
-	<div class="header">{dayName} {dayDate}</div>
-	<div class="classes">
-		{#each classes as classOb}
-			<Class {classOb} {today} {singleDay} />
-		{/each}
+	{#if show}
+		<div class="header">{dayName} {dayDate}</div>
+		<div class="classes">
+			{#each classes as classOb}
+				<Class {classOb} {today} {singleDay} />
+			{/each}
 
-		{#if nowLineActive}
-			<div class="nowLine" style="top: {nowLinePos}%;">
-				<hr class="nowLineHr" />
-				<span class="nowLineCircle" />
-			</div>
-		{/if}
-	</div>
+			{#if nowLineActive}
+				<div class="nowLine" style="top: {nowLinePos}%;">
+					<hr class="nowLineHr" />
+					<span class="nowLineCircle" />
+				</div>
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style>

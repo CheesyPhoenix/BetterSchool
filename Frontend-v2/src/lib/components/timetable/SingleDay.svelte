@@ -9,6 +9,7 @@
 	export let weeks: App.Week[];
 
 	let dayIndex: number | undefined = undefined;
+	let currDayIndex: number | undefined = undefined;
 
 	$: weekIndex =
 		dayIndex !== undefined
@@ -26,6 +27,7 @@
 				new Date(day.date).getFullYear() == new Date().getFullYear()
 			) {
 				dayIndex = i;
+				currDayIndex = i;
 				break;
 			}
 		}
@@ -65,14 +67,14 @@
 		<h5 class="nowDate">Dato: {nowFormatted}</h5>
 	</div>
 
-	{#if dayIndex != undefined}
+	{#if dayIndex != undefined && currDayIndex != undefined}
 		<Swipe
 			bind:active_item={dayIndex}
-			defaultIndex={dayIndex}
+			defaultIndex={currDayIndex}
 			bind:goTo={swipeGoTo}
 		>
-			{#each weeks as week}
-				{#each week.days as day}
+			{#each weeks as week, wi}
+				{#each week.days as day, di}
 					<SwipeItem>
 						<div
 							class="centerVertical"
@@ -80,7 +82,13 @@
 							in:fade
 						>
 							<div class="table">
-								<Day {day} widthPer={100} singleDay={true} />
+								<Day
+									{day}
+									widthPer={100}
+									singleDay={true}
+									show={wi * 5 + di >= dayIndex - 1 &&
+										wi * 5 + di <= dayIndex + 1}
+								/>
 							</div>
 						</div>
 					</SwipeItem>
@@ -107,14 +115,20 @@
 								<button
 									on:click={() =>
 										(dayIndex = weekIndex * 5 + i)}
-									class="bg-[#333] rounded-full h-12 w-12 drop-shadow-lg duration-200"
+									class="bg-[#333] rounded-full h-12 w-12 drop-shadow-lg duration-200 border-[#777] {currDayIndex ==
+									weekIndex * 5 + i
+										? 'border'
+										: 'border-none'}"
 									>{day.name.slice(0, 1)}</button
 								>
 							{:else}
 								<button
 									on:click={() =>
 										(dayIndex = weekIndex * 5 + i)}
-									class="bg-[#222] rounded-full h-12 w-12 drop-shadow-lg hover:bg-[#444] duration-200 pointer-events-auto"
+									class="bg-[#222] rounded-full h-12 w-12 drop-shadow-lg hover:bg-[#444] duration-200 pointer-events-auto border-[#777] {currDayIndex ==
+									weekIndex * 5 + i
+										? 'border'
+										: 'border-none'}"
 									>{day.name.slice(0, 1)}</button
 								>
 							{/if}
