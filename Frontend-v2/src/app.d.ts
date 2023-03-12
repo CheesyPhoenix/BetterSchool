@@ -19,16 +19,18 @@ declare global {
 
 		interface Week {
 			weekNr: string;
-			days: {
-				name: string;
+			days: Day[];
+		}
+
+		interface Day {
+			name: string;
+			date: string;
+			classes: {
 				date: string;
-				classes: {
-					date: string;
-					time: string;
-					room: string;
-					name: string;
-					teacher: string;
-				}[];
+				time: string;
+				room: string;
+				name: string;
+				teacher: string;
 			}[];
 		}
 	}
