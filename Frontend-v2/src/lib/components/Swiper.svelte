@@ -2,9 +2,12 @@
 	import { createEventDispatcher } from "svelte";
 	import { fly } from "svelte/transition";
 
-	export let index = 0;
-	let _index = 0;
+	export let defaultIndex: number;
+	export let index = defaultIndex;
+	let _index = defaultIndex;
 	$: {
+		console.log({ index, _index });
+
 		if (index != _index || _index != index) {
 			animFromX = 0;
 			animFromI = _index;
@@ -22,7 +25,7 @@
 	let startSwipePosX: number | undefined = undefined;
 	let currSwipePosX: number | undefined = undefined;
 	let animFromX = 0;
-	let animFromI = 0;
+	let animFromI: number | undefined = undefined;
 
 	function startSwipe(
 		e:
@@ -83,7 +86,6 @@
 		}
 
 		animFromX = currSwipePosX - startSwipePosX;
-		console.log(animFromX);
 
 		startSwipePosX = undefined;
 		currSwipePosX = undefined;
@@ -137,15 +139,17 @@
 					in:fly={{
 						opacity: 1,
 						x:
-							(windowWidth * (_index != animFromI ? 1 : 0) -
-								Math.abs(animFromX)) *
-							(animFromI == _index
-								? animFromX < 0
-									? 1
-									: -1
-								: animFromI > _index
-								? -1
-								: 1),
+							animFromI != undefined
+								? (windowWidth * (_index != animFromI ? 1 : 0) -
+										Math.abs(animFromX)) *
+								  (animFromI == _index
+										? animFromX < 0
+											? 1
+											: -1
+										: animFromI > _index
+										? -1
+										: 1)
+								: 0,
 					}}
 				>
 					<slot name="prev" index={_index - 1} />
@@ -156,15 +160,17 @@
 					in:fly={{
 						opacity: 1,
 						x:
-							(windowWidth * (_index != animFromI ? 1 : 0) -
-								Math.abs(animFromX)) *
-							(animFromI == _index
-								? animFromX < 0
-									? 1
-									: -1
-								: animFromI > _index
-								? -1
-								: 1),
+							animFromI != undefined
+								? (windowWidth * (_index != animFromI ? 1 : 0) -
+										Math.abs(animFromX)) *
+								  (animFromI == _index
+										? animFromX < 0
+											? 1
+											: -1
+										: animFromI > _index
+										? -1
+										: 1)
+								: 0,
 					}}
 				>
 					<slot name="main" index={_index} />
@@ -175,15 +181,17 @@
 					in:fly={{
 						opacity: 1,
 						x:
-							(windowWidth * (_index != animFromI ? 1 : 0) -
-								Math.abs(animFromX)) *
-							(animFromI == _index
-								? animFromX < 0
-									? 1
-									: -1
-								: animFromI > _index
-								? -1
-								: 1),
+							animFromI != undefined
+								? (windowWidth * (_index != animFromI ? 1 : 0) -
+										Math.abs(animFromX)) *
+								  (animFromI == _index
+										? animFromX < 0
+											? 1
+											: -1
+										: animFromI > _index
+										? -1
+										: 1)
+								: 0,
 					}}
 				>
 					<slot name="next" index={_index + 1} />

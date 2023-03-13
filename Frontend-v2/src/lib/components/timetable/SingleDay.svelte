@@ -74,11 +74,12 @@
 			<h5 class="nowDate">Dato: {nowFormatted}</h5>
 		</div>
 
-		{#if dayIndex != undefined}
+		{#if dayIndex != undefined && swipeIndex != undefined && weekIndex != undefined}
 			<div class="pt-16 pb-24 h-full">
 				<Swiper
 					length={weeks.flatMap((x) => x.days).length}
 					bind:index={swipeIndex}
+					defaultIndex={swipeIndex}
 				>
 					<svelte:fragment slot="prev">
 						{#if prevDay}
@@ -123,6 +124,7 @@
 								(e.detail.newIndex - e.detail.oldIndex) * 5;
 					}}
 					bind:index={weekIndex}
+					defaultIndex={weekIndex}
 				>
 					<svelte:fragment slot="prev" let:index>
 						{#if index >= 0}

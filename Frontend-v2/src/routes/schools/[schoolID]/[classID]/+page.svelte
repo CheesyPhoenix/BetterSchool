@@ -42,11 +42,7 @@
 <svelte:window bind:innerWidth={windowWidth} />
 
 {#if $isMobile == false}
-	<div
-		in:fly|local={{ x: -100 }}
-		out:fly|local={{ x: 100 }}
-		class="absolute w-screen screenHeight"
-	>
+	<div in:fade|local out:fade|local class="absolute w-screen screenHeight">
 		<TimeTable
 			className={data.className}
 			{swipeOffset}
@@ -92,11 +88,7 @@
 		</div>
 	</div>
 {:else if $isMobile == true}
-	<div
-		in:fly|local={{ x: -100 }}
-		out:fly|local={{ x: 100 }}
-		class="absolute w-screen screenHeight"
-	>
+	<div in:fade|local out:fade|local class="absolute w-screen screenHeight">
 		<SingleDay
 			className={data.className}
 			weeks={data.weeks}
