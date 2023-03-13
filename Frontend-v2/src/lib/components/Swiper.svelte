@@ -6,8 +6,6 @@
 	export let index = defaultIndex;
 	let _index = defaultIndex;
 	$: {
-		console.log({ index, _index });
-
 		if (index != _index || _index != index) {
 			animFromX = 0;
 			animFromI = _index;
