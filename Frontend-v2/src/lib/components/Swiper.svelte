@@ -1,10 +1,18 @@
 <script lang="ts">
-	//TODO: Add animations when index is changed externally
-
 	import { createEventDispatcher } from "svelte";
 	import { fly } from "svelte/transition";
 
 	export let index = 0;
+	let _index = 0;
+	$: {
+		if (index != _index || _index != index) {
+			animFromX = 0;
+			animFromI = _index;
+
+			_index = index;
+		}
+	}
+
 	export let length: number;
 
 	const dispatch = createEventDispatcher();
@@ -44,7 +52,7 @@
 	) {
 		if (
 			startSwipePosX == undefined ||
-			index == undefined ||
+			_index == undefined ||
 			currSwipePosX == undefined
 		) {
 			startSwipePosX = undefined;
@@ -57,24 +65,31 @@
 			event = (e as TouchEvent).changedTouches[0];
 		else event = e as MouseEvent;
 
-		animFromI = index;
+		animFromI = _index;
 
 		let diff = event.clientX - startSwipePosX;
 		if (Math.abs(diff) > 100) {
 			if (diff > 0) {
-				if (index > 0) index--;
+				if (_index > 0) {
+					_index--;
+					index--;
+				}
 			} else {
-				if (index < length - 1) index++;
+				if (_index < length - 1) {
+					_index++;
+					index++;
+				}
 			}
 		}
 
 		animFromX = currSwipePosX - startSwipePosX;
+		console.log(animFromX);
 
 		startSwipePosX = undefined;
 		currSwipePosX = undefined;
 
 		// emit change event
-		dispatch("change", { newIndex: index, oldIndex: animFromI });
+		dispatch("change", { newIndex: _index, oldIndex: animFromI });
 	}
 
 	function swiping(
@@ -116,53 +131,64 @@
 		on:touchmove={swiping}
 	>
 		{#key animFromX}
-			<div
-				class="w-screen"
-				in:fly={{
-					opacity: 1,
-					x:
-						(windowWidth *
-							(Math.abs(animFromX) > 100 && index != animFromI
-								? 1
-								: 0) -
-							Math.abs(animFromX)) *
-						(animFromX > 0 ? -1 : 1),
-				}}
-			>
-				<slot name="prev" index={index - 1} />
-			</div>
+			{#key animFromI}
+				<div
+					class="w-screen"
+					in:fly={{
+						opacity: 1,
+						x:
+							(windowWidth * (_index != animFromI ? 1 : 0) -
+								Math.abs(animFromX)) *
+							(animFromI == _index
+								? animFromX < 0
+									? 1
+									: -1
+								: animFromI > _index
+								? -1
+								: 1),
+					}}
+				>
+					<slot name="prev" index={_index - 1} />
+				</div>
 
-			<div
-				class="w-screen"
-				in:fly={{
-					opacity: 1,
-					x:
-						(windowWidth *
-							(Math.abs(animFromX) > 100 && index != animFromI
-								? 1
-								: 0) -
-							Math.abs(animFromX)) *
-						(animFromX > 0 ? -1 : 1),
-				}}
-			>
-				<slot name="main" {index} />
-			</div>
+				<div
+					class="w-screen"
+					in:fly={{
+						opacity: 1,
+						x:
+							(windowWidth * (_index != animFromI ? 1 : 0) -
+								Math.abs(animFromX)) *
+							(animFromI == _index
+								? animFromX < 0
+									? 1
+									: -1
+								: animFromI > _index
+								? -1
+								: 1),
+					}}
+				>
+					<slot name="main" index={_index} />
+				</div>
 
-			<div
-				class="w-screen"
-				in:fly={{
-					opacity: 1,
-					x:
-						(windowWidth *
-							(Math.abs(animFromX) > 100 && index != animFromI
-								? 1
-								: 0) -
-							Math.abs(animFromX)) *
-						(animFromX > 0 ? -1 : 1),
-				}}
-			>
-				<slot name="next" index={index + 1} />
-			</div>
+				<div
+					class="w-screen"
+					in:fly={{
+						opacity: 1,
+						x:
+							(windowWidth * (_index != animFromI ? 1 : 0) -
+								Math.abs(animFromX)) *
+							(animFromI == _index
+								? animFromX < 0
+									? 1
+									: -1
+								: animFromI > _index
+								? -1
+								: 1),
+					}}
+				>
+					<slot name="next" index={_index + 1} />
+				</div>
+			{/key}
 		{/key}
 	</div>
 </div>
