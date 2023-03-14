@@ -17,25 +17,14 @@
 	export let singleDay: boolean;
 	export let show = true;
 
-	$: dayName = day.name;
-
 	$: dayDateOb = new Date(day.date);
 
 	$: dayDate = dayDateOb.toLocaleDateString("no");
 
-	$: classes = day.classes;
-
-	// let dateOb =
-	// 	classes.length == 0 ? undefined : new Date(day.classes[0].date);
-	// $: {
-	// 	dateOb =
-	// 		classes.length == 0 ? undefined : new Date(day.classes[0].date);
-	// }
-
 	const todayDate = new Date();
 
 	let bgColor = "#595959";
-	let today = false;
+	let today: boolean;
 
 	$: {
 		if (
@@ -91,10 +80,10 @@
 
 	let dayHeight: number;
 
-	let currTime = new Date();
+	let currTime = new Date("14 march 2023 10:36");
 	//update current time once a minute
 	setInterval(() => {
-		currTime = new Date();
+		currTime = new Date("14 march 2023 10:36");
 	}, 60 * 1000);
 
 	$: scale = 100 / 8.25;
@@ -107,15 +96,17 @@
 	$: {
 		if (today && currTime.getHours() >= 8 && currTime.getHours() < 16) {
 			nowLineActive = true;
+		} else {
+			nowLineActive = false;
 		}
 	}
 </script>
 
 <div class="day" style="background-color: {bgColor}; width: {widthPer}%">
 	{#if show}
-		<div class="header">{dayName} {dayDate}</div>
+		<div class="header">{day.name} {dayDate}</div>
 		<div class="classes">
-			{#each classes as classOb}
+			{#each day.classes as classOb}
 				<Class {classOb} {today} {singleDay} />
 			{/each}
 
