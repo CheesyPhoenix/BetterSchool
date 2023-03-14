@@ -4,12 +4,9 @@
 	import arrow from "$lib/assets/arrow.svg";
 	import { onMount } from "svelte";
 	import { headerText } from "$lib/stores/header";
-	import { afterNavigate, beforeNavigate } from "$app/navigation";
-	import {
-		getWeekNr,
-		mobileThreshold,
-	} from "$lib/components/timetable/shared";
-	import { fade, fly, scale, slide } from "svelte/transition";
+	import { beforeNavigate } from "$app/navigation";
+	import { getWeekNr } from "$lib/components/timetable/shared";
+	import { fade } from "svelte/transition";
 	import SingleDay from "$lib/components/timetable/SingleDay.svelte";
 	import { isMobile } from "$lib/stores/isMobile";
 
@@ -37,6 +34,10 @@
 	}
 
 	let windowWidth = 0;
+
+	beforeNavigate(() => {
+		swipeDir = 0;
+	});
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
