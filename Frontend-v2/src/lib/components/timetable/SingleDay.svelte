@@ -40,7 +40,7 @@
 		}
 	});
 
-	const now = new Date("14 march 2023 10:36");
+	const now = new Date();
 
 	const nowFormatted = `${now.getDate()}.${
 		now.getMonth() + 1
