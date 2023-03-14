@@ -30,16 +30,17 @@
 			) {
 				currDayIndex = i;
 				swipeIndex = i + initWeekIndex * 5;
+
 				break;
 			}
 		}
 
-		if (dayIndex == undefined) {
+		if (swipeIndex == undefined) {
 			swipeIndex = 5 + initWeekIndex * 5;
 		}
 	});
 
-	const now = new Date();
+	const now = new Date("14 march 2023 10:36");
 
 	const nowFormatted = `${now.getDate()}.${
 		now.getMonth() + 1
