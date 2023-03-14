@@ -80,10 +80,10 @@
 
 	let dayHeight: number;
 
-	let currTime = new Date("14 march 2023 10:36");
+	let currTime = new Date();
 	//update current time once a minute
 	setInterval(() => {
-		currTime = new Date("14 march 2023 10:36");
+		currTime = new Date();
 	}, 60 * 1000);
 
 	$: scale = 100 / 8.25;
