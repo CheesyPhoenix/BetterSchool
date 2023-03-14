@@ -23,6 +23,6 @@ input {
 }
 
 .screenHeight80 {
-	height: 80vh; /* Fallback for browsers that do not support dvh */
-	height: 80dvh;
+	max-height: 80vh; /* Fallback for browsers that do not support dvh */
+	max-height: 80dvh;
 }

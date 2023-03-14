@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { isMobile } from "$lib/stores/isMobile";
-	import { mobileThreshold } from "./timetable/shared";
+	import { mobileThreshold } from "../timetable/shared";
+	import SearchElement from "./SearchElement.svelte";
 
 	export let searchables: { name: string; url: string }[];
 
@@ -16,12 +17,13 @@
 	}
 
 	let screenWidth = 0;
-	$: mobileMode = screenWidth < mobileThreshold;
+
+	let searchablesContainer: HTMLElement;
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} />
 
-<div class="m-auto max-w-md pl-4">
+<div class="m-auto max-w-md pl-4 h-full">
 	<div class="pr-4">
 		<input
 			type="text"
@@ -34,17 +36,20 @@
 	</div>
 
 	<div
-		class="overflow-y-auto screenHeight80 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-thumb-rounded-full mb-2 pr-4"
+		bind:this={searchablesContainer}
+		class="overflow-y-auto h-[90%] scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-thumb-rounded-full mb-2 pr-4"
 	>
 		{#each filteredSearchables as searchable}
-			<a
-				class="{$isMobile == true
-					? 'p-4'
-					: 'p-2'} bg-[#444] block mb-2 rounded-lg duration-200 w-full hover:bg-[#666]"
-				href={searchable.url
+			<SearchElement
+				url={searchable.url
 					.replace("//", "/")
-					.replace(/:\/[^\/]/, "://")}>{searchable.name}</a
-			>
+					.replace(/:\/[^\/]/, "://")}
+				name={searchable.name}
+				parent={searchablesContainer}
+			/>
 		{/each}
 	</div>
 </div>
+
+<style>
+</style>

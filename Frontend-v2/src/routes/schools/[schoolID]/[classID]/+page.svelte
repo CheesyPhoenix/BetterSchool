@@ -9,6 +9,7 @@
 	import { fade } from "svelte/transition";
 	import SingleDay from "$lib/components/timetable/SingleDay.svelte";
 	import { isMobile } from "$lib/stores/isMobile";
+	import { page } from "$app/stores";
 
 	export let data: PageData;
 
@@ -27,6 +28,9 @@
 	let clientSide = false;
 	onMount(() => {
 		clientSide = true;
+
+		// save last visited class and redirect on initial page load
+		window.localStorage.setItem("lastPageVisited", $page.url.pathname);
 	});
 
 	$: {

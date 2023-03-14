@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Search from "$lib/components/Search.svelte";
+	import Search from "$lib/components/Search/Search.svelte";
 	import type { PageData } from "./$types";
 	import { headerText } from "$lib/stores/header";
 	import { fly } from "svelte/transition";
@@ -12,7 +12,7 @@
 <main
 	in:fly={{ y: 100 }}
 	out:fly={{ y: -100 }}
-	class="absolute w-screen top-0 screenHeight pt-16"
+	class="absolute w-screen top-16 h-[calc(100vh-8rem)]"
 >
 	<Search
 		searchables={data.schools.map((x) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 	import { page } from "$app/stores";
-	import Search from "$lib/components/Search.svelte";
+	import Search from "$lib/components/Search/Search.svelte";
 
 	import { headerText } from "$lib/stores/header";
 	import { fly } from "svelte/transition";
