@@ -1,9 +1,12 @@
 import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
+import { env } from "$env/dynamic/public";
 
 export const load: LayoutLoad = async ({ params, fetch, parent }) => {
 	const res = await fetch(
-		`https://api.betterschool.chph.tk/school/${params.schoolID}/classes`
+		`${env.PUBLIC_API_URL ?? "https://api.betterschool.chph.tk"}/school/${
+			params.schoolID
+		}/classes`
 	);
 	if (res.status == 404) throw error(404, "Not found");
 

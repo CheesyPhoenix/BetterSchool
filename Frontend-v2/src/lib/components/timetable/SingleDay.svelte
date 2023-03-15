@@ -207,18 +207,6 @@
 		font-weight: bold;
 	}
 
-	.centerVertical {
-		display: flex;
-		justify-content: center;
-		position: absolute;
-		width: 100vw;
-		margin: 0;
-		left: 0;
-		top: 0;
-		margin-top: 4em;
-		min-height: calc(100% - 8em);
-	}
-
 	.table {
 		margin: auto;
 		width: 95%;
