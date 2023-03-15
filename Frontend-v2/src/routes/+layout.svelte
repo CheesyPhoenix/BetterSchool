@@ -6,7 +6,8 @@
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { pwaInfo } from "virtual:pwa-info"; //this complains, but it works so...
+	//@ts-ignore
+	import { pwaInfo } from "virtual:pwa-info";
 
 	let screenWidth: number | undefined = undefined;
 
@@ -24,11 +25,14 @@
 			const { registerSW } = await import("virtual:pwa-register");
 			registerSW({
 				immediate: true,
-				onRegistered(r: any) {
-					// r.update()
+				onRegistered(r) {
+					setInterval(() => {
+						r && r.update();
+					}, 20000);
+
 					console.log(`SW Registered: ${r}`);
 				},
-				onRegisterError(error: any) {
+				onRegisterError(error) {
 					console.log("SW registration error", error);
 				},
 			});

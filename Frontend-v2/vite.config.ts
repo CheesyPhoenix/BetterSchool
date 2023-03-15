@@ -35,16 +35,25 @@ const config: UserConfig = {
 					},
 				],
 			},
+			injectManifest: {
+				globPatterns: [
+					"client/**/*.{js,css,ico,png,svg,webp,woff,woff2}",
+				],
+			},
 			workbox: {
+				cleanupOutdatedCaches: true,
 				runtimeCaching: [
 					{
-						handler: "CacheFirst",
+						handler: "StaleWhileRevalidate",
 						urlPattern: (opt) => {
-							return opt.url.pathname.includes("school");
+							return (
+								!opt.sameOrigin &&
+								opt.url.pathname.includes("school")
+							);
 						},
 						method: "GET",
 						options: {
-							cacheName: "Api response",
+							cacheName: "Api responses",
 							expiration: {
 								maxEntries: 500,
 								maxAgeSeconds: 60 * 60 * 24 * 365 * 2, // 2 years
