@@ -6,6 +6,7 @@
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
+	import { pwaInfo } from "virtual:pwa-info"; //this complains, but it works so...
 
 	let screenWidth: number | undefined = undefined;
 
@@ -15,17 +16,37 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		// PWA
+		console.log(pwaInfo);
+
+		if (pwaInfo) {
+			const { registerSW } = await import("virtual:pwa-register");
+			registerSW({
+				immediate: true,
+				onRegistered(r: any) {
+					// r.update()
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error: any) {
+					console.log("SW registration error", error);
+				},
+			});
+		}
+
 		const lastPageVisited = window.localStorage.getItem("lastPageVisited");
 		if (lastPageVisited != null && $page.url.pathname == "/")
 			goto(lastPageVisited);
 	});
+
+	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
 </script>
 
 <svelte:window bind:innerWidth={screenWidth} />
 
 <svelte:head>
 	<link rel="shortcut icon" href={favicon} type="image/x-icon" />
+	{@html webManifest}
 </svelte:head>
 
 <slot />
