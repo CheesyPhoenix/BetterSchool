@@ -28,7 +28,7 @@
 				onRegistered(r) {
 					setInterval(() => {
 						r && r.update();
-					}, 20000);
+					}, 60 * 60 * 1000);
 
 					console.log(`SW Registered: ${r}`);
 				},
