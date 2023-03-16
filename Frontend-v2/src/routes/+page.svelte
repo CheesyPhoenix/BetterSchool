@@ -11,9 +11,9 @@
 		<h1 class="text-3xl font-bold m-auto max-w-[max-content] mt-12">
 			BetterSchool
 		</h1>
-		<h3 class="max-w-[max-content] m-auto">
+		<h2 class="max-w-[max-content] m-auto">
 			The better alternative to Visma Inschool
-		</h3>
+		</h2>
 
 		<br />
 

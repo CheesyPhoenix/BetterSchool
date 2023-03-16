@@ -1,6 +1,5 @@
 <script lang="ts">
 	import "../app.css";
-	import favicon from "$lib/assets/betterschool-icon-32.png";
 	import { isMobile } from "$lib/stores/isMobile";
 	import { mobileThreshold } from "$lib/components/timetable/shared";
 	import { onMount } from "svelte";
@@ -49,7 +48,17 @@
 <svelte:window bind:innerWidth={screenWidth} />
 
 <svelte:head>
-	<link rel="shortcut icon" href={favicon} type="image/x-icon" />
+	<link
+		rel="shortcut icon"
+		href="/betterschool-icon-32.png"
+		type="image/x-icon"
+	/>
+	<meta name="theme-color" content="#333" />
+	<link rel="apple-touch-icon" href="/betterschool-icon-192.png" />
+	<meta
+		name="description"
+		content="BetterSchool is a better way of viewing your Visma InSchool schedule. Don't waste time logging in to the app every time you just want to check when your next class starts, use BetterSchool instead!"
+	/>
 	{@html webManifest}
 </svelte:head>
 
