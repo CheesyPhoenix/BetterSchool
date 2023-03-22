@@ -5,9 +5,37 @@ on:
         branches: ["main"]
 
 jobs:
-    docker:
-        runs-on: ubuntu-latest
+    conditional_job_check_files:
+        runs-on: 'ubuntu-20.04'
+        # Declare outputs for next jobs
+        outputs:
+          backend_changed: ${{ steps.check_file_changed.outputs.backend_changed }}
+          frontend_changed: ${{ steps.check_file_changed.outputs.frontend_changed }}
+        steps:
+        - uses: actions/checkout@v2
+          with:
+            # Checkout as many commits as needed for the diff
+            fetch-depth: 2
+        - shell: pwsh
+          id: check_file_changed
+          run: |
+            # Diff HEAD with the previous commit
+            $diff = git diff --name-only HEAD^ HEAD
 
+            # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted)
+            $BSourceDiff = $diff | Where-Object { $_ -match '^scraper-api/' }
+            $BHasDiff = $BSourceDiff.Length -gt 0
+            Write-Host "::set-output name=backend_changed::$BHasDiff"
+            
+            $FSourceDiff = $diff | Where-Object { $_ -match '^BetterSchool-Frontend/' }
+            $FHasDiff = $FSourceDiff.Length -gt 0
+            Write-Host "::set-output name=frontend_changed::$FHasDiff"
+
+    backend:
+        runs-on: ubuntu-latest
+        needs: [conditional_job_check_files]
+        if: needs.conditional_job_check_files.outputs.backend_changed == 'True'
+        
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -18,7 +46,7 @@ jobs:
             - name: Login to registry
               uses: docker/login-action@v2
               with:
-                  registry: docker.cheesyphoenix.tk
+                  registry: docker.chph.tk
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_TOKEN }}
 
@@ -27,10 +55,32 @@ jobs:
               with:
                   context: ./scraper-api
                   push: true
-                  tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-api:latest
+                  tags: docker.chph.tk/cheesyphoenix/betterschool-api:latest
+                  
+    frontend:
+        runs-on: ubuntu-latest
+        needs: [conditional_job_check_files]
+        if: needs.conditional_job_check_files.outputs.frontend_changed == 'True'
 
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v2
+              
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+              
+            - name: Login to registry
+              uses: docker/login-action@v2
+              with:
+                  registry: docker.chph.tk
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_TOKEN }}
+                  
             - name: Use Node.js
-              uses: actions/setup-node@v3.4.1
+              uses: actions/setup-node@v3.5.1
               with:
                   node-version: 18
 
@@ -45,6 +95,12 @@ jobs:
               with:
                   context: ./BetterSchool-Frontend
                   push: true
-                  tags: docker.cheesyphoenix.tk/cheesyphoenix/betterschool-web:latest
-
-            - run: "curl --location --request GET 'https://watchtower.cheesyphoenix.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'"
+                  tags: docker.chph.tk/cheesyphoenix/betterschool-web:latest
+          
+    deployment:
+        runs-on: ubuntu-latest
+        needs: [backend, frontend]
+        if: ${{always() && (needs.backend.result == 'success' || needs.frontend.result == 'success')}}
+        
+        steps:
+            - run: "curl --location --request GET 'https://watchtower.chph.tk/v1/update' --header 'Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}'"
