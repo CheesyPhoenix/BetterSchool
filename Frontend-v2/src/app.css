@@ -1,0 +1,28 @@
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
+
+body {
+	background-color: #333;
+	color: #f5f5f5;
+
+	@apply overflow-hidden;
+}
+
+input {
+	@apply bg-stone-800 w-full block mb-2 p-2 rounded-xl focus-visible:outline-none hover:bg-stone-700 focus-visible:rounded-sm duration-200;
+}
+
+.btn {
+	@apply bg-stone-800 w-full block mb-2 p-2 text-center rounded-xl hover:bg-stone-700 active:rounded-sm active:bg-stone-600 duration-200;
+}
+
+.screenHeight {
+	height: 100vh; /* Fallback for browsers that do not support dvh */
+	height: 100dvh;
+}
+
+.screenHeight80 {
+	max-height: 80vh; /* Fallback for browsers that do not support dvh */
+	max-height: 80dvh;
+}

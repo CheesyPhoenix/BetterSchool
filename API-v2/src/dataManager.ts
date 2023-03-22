@@ -232,10 +232,14 @@ class DataManager {
 		return this._schools;
 	}
 
-	public getClasses(schoolID: string): {
-		className: string;
-		classID: string;
-	}[] {
+	public getClasses(schoolID: string):
+		| {
+				className: string;
+				classID: string;
+		  }[]
+		| undefined {
+		if (!this._schools.some((x) => x.id == schoolID)) return undefined;
+
 		return this.data
 			.filter((x) => x.schoolID == schoolID)
 			.map((x) => {

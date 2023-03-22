@@ -1,42 +1,31 @@
 {
 	"folders": [
 		{
-			"path": "API-v2"
-		},
-		{
+			"name": "api-relay",
 			"path": "api-relay"
 		},
 		{
-			"path": "BetterSchool-Frontend"
+			"name": "API-v2",
+			"path": "API-v2"
 		},
 		{
+			"name": "scraper-api",
 			"path": "scraper-api"
 		},
 		{
+			"name": "BetterSchool-Frontend",
+			"path": "BetterSchool-Frontend"
+		},
+		{
+			"name": "Frontend-v2",
+			"path": "Frontend-v2"
+		},
+		{
+			"name": "BetterSchool",
 			"path": "."
 		}
 	],
 	"settings": {
-		"workbench.colorCustomizations": {
-			"activityBar.activeBackground": "#88eeb5",
-			"activityBar.background": "#88eeb5",
-			"activityBar.foreground": "#15202b",
-			"activityBar.inactiveForeground": "#15202b99",
-			"activityBarBadge.background": "#a874eb",
-			"activityBarBadge.foreground": "#15202b",
-			"commandCenter.border": "#15202b99",
-			"sash.hoverBorder": "#88eeb5",
-			"statusBar.background": "#5be899",
-			"statusBar.foreground": "#15202b",
-			"statusBarItem.hoverBackground": "#2ee27d",
-			"statusBarItem.remoteBackground": "#5be899",
-			"statusBarItem.remoteForeground": "#15202b",
-			"titleBar.activeBackground": "#5be899",
-			"titleBar.activeForeground": "#15202b",
-			"titleBar.inactiveBackground": "#5be89999",
-			"titleBar.inactiveForeground": "#15202b99"
-		},
-		"peacock.color": "#5be899",
 		"sqltools.connections": [
 			{
 				"previewLimit": 50,

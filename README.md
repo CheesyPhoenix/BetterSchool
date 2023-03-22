@@ -58,6 +58,7 @@ docker run -p 8080:8080 -v betterschool-api-data:/app/data -e iv={INSERT RANDOM 
 ```
 
 ## Migrating from v1 to v2
+
 The API has recently been redesigned from the ground up, if you were already hosting a v1 API follow these steps to migrate your old data:
 
 ```
@@ -79,7 +80,7 @@ After running this, it should automatically migrate your old data. After the mig
 <details>
 <summary><h3>Web</h3></summary>
 
-Note: using a custom api does not yet work. This is being worked on, see [#54](https://github.com/CheesyPhoenix/BetterSchool/issues/54).
+Update: using a custom API now works!
 
 Run with:
 
@@ -89,15 +90,15 @@ Linux:
 docker run \
 -p 80:80 \
 --restart unless-stopped \
--e VITE_API_LOC={INSERT URL OF YOUR API HERE OR REMOVE THIS ARG TO USE THE OFFICIAL API} \
+-e PUBLIC_API_URL={INSERT URL OF YOUR API HERE OR REMOVE THIS ARG TO USE THE OFFICIAL API} \
 -d \
-docker.chph.tk/cheesyphoenix/betterschool-web:latest
+docker.chph.tk/cheesyphoenix/betterschool-web:-v2latest
 ```
 
 One liner:
 
 ```
-docker run -p 80:80 --restart unless-stopped -e VITE_API_LOC={INSERT URL OF YOUR API HERE OR REMOVE THIS ARG TO USE THE OFFICIAL API} -d docker.chph.tk/cheesyphoenix/betterschool-web:latest
+docker run -p 80:80 --restart unless-stopped -e PUBLIC_API_URL={INSERT URL OF YOUR API HERE OR REMOVE THIS ARG TO USE THE OFFICIAL API} -d docker.chph.tk/cheesyphoenix/betterschool-web:latest
 ```
 
 </details>
