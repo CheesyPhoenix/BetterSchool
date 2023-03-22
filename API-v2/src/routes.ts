@@ -15,13 +15,25 @@ function createRoutes(dataManager: DataManager) {
 
 	router.get("/school/:schoolID/classes", (ctx) => {
 		const schoolID = ctx.params.schoolID;
-		ctx.response.body = JSON.stringify(dataManager.getClasses(schoolID));
+		const classes = dataManager.getClasses(schoolID);
+		if (classes == undefined) {
+			ctx.response.status = 404;
+			return;
+		}
+
+		ctx.response.body = JSON.stringify(classes);
 		ctx.response.headers.set("Content-Type", "application/json");
 	});
 
 	router.get("/school/:schoolID/class/:classID", (ctx) => {
 		const classID = ctx.params.classID;
-		ctx.response.body = JSON.stringify(dataManager.getWeeks(classID));
+		const weeks = dataManager.getWeeks(classID);
+		if (!weeks) {
+			ctx.response.status = 404;
+			return;
+		}
+
+		ctx.response.body = JSON.stringify(weeks);
 		ctx.response.headers.set("Content-Type", "application/json");
 	});
 
