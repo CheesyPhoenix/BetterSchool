@@ -48,16 +48,16 @@ docker run \
 -e key={INSERT RANDOM 32 CHARACTER STRING HERE} \
 --restart unless-stopped \
 -d \
-docker.chph.tk/cheesyphoenix/betterschool-api-v2:latest
+docker.chph.tk/cheesyphoenix/betterschool-api-v3:latest
 ```
 
 One liner:
 
 ```
-docker run -p 8080:8080 -v betterschool-api-data:/app/data -e iv={INSERT RANDOM 16 CHARACTER STRING HERE} -e key={INSERT RANDOM 32 CHARACTER STRING HERE} --restart unless-stopped -d docker.chph.tk/cheesyphoenix/betterschool-api-v2:latest
+docker run -p 8080:8080 -v betterschool-api-data:/app/data -e iv={INSERT RANDOM 16 CHARACTER STRING HERE} -e key={INSERT RANDOM 32 CHARACTER STRING HERE} --restart unless-stopped -d docker.chph.tk/cheesyphoenix/betterschool-api-v3:latest
 ```
 
-## Migrating from v1 to v2
+## Migrating from v1 to v3
 
 The API has recently been redesigned from the ground up, if you were already hosting a v1 API follow these steps to migrate your old data:
 
@@ -70,7 +70,7 @@ docker run \
 -e key={INSERT SAME AS OLD 32 CHARACTER STRING HERE} \
 --restart unless-stopped \
 -d \
-docker.chph.tk/cheesyphoenix/betterschool-api-v2:latest
+docker.chph.tk/cheesyphoenix/betterschool-api-v3:latest
 ```
 
 After running this, it should automatically migrate your old data. After the migration is complete, the API should work as normal. You may also remove the old volume but this is not required.
