@@ -7,7 +7,7 @@
 </svelte:head>
 
 <main in:fly={{ y: 100 }} out:fly={{ y: -100 }} class="absolute w-screen">
-	<div class="m-4 overflow-y-auto max-screenHeight">
+	<div class="m-4 overflow-y-auto screenHeight">
 		<h1 class="text-3xl font-bold m-auto max-w-[max-content] mt-12">
 			BetterSchool
 		</h1>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { env } from "$env/dynamic/public";
 	import LogoAnim from "$lib/assets/logo-anim.svg";
 	import Input from "$lib/components/Input.svelte";
 	import { headerText } from "$lib/stores/header";
@@ -35,15 +36,23 @@
 		addClassError = undefined;
 		addClassSuccess = false;
 
-		const res = await fetch("https://api.betterschool.chph.tk/addUser", {
-			body: JSON.stringify({
-				username: username,
-				pass: password,
-				class: className,
-				schoolID: data.schoolID,
-			}),
-			method: "post",
-		});
+		const res = await fetch(
+			`${
+				env.PUBLIC_API_URL ?? "https://api.betterschool.chph.tk"
+			}/addUser`,
+			{
+				body: JSON.stringify({
+					username: username,
+					pass: password,
+					class: className,
+					schoolID: data.schoolID,
+				}),
+				method: "post",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
 
 		if (res.ok) {
 			addClassSuccess = true;
@@ -76,7 +85,7 @@
 <main
 	in:fly={{ y: 100 }}
 	out:fly={{ y: -100 }}
-	class="absolute w-screen top-16"
+	class="absolute w-screen top-0 pt-16 overflow-y-auto screenHeight"
 >
 	<div class="max-w-[35rem] m-auto p-4">
 		<h1 class="font-bold text-lg text-center">
@@ -89,8 +98,25 @@
 			Register using your Feide credentials. NOTE: These credentials will
 			be saved on a server for the remainder of the current school year,
 			and then used to log in to Visma InSchool on your behalf to collect
-			your schedule data. This data will thereafter be made PUBLICLY
+			your schedule data.This schedule will thereafter be made PUBLICLY
 			availible. If you are not comfortable with this, do not register!
+		</p>
+
+		<br />
+
+		<p class="text-zinc-400">
+			<b class="font-bold">IMPORTANT!:</b> Since your plain-text
+			credentials are needed to log in to Visma, there is only so much we
+			can do to protect them. In the event of a malicious actor gaining
+			access to the server in which the credentials are stored they can
+			easily extract your raw password. It is therefore not adviseable to
+			use the same password anywhere else.
+			<a
+				href="https://passord.vlfk.no/ForgottenPassword"
+				class="hover:underline text-zinc-300"
+				>If you want to change your Feide password to accomodate for
+				this, you might be able to do that here</a
+			>
 		</p>
 
 		<br />

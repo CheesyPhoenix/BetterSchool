@@ -29,7 +29,7 @@
 		<header
 			in:fade
 			out:fade
-			class="w-full h-16 p-2 z-10 flex flex-col justify-center font-bold"
+			class="w-screen h-16 p-2 z-10 flex flex-col justify-center font-bold absolute top-0 left-0"
 		>
 			<div>
 				<h1 class="inline text-2xl hover:underline">

@@ -23,7 +23,7 @@ jobs:
                   $diff = git diff --name-only HEAD^ HEAD
 
                   # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted)
-                  $BSourceDiff = $diff | Where-Object { $_ -match '^API-v2' }
+                  $BSourceDiff = $diff | Where-Object { $_ -match '^API-v3' }
                   $BHasDiff = $BSourceDiff.Length -gt 0
                   Write-Host "::set-output name=backend_changed::$BHasDiff"
 
@@ -53,9 +53,9 @@ jobs:
             - name: Build and push API docker image
               uses: docker/build-push-action@v3
               with:
-                  context: ./API-v2
+                  context: ./API-v3
                   push: true
-                  tags: docker.chph.tk/cheesyphoenix/betterschool-api-v2:latest
+                  tags: docker.chph.tk/cheesyphoenix/betterschool-api-v3:latest
 
     frontend:
         runs-on: ubuntu-latest
