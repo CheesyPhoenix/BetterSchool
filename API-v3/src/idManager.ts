@@ -1,4 +1,4 @@
-import { v5 } from "uuid";
+import { v5, v4 } from "uuid";
 import fs from "fs";
 
 export class IDManager {
@@ -37,7 +37,7 @@ export class IDManager {
 
 			if (!dirExists) fs.mkdirSync("./data");
 
-			config = { nextID: 0, nameSpace: crypto.randomUUID() };
+			config = { nextID: 0, nameSpace: v4() };
 			fs.writeFileSync(filePath, JSON.stringify(config));
 		}
 
