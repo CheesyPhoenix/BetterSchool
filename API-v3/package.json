@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "ts-node-esm --experimental-specifier-resolution node . --dev",
-		"start": "ts-node-esm --experimental-specifier-resolution node ."
+		"start": "ts-node-esm --experimental-specifier-resolution node . --transpile-only"
 	},
 	"keywords": [],
 	"author": "",
