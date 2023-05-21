@@ -167,13 +167,14 @@ class DataManager {
 				const scraped = await scraper
 					.scrape(
 						{
-							pass: await this.decrypt(user.pass),
-							username: await this.decrypt(user.username),
+							pass: this.decrypt(user.pass),
+							username: this.decrypt(user.username),
 						},
 						school.url
 					)
-					.catch(() => {
+					.catch((e) => {
 						console.log("Failed to scrape for: " + user.className);
+						console.error(e);
 						return undefined;
 					});
 
