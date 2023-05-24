@@ -371,10 +371,10 @@ async function doScrape(
 			}
 			weeks.push(data);
 		} catch (error) {
-			await page.screenshot({
-				fullPage: true,
-				path: "./errorScreenshots/latestError.png",
-			});
+			// await page.screenshot({
+			// 	fullPage: true,
+			// 	path: "./errorScreenshots/latestError.png",
+			// });
 
 			// console.log(
 			// 	"encountered error while getting week data, saving screenshot"
