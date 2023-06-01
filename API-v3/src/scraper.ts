@@ -31,6 +31,24 @@ async function doValidate(
 	browser: { pages: () => any }
 ) {
 	const page = (await browser.pages())[0];
+
+	await page.setExtraHTTPHeaders({
+		"Accept-Language": "no",
+	});
+
+	await page.evaluateOnNewDocument(() => {
+		Object.defineProperty(navigator, "language", {
+			get: function () {
+				return "no";
+			},
+		});
+		Object.defineProperty(navigator, "languages", {
+			get: function () {
+				return ["no"];
+			},
+		});
+	});
+
 	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
@@ -120,6 +138,24 @@ async function doScrape(
 
 	//login
 	const page = (await browser.pages())[0];
+
+	await page.setExtraHTTPHeaders({
+		"Accept-Language": "no",
+	});
+
+	await page.evaluateOnNewDocument(() => {
+		Object.defineProperty(navigator, "language", {
+			get: function () {
+				return "no";
+			},
+		});
+		Object.defineProperty(navigator, "languages", {
+			get: function () {
+				return ["no"];
+			},
+		});
+	});
+
 	await page.goto(schoolURL);
 
 	await page.waitForSelector("#login-with-feide-button");
