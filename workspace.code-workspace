@@ -23,6 +23,9 @@
 		{
 			"name": "BetterSchool",
 			"path": "."
+		},
+		{
+			"path": "API-v3"
 		}
 	],
 	"settings": {
