@@ -109,7 +109,7 @@ async function scrape(
 				"--disable-dev-shm-usage",
 				"--lang=nb-NO,no",
 			],
-			headless: true,
+			headless: false,
 			defaultViewport: { height: 1080, width: 1920 },
 		});
 
@@ -317,22 +317,32 @@ async function doScrape(
 						"-" +
 						data.split(" klokken ")[1].split(" og")[0].trim();
 				} else {
-					classOb.date = data
-						.toLowerCase()
-						.split(" starter ")[1]
-						.split(" klokken")[0];
-					classOb.time =
-						data.split(" klokken ")[1].split(" og")[0] +
-						"-" +
-						data.split(" slutter ")[1].trim();
+					if (data.toLowerCase().includes(" ends ")) {
+						// english bug
+						classOb.date = data
+							.toLowerCase()
+							.split(" starts on ")[1]
+							.split(" at ")[1];
+						classOb.time =
+							data.split(" at ")[2].split(" and ")[0] +
+							"-" +
+							data.split(" ends at ")[1].trim();
+					} else {
+						classOb.date = data
+							.toLowerCase()
+							.split(" starter ")[1]
+							.split(" klokken")[0];
+						classOb.time =
+							data.split(" klokken ")[1].split(" og")[0] +
+							"-" +
+							data.split(" slutter ")[1].trim();
+					}
 				}
 
-				if (!data.includes(" rom ")) {
+				if (!data.includes(" rom ") && !data.includes(" ends ")) {
 					classOb.room = "ingen";
 					classOb.name = data.split(",")[0].trim();
 				} else {
-					console.log(data);
-
 					if (data.trim().endsWith("og slutter")) {
 						//for screen reader bug
 						const idk = data.split(" på rom ")[0].split(" ");
@@ -343,8 +353,14 @@ async function doScrape(
 							.join(" ")
 							.trim();
 					} else {
-						classOb.room = data.split(" rom ")[1].split(".")[0];
-						classOb.name = data.split(" på rom ")[0].trim();
+						if (data.includes(" ends ")) {
+							// english bug
+							classOb.room = data.split(", ")[0].split(" at ")[1];
+							classOb.name = data.split(" at ")[0].trim();
+						} else {
+							classOb.room = data.split(" rom ")[1].split(".")[0];
+							classOb.name = data.split(" på rom ")[0].trim();
+						}
 					}
 				}
 
