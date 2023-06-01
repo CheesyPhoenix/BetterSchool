@@ -109,7 +109,7 @@ async function scrape(
 				"--disable-dev-shm-usage",
 				"--lang=nb-NO,no",
 			],
-			headless: false,
+			headless: true,
 			defaultViewport: { height: 1080, width: 1920 },
 		});
 
