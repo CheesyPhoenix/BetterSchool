@@ -10,7 +10,7 @@ async function validate(
 			"--disable-setuid-sandbox",
 			"--disable-gpu",
 			"--disable-dev-shm-usage",
-			"--lang=no",
+			"--lang=nb-NO,no",
 		],
 		headless: true,
 		defaultViewport: { height: 1080, width: 1920 },
@@ -107,7 +107,7 @@ async function scrape(
 				"--disable-setuid-sandbox",
 				"--disable-gpu",
 				"--disable-dev-shm-usage",
-				"--lang=no",
+				"--lang=nb-NO,no",
 			],
 			headless: true,
 			defaultViewport: { height: 1080, width: 1920 },
@@ -140,18 +140,18 @@ async function doScrape(
 	const page = (await browser.pages())[0];
 
 	await page.setExtraHTTPHeaders({
-		"Accept-Language": "no",
+		"Accept-Language": "nb-NO",
 	});
 
 	await page.evaluateOnNewDocument(() => {
 		Object.defineProperty(navigator, "language", {
 			get: function () {
-				return "no";
+				return "nb-NO";
 			},
 		});
 		Object.defineProperty(navigator, "languages", {
 			get: function () {
-				return ["no"];
+				return ["nb-NO", "no"];
 			},
 		});
 	});
