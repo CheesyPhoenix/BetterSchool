@@ -2,6 +2,13 @@
 
 ![betterschool-icon-192](https://user-images.githubusercontent.com/30808373/213921037-4bf9b005-75ad-4368-ab3f-51ecc2014577.png)
 
+<hr>
+
+# UNMAINTAIED
+This project is no longer maintained. Feel free to fork the project and host your own instance if you feel that this project is something that would benefit you
+
+<hr>
+
 ## **Hello everyone!**
 
 Do you suffer from having to log in multiple times a day to Visma Inschool? Do you experience extreme bouts of _rage_ and _frustration_ due to this severe issue?
